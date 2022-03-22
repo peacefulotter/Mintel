@@ -11,8 +11,7 @@ import chisel3._
  */
 
 
-class RAM extends Module {
-  val width: Int = 32
+class RAM(val width: Int = 32) extends Module {
 
   val io = IO(new Bundle {
     val enable = Input(Bool())
