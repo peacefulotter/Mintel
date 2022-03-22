@@ -1,0 +1,7 @@
+.bsp/
+.idea/
+target/
+test_run_dir/
+quartus/
+verilog/
+vivado/
