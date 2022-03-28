@@ -18,6 +18,7 @@ class RAM(val width: Int = 32) extends Module {
     val write = Input(Bool())
     val addr = Input(UInt(10.W))
     val dataIn = Input(UInt(width.W))
+
     val dataOut = Output(UInt(width.W))
   })
 
