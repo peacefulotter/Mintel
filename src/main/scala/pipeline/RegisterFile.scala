@@ -1,16 +1,15 @@
 package pipeline
 
 import chisel3._
-import chisel3.experimental.IO
 
-class RegisterFile {
+class RegisterFile extends Module {
 
-    val reg = RegInit(VecInit(Seq.fill(4)(0.U(32.W))));
+    val regs = Mem(32, UInt(32.W))
 
     val io = IO(new Bundle {
-        val ReadAddr1  = Input(UInt(4.W))
-        val ReadAddr2  = Input(UInt(4.W))
-        val WriteAddr = Input(UInt(4.W))
+        val ReadAddr1  = Input(UInt(5.W))
+        val ReadAddr2  = Input(UInt(5.W))
+        val WriteAddr = Input(UInt(5.W))
         val WriteData = Input(Vec(32, UInt(1.W)));
         val WriteEnable = Input(Bool())
 
@@ -18,10 +17,10 @@ class RegisterFile {
         val ReadData2 = Output(Vec(32, UInt(1.W)))
     })
 
-    when ( io.WriteEnable ) {
-        reg( io.WriteAddr ) := io.WriteData
+    when ( io.WriteEnable & io.WriteAddr.orR ) {
+        regs( io.WriteAddr ) := io.WriteData
     }
 
-    io.ReadData1 := reg( io.ReadAddr1 );
-    io.ReadData2 := reg( io.ReadAddr2 );
+    io.ReadData1 := Mux(io.ReadAddr1.orR, regs( io.ReadAddr1 ), 0.U)
+    io.ReadData2 := Mux(io.ReadAddr2.orR, regs( io.ReadAddr2 ), 0.U)
 }

@@ -1,11 +1,11 @@
 package pipeline
 
 import chisel3._
-import chisel3.experimental.IO
 
-class Decode {
+class Decode extends Module  {
 
     val regFile = Module( new RegisterFile )
+    val control = Module( new Control )
     val signExtend = Module( new SignExtend )
 
     val io = IO(new Bundle {
@@ -24,6 +24,9 @@ class Decode {
         val DataRead1 = Output(UInt(32.W))
         val DataRead2 = Output(UInt(32.W))
     })
+
+    // DECODE
+
 
     regFile.io.ReadAddr1 := io.instr(x, y);
     regFile.io.ReadAddr2 := io.instr(y, z);

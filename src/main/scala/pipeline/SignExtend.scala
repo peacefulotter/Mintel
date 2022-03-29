@@ -1,9 +1,8 @@
 package pipeline
 
 import chisel3._
-import chisel3.experimental.IO
 
-class SignExtend {
+class SignExtend extends Module  {
     val io = IO(new Bundle {
         val in = Input(Vec(16, Bool()))
         val isSigned = Input(Bool())
@@ -21,6 +20,6 @@ class SignExtend {
     // io.out.slice(16, 32) := = Mux(io.isSigned && io.in(15) === true.B, ones, zeros)
 
     val forward: Vec[Bool] = Mux(io.isSigned && io.in(15) === true.B, ones, zeros)
-    io.out.zip(io.in).slice(0, 16).foreach { case (a, b) => a:= b }
-    io.out.zip(forward).slice(16, 32).foreach { case (a, b) => a:= b }
+    io.out.zip(io.in).slice(0, 16).foreach { case (a, b) => a := b }
+    io.out.zip(forward).slice(16, 32).foreach { case (a, b) => a := b }
 }

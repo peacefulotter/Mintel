@@ -1,9 +1,8 @@
 package pipeline
 
 import chisel3._
-import chisel3.experimental.IO
 
-class Fetch {
+class Fetch extends Module  {
     val PC = RegInit(0.U);
 
     val io = IO(new Bundle {
