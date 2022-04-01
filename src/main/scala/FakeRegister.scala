@@ -1,4 +1,3 @@
-
 import chisel3._
 
 class FakeRegister extends Module {

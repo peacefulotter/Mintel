@@ -10,22 +10,26 @@ import chisel3._
  * The RAM component.
  */
 
+class RAM(val size: Int = 1024, val width: Int = 32) extends Module {
 
-class RAM(val width: Int = 32) extends Module {
+  val mem = SyncReadMem(size, UInt(width.W))
 
   val io = IO(new Bundle {
-    val enable = Input(Bool())
-    val write = Input(Bool())
+    val writeEn = Input(Bool())
+    val readEn = Input(Bool())
     val addr = Input(UInt(10.W))
-    val dataIn = Input(UInt(width.W))
+    val writeData = Input(UInt(width.W))
 
-    val dataOut = Output(UInt(width.W))
+    val readData = Output(UInt(width.W))
   })
 
-  val mem = SyncReadMem(1024, UInt(width.W))
-  // Create one write port and one read port
-  mem.write(io.addr, io.dataIn)
-  io.dataOut := mem.read(io.addr, io.enable)
+  def isValid(addr: UInt) = addr >= 0.U & addr < size.asUInt
+
+  // Enable and address is valid
+  when ( io.writeEn & isValid(io.addr) ) {
+    mem.write(io.addr, io.writeData)
+  }
+  io.readData := Mux(io.readEn, mem.read(io.addr, io.readEn), 0.U)
 }
 
 object RAM extends App {
