@@ -8,9 +8,16 @@ class MemoryModule extends Module {
 
     // TODO: have the IO ports in separate component
 
+    /****
+     *
+     *  REFACTOR MEMORY MODULE - STORE THE PORTS INTO A SEPARATE COMPONENT
+     *
+     */
+
     val InPort0 = Module(new FakeRegister)
     val InPort1 = Module(new FakeRegister)
     val OutPort = Module(new FakeRegister)
+    val ram = Module( new RAM );
 
     val maxAddr: UInt = 1024.U
     val InPort0Addr: UInt = 65524.U; // FFF4 = 65524 -> Inport0
@@ -22,9 +29,10 @@ class MemoryModule extends Module {
         val Inport1En: Bool = Input(Bool())
         val SwitchData: Vec[UInt] = Input(Vec(switches, UInt(width.W)))
 
+        val readEn: Bool = Input(Bool())
         val writeEn: Bool = Input(Bool())
-        val addr: UInt = Input(UInt(width.W)); // Could be read or write
         val writeData: UInt = Input(UInt(width.W))
+        val addr: UInt = Input(UInt(width.W)); // Could be read or write
 
         val readData: UInt = Output(UInt(width.W))
     })
@@ -37,7 +45,6 @@ class MemoryModule extends Module {
     ));
     // val delay_en = false.B;
 
-
     InPort0.io.en := io.Inport0En
     InPort0.reg := io.SwitchData(0)
 
@@ -47,7 +54,6 @@ class MemoryModule extends Module {
     OutPort.reg := io.writeData;
     OutPort.io.en := OutportWrEn;
 
-    val ram = Module( new RAM );
     ram.io.writeEn := io.writeEn
     ram.io.addr := io.addr;
     ram.io.writeData := io.writeData;

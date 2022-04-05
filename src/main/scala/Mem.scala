@@ -2,21 +2,36 @@ import chisel3._
 
 class Mem extends Module {
 
-    val mem = Module( new MemoryModule )
+    // val mem = Module( new MemoryModule )
+    val mem = Module( new RAM );
+
+    /**
+     * TODO: REPLACE RAM WITH MEMORY_MODULE
+     */
 
     val io = IO(new Bundle {
-        // From Control basically
-        val writeEn = Input(UInt(1.W))
+        // From Control
+        val WriteEn = Input(UInt(1.W)) // MemWrite
+        val ReadEn = Input(UInt(1.W)) // MemRead
+        val WbSelIn = Input(UInt(1.W)) // WB
 
         // From Execute
-        val aluRes = Input(UInt(32.W))
-        val writeAddr = Input(UInt(32.W))
+        val AluRes = Input(UInt(32.W))
+        val AddrIn = Input(UInt(32.W)) // ????
 
-        val readData = Output(UInt(32.W))
+
+        // To WB
+        val ReadData = Output(UInt(32.W)) // After reading from the Memory
+        val WbSelOut = Output(UInt(1.W)) // WB
+        val AddrOut = Output(UInt(32.W)) // Raw addr
     })
 
-    mem.io.addr := ???
-    mem.io.writeEn := io.writeEn
-    mem.io.writeData := io.aluRes // we write the ALU result
-    io.readData := mem.io.readData
+    mem.io.addr := io.AddrIn
+    mem.io.readEn := io.ReadEn;
+    mem.io.writeEn := io.WriteEn
+    mem.io.writeData := io.AluRes // we write the ALU result
+    io.ReadData := mem.io.readData;
+
+    io.WbSelOut := io.WbSelIn;
+    io.AddrOut := io.AddrIn;
 }
