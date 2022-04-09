@@ -13,17 +13,21 @@ class Mem extends Module {
         // From Control
         val WriteEn = Input(UInt(1.W)) // MemWrite
         val ReadEn = Input(UInt(1.W)) // MemRead
+        val CtrlBranchSel = Input(Bool()) // WB
         val WbSelIn = Input(UInt(1.W)) // WB
 
         // From Execute
         val AluRes = Input(UInt(32.W))
+        val AluBranchSel = Input(Bool())
         val AddrIn = Input(UInt(32.W)) // ????
-
 
         // To WB
         val ReadData = Output(UInt(32.W)) // After reading from the Memory
         val WbSelOut = Output(UInt(1.W)) // WB
         val AddrOut = Output(UInt(32.W)) // Raw addr
+
+        // To Datapath
+        val PCSrc = Output(Bool())
     })
 
     mem.io.addr := io.AddrIn
@@ -34,4 +38,6 @@ class Mem extends Module {
 
     io.WbSelOut := io.WbSelIn;
     io.AddrOut := io.AddrIn;
+
+    io.PCSrc := io.AluBranchSel & io.CtrlBranchSel;
 }

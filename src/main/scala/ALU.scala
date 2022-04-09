@@ -1,27 +1,18 @@
+import ALU._
 import chisel3._
 import chisel3.util._
 
 object ALU {
-    def ALU_ADD = 0.U(4.W)
-    def ALU_SUB = 1.U(4.W)
-    def ALU_AND = 2.U(4.W)
-    def ALU_OR = 3.U(4.W)
-    def ALU_XOR = 4.U(4.W)
-    def ALU_SLT = 5.U(4.W)
-    def ALU_SLL = 6.U(4.W)
-    def ALU_SLTU = 7.U(4.W)
-    def ALU_SRL = 8.U(4.W)
-    def ALU_SRA = 9.U(4.W)
-    def ALU_COPY_A = 10.U(4.W)
-    def ALU_COPY_B = 11.U(4.W)
-    def ALU_XXX = 15.U(4.W)
+    val add :: sub :: and :: or :: xor :: sll ::
+        slt :: sltu :: ge :: geu :: srl :: sra ::
+        copy_a :: copy_b :: xxx :: Nil = Enum(16)
 }
 
 class ALU extends Module {
     val io = IO(new Bundle {
         val A = Input(UInt(32.W))
         val B = Input(UInt(32.W))
-        val alu_op = Input(UInt(4.W))
+        val alu_op = Input(UInt(5.W))
 
         val out = Output(UInt(32.W))
         val sum = Output(UInt(32.W))
@@ -33,17 +24,20 @@ class ALU extends Module {
         io.alu_op,
         io.B,
         Seq(
-            ALU_ADD -> (io.A + io.B),
-            ALU_SUB -> (io.A - io.B),
-            ALU_SRA -> (io.A.asSInt >> shamt).asUInt,
-            ALU_SRL -> (io.A >> shamt),
-            ALU_SLL -> (io.A << shamt),
-            ALU_SLT -> (io.A.asSInt < io.B.asSInt),
-            ALU_SLTU -> (io.A < io.B),
-            ALU_AND -> (io.A & io.B),
-            ALU_OR -> (io.A | io.B),
-            ALU_XOR -> (io.A ^ io.B),
-            ALU_COPY_A -> io.A
+            add -> (io.A + io.B),
+            sub -> (io.A - io.B),
+            sra -> (io.A.asSInt >> shamt).asUInt,
+            srl -> (io.A >> shamt),
+            sll -> (io.A << shamt),
+            slt -> (io.A.asSInt < io.B.asSInt),
+            sltu -> (io.A < io.B),
+            ge -> (io.A.asSInt >= io.B.asSInt),
+            geu -> (io.A >= io.B),
+            and -> (io.A & io.B),
+            or -> (io.A | io.B),
+            xor -> (io.A ^ io.B),
+            copy_a -> io.A,
+            copy_b -> io.B
         )
     )
 

@@ -15,7 +15,8 @@ class Control extends Module  {
         val immSel = Output(UInt(1.W))
         val addr = Output(UInt(26.W))
         val funct = Output(UInt(6.W))
-        val wbSel = Output(UInt(1.W))
+        val MemSel = Output(Bool())
+        val WbSel = Output(UInt(1.W))
     })
 
     def assign(out: UInt, loc: UInt) = {
@@ -33,7 +34,8 @@ class Control extends Module  {
     assign(io.immSel, format(5))
     assign(io.addr, format(6))
     assign(io.funct, format(7))
-    assign(io.wbSel, format(8))
+    assign(io.WbSel, format(8))
+    // assign MemSel
 
     /*
     Make the 1.W -> BOOL()

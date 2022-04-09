@@ -13,19 +13,23 @@ class Decode extends Module  {
         val Instr = Input(UInt(32.W))
 
         // From WB
-        val WriteAddr = Input(UInt(32.W))
+        val WriteAddrIn = Input(UInt(32.W))
         val WriteEn = Input(UInt(1.W))
         val WriteDataIn = Input(UInt(32.W))
 
         // To Execute
+        val AluOp = Output(UInt(32.W))
         val Imm = Output(UInt(32.W))               // IMM VAL
         val ImmSel = Output(UInt(1.W))             // IMM SEL
         val PcCounterOut = Output(UInt(32.W))      // PC + 4
         val BranchAddrDelta = Output(UInt(32.W))   // delta the PC needs to move to for the branch
 
+        // To Mem
+        val MemSel = Output(Bool())
+
         // To WB going back to Decode
-        val WriteDataOut = Output(UInt(32.W))       // RD ADDR
         val WbSel = Output(UInt(1.W))               // WB SEL
+        val WriteAddrOut = Output(UInt(1.W))               // WB SEL
 
         val DataRead1 = Output(UInt(32.W))          // RS VALUE
         val DataRead2 = Output(UInt(32.W))          // RT VALUE
@@ -33,19 +37,18 @@ class Decode extends Module  {
 
     // CONTROL - which takes care of the actual instruction decoding
     control.io.instr := io.Instr;
-    val op = control.io.op;
-    val rs = control.io.rs;                         // RS ADDR
-    val rt = control.io.rt;                         // RT ADDR
+    io.AluOp := control.io.op;
+    io.MemSel := control.io.MemSel
     val rd = control.io.rd;                         // RD ADDR
     val imm = control.io.imm;                       // IMM VALUE
     val immSel = control.io.immSel                  // IMM SEL
-    val wbSel = control.io.wbSel                    // WB SEL
+    val wbSel = control.io.WbSel                    // WB SEL
 
     // REGISTER FILE
-    regFile.io.ReadAddr1 := rs;
-    regFile.io.ReadAddr2 := rt;
+    regFile.io.ReadAddr1 := control.io.rs;
+    regFile.io.ReadAddr2 := control.io.rt;
     regFile.io.WriteEnable := io.WriteEn === WB_MEM;
-    regFile.io.WriteAddr := io.WriteAddr;
+    regFile.io.WriteAddr := io.WriteAddrIn;
     regFile.io.WriteData := io.WriteDataIn;
     io.DataRead1 := regFile.io.ReadData1;
     io.DataRead2 := regFile.io.ReadData2;
@@ -53,7 +56,6 @@ class Decode extends Module  {
     io.PcCounterOut := io.PcCounterIn
     io.Imm := imm.asUInt;
     io.ImmSel := wbSel;
-    io.WriteDataOut := rd;
     io.WbSel := wbSel;
 
     signExtend.io.in := io.Instr(15, 0)
