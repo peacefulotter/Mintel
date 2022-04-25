@@ -1,5 +1,5 @@
+import Instructions.WB_MEM
 import chisel3._
-import instr.InstructionMapping.WB_MEM
 
 class Decode extends Module  {
 
@@ -9,26 +9,29 @@ class Decode extends Module  {
 
     val io = IO(new Bundle {
         // From Fetch
-        val PcCounterIn = Input(UInt(32.W))
         val Instr = Input(UInt(32.W))
+        val PcCounterIn = Input(UInt(32.W))
 
         // From WB
         val WriteAddrIn = Input(UInt(32.W))
-        val WriteEn = Input(UInt(1.W))
+        val WriteEnIn = Input(UInt(1.W))
         val WriteDataIn = Input(UInt(32.W))
 
         // To Execute
         val AluOp = Output(UInt(32.W))
         val Imm = Output(UInt(32.W))               // IMM VAL
-        val ImmSel = Output(UInt(1.W))             // IMM SEL
+        val ImmEn = Output(UInt(1.W))              // IMM SEL
+        val BrEn = Output(UInt(1.W))
         val PcCounterOut = Output(UInt(32.W))      // PC + 4
 
         // To Mem
-        val MemSel = Output(Bool())
+        val ReadEn = Output(Bool())
+        val WriteEnOut = Output(Bool())
 
         // To WB going back to Decode
-        val WbSel = Output(UInt(1.W))               // WB SEL
-        val WriteAddrOut = Output(UInt(1.W))               // WB SEL
+        val WbType = Output(UInt(1.W))
+        val WbEn = Output(UInt(1.W))
+        val WriteAddrOut = Output(UInt(1.W))
 
         val DataRead1 = Output(UInt(32.W))          // RS VALUE
         val DataRead2 = Output(UInt(32.W))          // RT VALUE
@@ -36,26 +39,28 @@ class Decode extends Module  {
 
     // CONTROL - which takes care of the actual instruction decoding
     control.io.instr := io.Instr;
-    io.AluOp := control.io.op;
-    io.MemSel := control.io.MemSel
-    val rd = control.io.rd;                         // RD ADDR
-    val imm = control.io.imm;                       // IMM VALUE
-    val immSel = control.io.immSel                  // IMM SEL
-    val wbSel = control.io.WbSel                    // WB SEL
+    io.WriteAddrOut := control.io.rd
+    io.Imm := control.io.imm;
+    io.AluOp := control.io.AluOp;
+    io.BrEn := control.io.BrEn
+    io.ReadEn := control.io.LoadEn
+    io.ImmEn := control.io.ImmEn;
+    io.WriteEnOut := control.io.StoreEn;
+    io.WbType := control.io.WbType;
+    io.WbEn := control.io.WbEn;
 
     // REGISTER FILE
     regFile.io.ReadAddr1 := control.io.rs;
     regFile.io.ReadAddr2 := control.io.rt;
-    regFile.io.WriteEnable := io.WriteEn === WB_MEM;
+    regFile.io.WriteEnable := io.WriteEnIn === WB_MEM;
     regFile.io.WriteAddr := io.WriteAddrIn;
     regFile.io.WriteData := io.WriteDataIn;
+
     io.DataRead1 := regFile.io.ReadData1;
     io.DataRead2 := regFile.io.ReadData2;
 
     io.PcCounterOut := io.PcCounterIn
-    io.Imm := imm.asUInt;
-    io.ImmSel := wbSel;
-    io.WbSel := wbSel;
+
 
     signExtend.io.in := io.Instr(15, 0)
     signExtend.io.isSigned := ???

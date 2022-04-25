@@ -1,103 +1,70 @@
 
 import chisel3._
 import chisel3.util.BitPat
-import instr.InstructionFormats.{I, J, R}
 
 object Instructions {
-    // i-format
-    def I_RS = 6.U(5.W)
-    def I_RT = 11.U(5.W)
-    def I_IMM = 16.U(16.W)
 
-    // j-format
-    def J_ADDR = 6.U(26.W)
-
-    // r-format
-    def R_RS = 6.U(5.W)
-    def R_RT = 11.U(5.W)
-    def R_RD = 16.U(5.W)
-    def R_FUNCT = 26.U(6.W)
-
-    def X = 0.U(0.W);
+    val default = (0 until 7).map( _ => 0.U ).toList
 
     // IMM SEL
-    def IMM_X = 0.U(1.W)
-    def IMM_EN = 1.U(1.W)
-
-    // WB SEL
-    def WB_ALU = 0.U(1.W)
-    def WB_MEM = 1.U(1.W)
-
-    def conversion = Map(
-        //         rs      rt      rd     imm      addr     funct    imm_sel
-        I -> List( I_RS,  I_RT,    X,     I_IMM,   X,       X,       IMM_EN),
-        J -> List( X,     X,       X,     X,       J_ADDR,  X,       IMM_X),
-        R -> List( R_RS,  R_RT,    R_RD,  X,       X,       R_FUNCT, IMM_X)
-    )
-
-    def default= List(X, X, X, X, X, X, X, X)
-
-    // BR TYPE
-    def BR_X = 0.U(3.W)
-    def BR_LTU = 1.U(3.W)
-    def BR_LT = 2.U(3.W)
-    def BR_EQ = 3.U(3.W)
-    def BR_GEU = 4.U(3.W)
-    def BR_GE = 5.U(3.W)
-    def BR_NE = 6.U(3.W)
-
-    // LD TYPE
-    val LD_X = 0.U(1.W)
-    val LD_LW = 1.U(1.W)
-
-    // ST TYPE
-    val ST_X = 0.U(1.W)
-    val ST_W = 1.U(1.W)
-
+    val IMM_N = 0.U(1.W)
+    val IMM_Y = 1.U(1.W)
+    // BR EN
+    val BR_N = 0.U(1.W)
+    val BR_Y = 1.U(1.W)
+    // LD EN
+    val LD_N = 0.U(1.W)
+    val LD_Y = 1.U(1.W)
+    // ST EN
+    val ST_N = 0.U(1.W)
+    val ST_Y = 1.U(1.W)
+    // WB TYPE
+    val WB_ALU = 0.U(1.W)
+    val WB_MEM = 1.U(1.W)
     // WR EN
-    def WB_N = 0.U(1.W) // no
-    def WB_Y = 1.U(1.W) // yes
+    val WB_N = 0.U(1.W)
+    val WB_Y = 1.U(1.W)
 
     val map = Array(
-        //       type  alu_op    ld_type   st_type  wb_type  wb_en
+        //       imm_en     alu_op   br_en    ld_en    st_en   wb_type   wb_en
         // Arithmetic
-        ADD ->   (R,    ALU.add,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        ADDI ->  (I,    ALU.add,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SUB ->   (R,    ALU.sub,  LD_X,     ST_X,   WB_ALU,   WB_Y),
+        ADD ->   (ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ADDI ->  (ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SUB ->   (ALU.sub,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Logical
-        AND ->   (R,    ALU.and,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        ANDI ->  (I,    ALU.and,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        OR ->    (R,    ALU.or,   LD_X,     ST_X,   WB_ALU,   WB_Y),
-        ORI ->   (I,    ALU.or,   LD_X,     ST_X,   WB_ALU,   WB_Y),
-        XOR ->   (R,    ALU.xor,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        XORI ->  (I,    ALU.xor,  LD_X,     ST_X,   WB_ALU,   WB_Y),
+        AND ->   (ALU.and,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ANDI ->  (ALU.and,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        OR ->    (ALU.or,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ORI ->   (ALU.or,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        XOR ->   (ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        XORI ->  (ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Shifts
-        SLL ->   (R,    ALU.sll,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SLLI ->  (I,    ALU.sll,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SRL ->   (R,    ALU.srl,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SRLI ->  (I,    ALU.srl,  LD_X,     ST_X,   WB_ALU,   WB_Y),
+        SLL ->   (ALU.sll,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLLI ->  (ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SRL ->   (ALU.srl,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SRLI ->  (ALU.srl,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Compare
-        SLT ->   (R,    ALU.lt,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SLTI ->  (I,    ALU.lt,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SLTU ->  (R,    ALU.ltu,  LD_X,     ST_X,   WB_ALU,   WB_Y),
-        SLTIU -> (I,   ALU.ltu,  LD_X,     ST_X,   WB_ALU,   WB_Y),
+        SLT ->   (ALU.lt,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTI ->  (ALU.lt,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTU ->  (ALU.ltu,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTIU -> (ALU.ltu,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Branch
-        BEQ ->   (J,    ALU.eq,   LD_X,     ST_X,   WB_ALU,   WB_N),
-        BNE ->   (J,    ALU.ne,   LD_X,     ST_X,   WB_ALU,   WB_N),
-        BLT ->   (J,    ALU.lt,   LD_X,     ST_X,   WB_ALU,   WB_N),
-        BGE ->   (J,    ALU.ge,   LD_X,     ST_X,   WB_ALU,   WB_N),
-        BLTU ->  (J,    ALU.ltu,  LD_X,     ST_X,   WB_ALU,   WB_N),
-        BGEU ->  (J,    ALU.geu,  LD_X,     ST_X,   WB_ALU,   WB_N),
+        BNE ->   (ALU.ne,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BEQ ->   (ALU.eq,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BLT ->   (ALU.lt,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BGE ->   (ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BLTU ->  (ALU.ltu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BGEU ->  (ALU.geu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
         // Load
-        LW ->    (R,    ALU.add,  LD_X,     ST_X,   WB_MEM,   WB_Y),
+        LW ->    (ALU.add,  IMM_N,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
         // Store
-        SW ->    (R,    ALU.add,  LD_X,     ST_W,   WB_ALU,   WB_N),
-    ).map((line) => (line._1, conversion.get(line._2._1).get))
+        SW ->    (ALU.add,  IMM_N,   BR_N,    LD_N,    ST_Y,   WB_ALU,   WB_N),
+    )
 
     // Arithmetic
     def ADD = BitPat("b0000000??????????000?????0110011")
     def ADDI = BitPat("b?????????????????000?????0010011")
-    def SUB = BitPat("b0100000??????????000?????0110011")
+    def SUB = BitPat("b0100000??????????000?????0110011") // FIXME: OPCODE = 0
     // Logical
     def AND = BitPat("b0000000??????????111?????0110011")
     def ANDI = BitPat("b?????????????????111?????0010011")

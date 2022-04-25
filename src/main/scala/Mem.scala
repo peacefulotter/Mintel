@@ -11,27 +11,27 @@ class Mem extends Module {
 
     val io = IO(new Bundle {
         // From Control
-        val WriteEn = Input(UInt(1.W)) // MemWrite
-        val ReadEn = Input(UInt(1.W)) // MemRead
-        val CtrlBranchSel = Input(Bool()) // WB
-        val WbSelIn = Input(UInt(1.W)) // WB
+        val WriteEn = Input(UInt(1.W))
+        val ReadEn = Input(UInt(1.W))
+        val CtrlBrEn = Input(Bool())
+        val WbTypeIn = Input(UInt(1.W))
+        val WbEnIn = Input(UInt(1.W))
 
         // From Execute
         val WriteData = Input(UInt(32.W))
-        val AluBranchSel = Input(Bool())
-        val WriteAddr = Input(UInt(32.W)) // ????
-        val BranchAddrIn = Input(UInt(32.W))
-
-        // To Fetch
-        val BranchAddrOut = Input(UInt(32.W))
+        val AluBrEn = Input(Bool())
+        val WriteAddr = Input(UInt(32.W))
+        val BrAddrIn = Input(UInt(32.W))
 
         // To WB
-        val ReadData = Output(UInt(32.W)) // After reading from the Memory
-        val WbSelOut = Output(UInt(1.W)) // WB
-        val AddrOut = Output(UInt(32.W)) // Raw addr
+        val ReadData = Output(UInt(32.W))
+        val WbTypeOut = Output(UInt(1.W))
+        val WbEnOut = Output(UInt(1.W))
+        val AddrOut = Output(UInt(32.W))
 
-        // To Datapath
-        val PCSrc = Output(Bool())
+        // Datapath -> To Fetch
+        val BrAddrOut = Output(UInt(32.W))
+        val BrEnOut = Output(Bool())
     })
 
     mem.io.addr := io.WriteAddr
@@ -40,10 +40,11 @@ class Mem extends Module {
     mem.io.writeData := io.WriteData // we write the ALU result
     io.ReadData := mem.io.readData;
 
-    io.BranchAddrOut := io.BranchAddrIn;
+    io.BrAddrOut := io.BrAddrIn;
 
-    io.WbSelOut := io.WbSelIn;
+    io.WbTypeOut := io.WbTypeIn;
+    io.WbEnOut := io.WbEnIn;
     io.AddrOut := io.WriteAddr;
 
-    io.PCSrc := io.AluBranchSel & io.CtrlBranchSel;
+    io.BrEnOut := io.AluBrEn & io.CtrlBrEn;
 }
