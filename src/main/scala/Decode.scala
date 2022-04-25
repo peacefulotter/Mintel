@@ -22,7 +22,6 @@ class Decode extends Module  {
         val Imm = Output(UInt(32.W))               // IMM VAL
         val ImmSel = Output(UInt(1.W))             // IMM SEL
         val PcCounterOut = Output(UInt(32.W))      // PC + 4
-        val BranchAddrDelta = Output(UInt(32.W))   // delta the PC needs to move to for the branch
 
         // To Mem
         val MemSel = Output(Bool())
@@ -60,5 +59,5 @@ class Decode extends Module  {
 
     signExtend.io.in := io.Instr(15, 0)
     signExtend.io.isSigned := ???
-    io.BranchAddrDelta := signExtend.io.out
+    io.Imm := signExtend.io.out
 }

@@ -13,7 +13,7 @@ class Datapath extends Module {
 
     /** FETCH **/
     fetch.io.PCSrc := memory.io.PCSrc
-    fetch.io.BranchAddr := memory.io.AddrOut
+    fetch.io.BranchAddr := memory.io.BranchAddrOut
 
     /** DECODE **/
     decode.io.PcCounterIn := RegNext( fetch.io.PcCounter )
@@ -24,27 +24,28 @@ class Datapath extends Module {
 
     /** EXECUTE **/
     execute.io.PcCounter := RegNext(decode.io.PcCounterOut)
-    execute.io.BranchAddrIn := RegNext(decode.io.BranchAddrDelta)
+    execute.io.Imm := RegNext(decode.io.Imm)
     execute.io.DataRead1 := RegNext(decode.io.DataRead1)
     execute.io.DataRead2 := RegNext(decode.io.DataRead2)
     execute.io.WriteAddr := RegNext(decode.io.WriteAddrOut)
     execute.io.AluOp := RegNext(decode.io.AluOp)
-    execute.io.AluSrc := ???
-    execute.io.MemSel := RegNext(decode.io.MemSel)
+    execute.io.ImmSel := RegNext(decode.io.ImmSel)
+    execute.io.WriteSelIn := RegNext(decode.io.WriteSelOut)
+    execute.io.ReadSelIn := RegNext(decode.io.ReadSelOut)
+    execute.io.BranchSelIn := RegNext(decode.io.BranchSelIn)
     execute.io.WbSel := RegNext(decode.io.WbSel)
-    // Output
-    execute.io.BranchAddrOut := ???
-    execute.io.DataRead2Out := ???
 
     /** MEMORY **/
     // Input
-    memory.io.WriteEn := ??? // RegNext(execute.io.)
-    memory.io.ReadEn := ??? // RegNext(execute.io.MemSelOut)
+    memory.io.WriteEn := RegNext(execute.io.WriteSelOut)
+    memory.io.ReadEn := RegNext(execute.io.ReadSelOut)
     memory.io.WbSelIn := RegNext(execute.io.WbSelOut)
-    memory.io.AluRes := RegNext(execute.io.AluRes)
-    memory.io.CtrlBranchSel := ???
-    memory.io.AluBranchSel := RegNext(execute.io.BranchSel)
-    memory.io.AddrIn := RegNext(execute.io.WriteAddr)
+    memory.io.WriteData := RegNext(execute.io.DataRead2Out)
+    memory.io.WriteAddr := RegNext(execute.io.AluRes)
+    memory.io.CtrlBranchSel := RegNext(execute.io.BranchSelOut)
+    memory.io.AluBranchSel := RegNext(execute.io.BranchCond)
+    memory.io.WriteAddr := RegNext(execute.io.WriteAddr)
+    memory.io.BranchAddrIn := RegNext(execute.io.BranchAddrOut)
 
     /** WRITEBACK **/
     writeback.io.WbSelIn := RegNext(memory.io.WbSelOut)

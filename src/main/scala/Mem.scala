@@ -17,9 +17,13 @@ class Mem extends Module {
         val WbSelIn = Input(UInt(1.W)) // WB
 
         // From Execute
-        val AluRes = Input(UInt(32.W))
+        val WriteData = Input(UInt(32.W))
         val AluBranchSel = Input(Bool())
-        val AddrIn = Input(UInt(32.W)) // ????
+        val WriteAddr = Input(UInt(32.W)) // ????
+        val BranchAddrIn = Input(UInt(32.W))
+
+        // To Fetch
+        val BranchAddrOut = Input(UInt(32.W))
 
         // To WB
         val ReadData = Output(UInt(32.W)) // After reading from the Memory
@@ -30,14 +34,16 @@ class Mem extends Module {
         val PCSrc = Output(Bool())
     })
 
-    mem.io.addr := io.AddrIn
+    mem.io.addr := io.WriteAddr
     mem.io.readEn := io.ReadEn;
     mem.io.writeEn := io.WriteEn
-    mem.io.writeData := io.AluRes // we write the ALU result
+    mem.io.writeData := io.WriteData // we write the ALU result
     io.ReadData := mem.io.readData;
 
+    io.BranchAddrOut := io.BranchAddrIn;
+
     io.WbSelOut := io.WbSelIn;
-    io.AddrOut := io.AddrIn;
+    io.AddrOut := io.WriteAddr;
 
     io.PCSrc := io.AluBranchSel & io.CtrlBranchSel;
 }
