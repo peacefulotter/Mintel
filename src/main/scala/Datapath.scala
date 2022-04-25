@@ -12,7 +12,7 @@ class Datapath extends Module {
     val io = IO( new Bundle {} )
 
     /** FETCH **/
-    fetch.io.PCSrc := memory.io.BrEnOut
+    fetch.io.BrEn := memory.io.BrEnOut
     fetch.io.BranchAddr := memory.io.BrAddrOut
 
     /** DECODE **/
@@ -37,7 +37,6 @@ class Datapath extends Module {
     execute.io.DataRead2 := RegNext(decode.io.DataRead2)
 
     /** MEMORY **/
-    // Input
     memory.io.WriteEn := RegNext(execute.io.WriteEnOut)
     memory.io.ReadEn := RegNext(execute.io.ReadEnOut)
     memory.io.WbTypeIn := RegNext(execute.io.WbTypeOut)

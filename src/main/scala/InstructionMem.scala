@@ -14,5 +14,4 @@ class InstructionMem extends Module {
 
     io.Instr := memory(io.PC)
     loadMemoryFromFile(memory, "/res/test.txt")
-
 }

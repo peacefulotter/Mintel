@@ -8,7 +8,7 @@ class Fetch extends Module  {
     val io = IO(new Bundle {
         // From MEM - in case of a Branch
         val BranchAddr = Input(UInt(32.W))
-        val PCSrc = Input(Bool())
+        val BrEn = Input(Bool())
 
         val PcCounter = Output(UInt(32.W))
         val Instr = Output(Vec(32, Bool()))
@@ -19,5 +19,5 @@ class Fetch extends Module  {
     io.Instr := mem.io.Instr;
 
     io.PcCounter := PC + 4.U;
-    PC := Mux( io.PCSrc, io.BranchAddr, io.PcCounter )
+    PC := Mux( io.BrEn, io.BranchAddr, io.PcCounter )
 }

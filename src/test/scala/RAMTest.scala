@@ -10,21 +10,21 @@ class RAMTest extends AnyFlatSpec with ChiselScalatestTester {
       println("Start the blinking LED")
 
       c.io.addr.poke(0.U);
-      c.io.enable.poke(true.B)
+      c.io.readEn.poke(true.B)
 
       // Read at 0x0
       c.clock.step(1)
-      val r2 = c.io.dataOut.peek().litValue
+      val r2 = c.io.readData.peek().litValue
       println(r2)
 
       // Write 4 at 0x0
       c.clock.step(1)
-      c.io.write.poke(true.B);
-      c.io.dataIn.poke(4.U);
+      c.io.writeEn.poke(true.B);
+      c.io.writeData.poke(4.U);
 
       // Read at 0x0
       c.clock.step(1);
-      val r3 = c.io.dataOut.peek().litValue;
+      val r3 = c.io.readData.peek().litValue;
       println(r3)
 
       println("\nEnd the blinking LED")

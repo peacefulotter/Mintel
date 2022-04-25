@@ -63,6 +63,6 @@ class Decode extends Module  {
 
 
     signExtend.io.in := io.Instr(15, 0)
-    signExtend.io.isSigned := ???
+    signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic
     io.Imm := signExtend.io.out
 }

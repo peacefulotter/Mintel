@@ -26,7 +26,7 @@ object Instructions {
     val WB_Y = 1.U(1.W)
 
     val map = Array(
-        //       imm_en     alu_op   br_en    ld_en    st_en   wb_type   wb_en
+        //        imm_en    alu_op   br_en    ld_en    st_en   wb_type   wb_en
         // Arithmetic
         ADD ->   (ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         ADDI ->  (ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
@@ -62,6 +62,7 @@ object Instructions {
     )
 
     // Arithmetic
+    // TODO: add unsigned arithmetic ?
     def ADD = BitPat("b0000000??????????000?????0110011")
     def ADDI = BitPat("b?????????????????000?????0010011")
     def SUB = BitPat("b0100000??????????000?????0110011") // FIXME: OPCODE = 0

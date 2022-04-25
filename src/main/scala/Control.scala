@@ -1,7 +1,6 @@
 import Instructions.default
 import chisel3._
 import chisel3.util.ListLookup
-import instr.InstructionMapping._
 
 class Control extends Module  {
     val io = IO(new Bundle {
