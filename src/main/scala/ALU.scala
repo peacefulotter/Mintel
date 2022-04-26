@@ -3,9 +3,7 @@ import chisel3._
 import chisel3.util._
 
 object ALU {
-    val add :: sub :: and :: or :: xor :: sll ::
-        slt :: sltu :: lt :: ltu :: lte :: ge ::
-        geu :: ne :: eq :: srl :: sra :: Nil = Enum(17)
+    val add :: sub :: and :: or :: xor :: sll :: slt :: sltu :: lt :: ltu :: lte :: ge :: geu :: ne :: eq :: srl :: sra :: Nil = Enum(17)
 }
 
 class ALU extends Module {
@@ -43,7 +41,7 @@ class ALU extends Module {
             sra ->  (io.A.asSInt >> shamt).asUInt,
             srl ->  (io.A >> shamt),
             sll ->  (io.A << shamt),
-            slt ->  (io.A.asSInt << io.B.asSInt),
+            slt ->  (io.A.asSInt < io.B.asSInt),
             sltu -> (io.A << io.B),
             and ->  (io.A & io.B),
             or ->   (io.A | io.B),

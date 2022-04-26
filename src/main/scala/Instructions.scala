@@ -28,37 +28,37 @@ object Instructions {
     val map = Array(
         //        imm_en    alu_op   br_en    ld_en    st_en   wb_type   wb_en
         // Arithmetic
-        ADD ->   (ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ADDI ->  (ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SUB ->   (ALU.sub,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ADD ->   List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ADDI ->  List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SUB ->   List(ALU.sub,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Logical
-        AND ->   (ALU.and,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ANDI ->  (ALU.and,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        OR ->    (ALU.or,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ORI ->   (ALU.or,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        XOR ->   (ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        XORI ->  (ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        AND ->   List(ALU.and,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ANDI ->  List(ALU.and,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        OR ->    List(ALU.or,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ORI ->   List(ALU.or,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        XOR ->   List(ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        XORI ->  List(ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Shifts
-        SLL ->   (ALU.sll,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLLI ->  (ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SRL ->   (ALU.srl,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SRLI ->  (ALU.srl,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLL ->   List(ALU.sll,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLLI ->  List(ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SRL ->   List(ALU.srl,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SRLI ->  List(ALU.srl,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Compare
-        SLT ->   (ALU.lt,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTI ->  (ALU.lt,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTU ->  (ALU.ltu,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTIU -> (ALU.ltu,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLT ->   List(ALU.lt,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTI ->  List(ALU.lt,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTU ->  List(ALU.ltu,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLTIU -> List(ALU.ltu,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Branch
-        BNE ->   (ALU.ne,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BEQ ->   (ALU.eq,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BLT ->   (ALU.lt,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BGE ->   (ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BLTU ->  (ALU.ltu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BGEU ->  (ALU.geu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BNE ->   List(ALU.ne,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BEQ ->   List(ALU.eq,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BLT ->   List(ALU.lt,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BGE ->   List(ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BLTU ->  List(ALU.ltu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BGEU ->  List(ALU.geu,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
         // Load
-        LW ->    (ALU.add,  IMM_N,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
+        LW ->    List(ALU.add,  IMM_N,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
         // Store
-        SW ->    (ALU.add,  IMM_N,   BR_N,    LD_N,    ST_Y,   WB_ALU,   WB_N),
+        SW ->    List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_Y,   WB_ALU,   WB_N),
     )
 
     // Arithmetic
@@ -100,7 +100,7 @@ object Instructions {
     // instr.cover( BNE._2 )
 
     // Loads
-    """ def LB = Instructions( InstructionFormats.R, BitPat("b?????????????????000?????0000011") )
+    /*def LB = Instructions( InstructionFormats.R, BitPat("b?????????????????000?????0000011") )
     def LH = BitPat("b?????????????????001?????0000011")
     def LW = BitPat("b?????????????????010?????0000011")
     def LBU = BitPat("b?????????????????100?????0000011")
@@ -160,5 +160,5 @@ object Instructions {
     def ERET = BitPat("b00010000000000000000000001110011")
     def WFI = BitPat("b00010000001000000000000001110011")
 
-    def NOP = BitPat.bitPatToUInt(BitPat("b00000000000000000000000000010011"))"""
+    def NOP = BitPat.bitPatToUInt(BitPat("b00000000000000000000000000010011"))*/
 }

@@ -37,11 +37,11 @@ class MemoryModule extends Module {
         val readData: UInt = Output(UInt(width.W))
     })
 
-    val OutportWrEn: Bool = io.writeEn & (io.addr == OutPortAddr);
+    val OutportWrEn: Bool = io.writeEn & (io.addr === OutPortAddr);
     val mux_sel: UInt = MuxCase(3.U, Array(
         OutportWrEn -> 3.U,
-        !io.writeEn & (io.addr == InPort0Addr) -> 2.U,
-        !io.writeEn & (io.addr == InPort1Addr) -> 1.U
+        (!io.writeEn && (io.addr === InPort0Addr)) -> 2.U,
+        (!io.writeEn && (io.addr === InPort1Addr)) -> 1.U
     ));
     // val delay_en = false.B;
 
