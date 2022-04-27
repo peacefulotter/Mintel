@@ -15,7 +15,7 @@ class InstructionMem extends Module {
     io.Instr := memory(io.PC)
     loadMemoryFromFile(memory, "res/test.txt")
     /*
-    addi t3 t2 0xF
     sub t2 t1 t0
+    addi t3 t2 0xF
      */
 }

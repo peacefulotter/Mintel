@@ -14,7 +14,6 @@ class Fetch extends Module  {
         val Instr = Output(UInt(32.W))
     })
 
-
     mem.io.PC := PC
     io.Instr := mem.io.Instr;
 
