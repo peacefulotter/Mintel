@@ -8,7 +8,9 @@ class Execute extends Module {
         val PcCounter = Input(UInt(32.W)) // used for branch addr
 
         // From Decode
-        val Imm = Input(UInt(32.W)) // signal using the SignExtend
+        val Imm = Input(UInt(32.W))
+        val rt = Input(UInt(32.W))
+        val rd = Input(UInt(32.W))
         val DataRead1 = Input(UInt(32.W))
         val DataRead2 = Input(UInt(32.W))
 
@@ -24,7 +26,7 @@ class Execute extends Module {
         // From ALU to MEM
         val AluRes = Output(UInt(32.W))
         val zero = Output(Bool())
-        val WriteAddr = Output(UInt(32.W))
+        val WriteAddrOut = Output(UInt(32.W))
 
         val BranchAddrOut = Output(UInt(32.W))
 
@@ -36,6 +38,8 @@ class Execute extends Module {
         // To MEM -> WB
         val WbTypeOut = Output(UInt(1.W))
         val WbEnOut = Output(UInt(1.W))
+        // To MEM -> Decode
+        val WriteRegAddr = Output(UInt(32.W))
     })
 
     alu.io.A := io.DataRead1;
@@ -52,5 +56,6 @@ class Execute extends Module {
     io.WbTypeOut := io.WbTypeIn
     io.WbEnOut := io.WbEnIn
 
-    io.WriteAddr := io.DataRead2;
+    io.WriteAddrOut := io.DataRead2;
+    io.WriteRegAddr := Mux( io.ImmEn, io.rt, io.rd )
 }

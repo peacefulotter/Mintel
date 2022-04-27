@@ -42,7 +42,7 @@ class ALU extends Module {
             srl ->  (io.A >> shamt),
             sll ->  (io.A << shamt),
             slt ->  (io.A.asSInt < io.B.asSInt),
-            sltu -> (io.A << io.B),
+            // sltu -> (io.A << io.B),
             and ->  (io.A & io.B),
             or ->   (io.A | io.B),
             xor ->  (io.A ^ io.B)

@@ -22,12 +22,15 @@ class Mem extends Module {
         val AluBrEn = Input(Bool())
         val WriteAddr = Input(UInt(32.W))
         val BrAddrIn = Input(UInt(32.W))
+        val WriteRegAddrIn = Input(UInt(32.W))
 
         // To WB
         val ReadData = Output(UInt(32.W))
         val WbTypeOut = Output(UInt(1.W))
         val WbEnOut = Output(UInt(1.W))
         val AddrOut = Output(UInt(32.W))
+        // To WB -> Decode
+        val WriteRegAddrOut = Output(UInt(32.W))
 
         // Datapath -> To Fetch
         val BrAddrOut = Output(UInt(32.W))
@@ -35,16 +38,18 @@ class Mem extends Module {
     })
 
     mem.io.addr := io.WriteAddr
-    mem.io.readEn := io.ReadEn;
+    mem.io.readEn := io.ReadEn
     mem.io.writeEn := io.WriteEn
-    mem.io.writeData := io.WriteData // we write the ALU result
-    io.ReadData := mem.io.readData;
+    mem.io.writeData := io.WriteData // we write the ALU result ???
+    io.ReadData := mem.io.readData
 
-    io.BrAddrOut := io.BrAddrIn;
+    io.BrAddrOut := io.BrAddrIn
 
-    io.WbTypeOut := io.WbTypeIn;
-    io.WbEnOut := io.WbEnIn;
-    io.AddrOut := io.WriteAddr;
+    io.WbTypeOut := io.WbTypeIn
+    io.WbEnOut := io.WbEnIn
+    io.AddrOut := io.WriteAddr
 
-    io.BrEnOut := io.AluBrEn & io.CtrlBrEn;
+    io.BrEnOut := io.AluBrEn & io.CtrlBrEn
+
+    io.WriteRegAddrOut := io.WriteRegAddrIn
 }

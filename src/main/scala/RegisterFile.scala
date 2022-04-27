@@ -8,11 +8,11 @@ class RegisterFile extends Module {
         val ReadAddr1  = Input(UInt(5.W))
         val ReadAddr2  = Input(UInt(5.W))
         val WriteAddr = Input(UInt(5.W))
-        val WriteData = Input(Vec(32, UInt(1.W)));
+        val WriteData = Input(UInt(32.W));
         val WriteEnable = Input(Bool())
 
-        val ReadData1 = Output(Vec(32, UInt(1.W)))
-        val ReadData2 = Output(Vec(32, UInt(1.W)))
+        val ReadData1 = Output(UInt(32.W))
+        val ReadData2 = Output(UInt(32.W))
     })
 
     when ( io.WriteEnable & io.WriteAddr.orR ) {

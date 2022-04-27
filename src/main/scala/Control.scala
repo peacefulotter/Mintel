@@ -21,11 +21,11 @@ class Control extends Module  {
     })
 
     val format = ListLookup(io.instr.asUInt, default, Instructions.map);
-    io.rs      := io.instr(6, 11)
-    io.rt      := io.instr(11, 16)
-    io.rd      := io.instr(16, 21)
-    io.imm     := io.instr(16, 32)
-    io.addr    := io.instr(6, 32)
+    io.rs      := 0.U; // io.instr(6, 11)
+    io.rt      := 0.U; // io.instr(11, 16)
+    io.rd      := 0.U; // io.instr(16, 21)
+    io.imm     := 0.U; // io.instr(16, 32)
+    io.addr    := 0.U; // io.instr(6, 32)
     io.AluOp   := format(0)
     io.ImmEn   := format(1)
     io.BrEn    := format(2)

@@ -3,7 +3,7 @@ import chisel3._
 class Fetch extends Module  {
 
     val mem = Module( new InstructionMem )
-    val PC = RegInit(0.U); // TODO: PC should start at which value?
+    val PC = RegInit(0.U(32.W)); // TODO: PC should start at which value?
 
     val io = IO(new Bundle {
         // From MEM - in case of a Branch
@@ -11,7 +11,7 @@ class Fetch extends Module  {
         val BrEn = Input(Bool())
 
         val PcCounter = Output(UInt(32.W))
-        val Instr = Output(Vec(32, Bool()))
+        val Instr = Output(UInt(32.W))
     })
 
 

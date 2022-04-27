@@ -9,17 +9,21 @@ class Datapath extends Module {
     val memory = Module( new Mem )
     val writeback = Module( new Writeback )
 
-    val io = IO( new Bundle {} )
+    val io = IO( new Bundle {
+        val instr = Output(UInt(32.W))
+    } )
 
     /** FETCH **/
     fetch.io.BrEn := memory.io.BrEnOut
     fetch.io.BranchAddr := memory.io.BrAddrOut
 
+    io.instr := fetch.io.Instr
+
     /** DECODE **/
     decode.io.Instr := RegNext( fetch.io.Instr )
     decode.io.PcCounterIn := RegNext( fetch.io.PcCounter )
     decode.io.WriteEnIn := writeback.io.WbEnOut // no RegNext
-    decode.io.WriteAddrIn := writeback.io.WriteAddrOut // no RegNext
+    decode.io.WriteAddrIn := writeback.io.WriteRegAddrOut // no RegNext
     decode.io.WriteDataIn := writeback.io.WriteDataOut // no RegNext
 
     /** EXECUTE **/
@@ -32,7 +36,8 @@ class Datapath extends Module {
     execute.io.WriteEnIn := RegNext(decode.io.WriteEnOut)
     execute.io.WbTypeIn := RegNext(decode.io.WbType)
     execute.io.WbEnIn := RegNext(decode.io.WbEn)
-    execute.io.WriteAddr := RegNext(decode.io.WriteAddrOut)
+    execute.io.rd := RegNext(decode.io.rd)
+    execute.io.rt := RegNext(decode.io.rt)
     execute.io.DataRead1 := RegNext(decode.io.DataRead1)
     execute.io.DataRead2 := RegNext(decode.io.DataRead2)
 
@@ -45,13 +50,13 @@ class Datapath extends Module {
     memory.io.WriteAddr := RegNext(execute.io.AluRes)
     memory.io.CtrlBrEn := RegNext(execute.io.BrEnOut)
     memory.io.AluBrEn := RegNext(execute.io.zero)
-    memory.io.WriteAddr := RegNext(execute.io.WriteAddr)
     memory.io.BrAddrIn := RegNext(execute.io.BranchAddrOut)
+    memory.io.WriteRegAddrIn := RegNext(execute.io.WriteRegAddr)
 
     /** WRITEBACK **/
     writeback.io.WbTypeIn := RegNext(memory.io.WbTypeOut)
     writeback.io.WbEnIn := RegNext(memory.io.WbEnOut)
-    writeback.io.WriteAddrIn := ???
     writeback.io.ReadData := RegNext(memory.io.ReadData)
     writeback.io.AddrData := RegNext(memory.io.AddrOut)
+    writeback.io.WriteRegAddrIn := RegNext(memory.io.WriteRegAddrOut)
 }

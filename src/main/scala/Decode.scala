@@ -31,7 +31,8 @@ class Decode extends Module  {
         // To WB going back to Decode
         val WbType = Output(UInt(1.W))
         val WbEn = Output(UInt(1.W))
-        val WriteAddrOut = Output(UInt(1.W))
+        val rd = Output(UInt(6.W))
+        val rt = Output(UInt(6.W))
 
         val DataRead1 = Output(UInt(32.W))          // RS VALUE
         val DataRead2 = Output(UInt(32.W))          // RT VALUE
@@ -39,7 +40,8 @@ class Decode extends Module  {
 
     // CONTROL - which takes care of the actual instruction decoding
     control.io.instr := io.Instr;
-    io.WriteAddrOut := control.io.rd
+    io.rd := control.io.rd
+    io.rt := control.io.rt
     io.Imm := control.io.imm;
     io.AluOp := control.io.AluOp;
     io.BrEn := control.io.BrEn
@@ -60,7 +62,6 @@ class Decode extends Module  {
     io.DataRead2 := regFile.io.ReadData2;
 
     io.PcCounterOut := io.PcCounterIn
-
 
     signExtend.io.in := io.Instr(15, 0)
     signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic
