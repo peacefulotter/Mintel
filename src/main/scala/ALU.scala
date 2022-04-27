@@ -3,7 +3,7 @@ import chisel3._
 import chisel3.util._
 
 object ALU {
-    val add :: sub :: and :: or :: xor :: sll :: slt :: sltu :: lt :: ltu :: lte :: ge :: geu :: ne :: eq :: srl :: sra :: Nil = Enum(17)
+    val add :: sub :: and :: or :: xor :: sll :: srl :: slt :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(16)
 }
 
 class ALU extends Module {
@@ -23,9 +23,7 @@ class ALU extends Module {
         false.B,
         Seq(
             ALU.lt ->   (io.A.asSInt < io.B.asSInt),
-            ALU.ltu ->  (io.A < io.B),
             ALU.ge ->   (io.A.asSInt >= io.B.asSInt),
-            ALU.geu ->  (io.A >= io.B),
             ALU.ne ->   (io.A =/= io.B),
             ALU.eq ->   (io.A === io.B)
         )
@@ -37,11 +35,9 @@ class ALU extends Module {
         Seq(
             add ->  (io.A + io.B),
             sub ->  (io.A - io.B),
-            sra ->  (io.A.asSInt >> shamt).asUInt,
-            srl ->  (io.A >> shamt),
-            sll ->  (io.A << shamt),
+            srl ->  (io.A >> io.B),
+            sll ->  (io.A << io.B),
             slt ->  (io.A.asSInt < io.B.asSInt),
-            // sltu -> (io.A << io.B),
             and ->  (io.A & io.B),
             or ->   (io.A | io.B),
             xor ->  (io.A ^ io.B)
