@@ -13,7 +13,6 @@ class ALU extends Module {
         val alu_op = Input(UInt(5.W))
 
         val out = Output(UInt(32.W))
-        // val sum = Output(UInt(32.W))
         val zero = Output(Bool())
     })
 
@@ -50,7 +49,5 @@ class ALU extends Module {
     )
 
     io.zero := zero
-
     // io.sum := io.A + Mux(io.alu_op(0), -io.B, io.B)
-
 }

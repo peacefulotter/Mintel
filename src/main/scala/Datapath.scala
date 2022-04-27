@@ -17,29 +17,29 @@ class Datapath extends Module {
     fetch.io.BrEn := memory.io.BrEnOut
     fetch.io.BranchAddr := memory.io.BrAddrOut
 
-    io.instr := fetch.io.Instr
+    io.instr := fetch.io.Instr;
 
     /** DECODE **/
     decode.io.Instr := RegNext( fetch.io.Instr )
-    decode.io.PcCounterIn := RegNext( fetch.io.PcCounter )
+    decode.io.NextPCIn := RegNext( fetch.io.NextPC )
     decode.io.WriteEnIn := writeback.io.WbEnOut // no RegNext
     decode.io.WriteAddrIn := writeback.io.WriteRegAddrOut // no RegNext
     decode.io.WriteDataIn := writeback.io.WriteDataOut // no RegNext
 
     /** EXECUTE **/
-    execute.io.AluOp := RegNext(decode.io.AluOp)
-    execute.io.Imm := RegNext(decode.io.Imm)
-    execute.io.ImmEn := RegNext(decode.io.ImmEn)
-    execute.io.BrEnIn := RegNext(decode.io.BrEn)
-    execute.io.PcCounter := RegNext(decode.io.PcCounterOut)
-    execute.io.ReadEnIn := RegNext(decode.io.ReadEn)
-    execute.io.WriteEnIn := RegNext(decode.io.WriteEnOut)
-    execute.io.WbTypeIn := RegNext(decode.io.WbType)
-    execute.io.WbEnIn := RegNext(decode.io.WbEn)
-    execute.io.rd := RegNext(decode.io.rd)
-    execute.io.rt := RegNext(decode.io.rt)
-    execute.io.DataRead1 := RegNext(decode.io.DataRead1)
-    execute.io.DataRead2 := RegNext(decode.io.DataRead2)
+    execute.io.AluOp := decode.io.AluOp
+    execute.io.Imm := decode.io.Imm
+    execute.io.ImmEn := decode.io.ImmEn
+    execute.io.BrEnIn := decode.io.BrEn
+    execute.io.NextPC := decode.io.NextPCOut
+    execute.io.ReadEnIn := decode.io.ReadEn
+    execute.io.WriteEnIn := decode.io.WriteEnOut
+    execute.io.WbTypeIn := decode.io.WbType
+    execute.io.WbEnIn := decode.io.WbEn
+    execute.io.rd := decode.io.rd
+    execute.io.rt := decode.io.rt
+    execute.io.DataRead2 := decode.io.DataRead2
+    execute.io.DataRead1 := decode.io.DataRead1
 
     /** MEMORY **/
     memory.io.WriteEn := RegNext(execute.io.WriteEnOut)

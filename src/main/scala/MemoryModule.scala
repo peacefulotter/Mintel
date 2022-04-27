@@ -1,3 +1,4 @@
+/*
 import chisel3._
 import chisel3.util.MuxCase
 
@@ -69,3 +70,4 @@ object MemoryModule extends App {
     (new chisel3.stage.ChiselStage).emitVerilog(new MemoryModule())
 }
 
+*/

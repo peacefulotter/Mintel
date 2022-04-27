@@ -5,7 +5,7 @@ class Execute extends Module {
 
     val io = IO(new Bundle {
         // From Fetch -> Decode
-        val PcCounter = Input(UInt(32.W)) // used for branch addr
+        val NextPC = Input(UInt(32.W)) // used for branch addr
 
         // From Decode
         val Imm = Input(UInt(32.W))
@@ -48,7 +48,7 @@ class Execute extends Module {
     io.AluRes := alu.io.out
     io.zero := alu.io.zero
 
-    io.BranchAddrOut := io.PcCounter + (io.Imm << 2)
+    io.BranchAddrOut := io.NextPC // + (io.Imm << 2) ONLY NEEDED IF PC + 4
     io.DataRead2Out := io.DataRead2;
     io.WriteEnOut := io.WriteEnIn
     io.ReadEnOut := io.ReadEnIn

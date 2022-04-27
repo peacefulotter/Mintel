@@ -10,7 +10,7 @@ class Decode extends Module  {
     val io = IO(new Bundle {
         // From Fetch
         val Instr = Input(UInt(32.W))
-        val PcCounterIn = Input(UInt(32.W))
+        val NextPCIn = Input(UInt(32.W))
 
         // From WB
         val WriteAddrIn = Input(UInt(32.W))
@@ -22,7 +22,7 @@ class Decode extends Module  {
         val Imm = Output(UInt(32.W))               // IMM VAL
         val ImmEn = Output(UInt(1.W))              // IMM SEL
         val BrEn = Output(UInt(1.W))
-        val PcCounterOut = Output(UInt(32.W))      // PC + 4
+        val NextPCOut = Output(UInt(32.W))      // PC + 4
 
         // To Mem
         val ReadEn = Output(Bool())
@@ -61,7 +61,7 @@ class Decode extends Module  {
     io.DataRead1 := regFile.io.ReadData1;
     io.DataRead2 := regFile.io.ReadData2;
 
-    io.PcCounterOut := io.PcCounterIn
+    io.NextPCOut := io.NextPCIn
 
     signExtend.io.in := io.Instr(15, 0)
     signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic

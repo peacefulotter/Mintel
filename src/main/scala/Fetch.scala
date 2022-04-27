@@ -10,7 +10,7 @@ class Fetch extends Module  {
         val BranchAddr = Input(UInt(32.W))
         val BrEn = Input(Bool())
 
-        val PcCounter = Output(UInt(32.W))
+        val NextPC = Output(UInt(32.W))
         val Instr = Output(UInt(32.W))
     })
 
@@ -18,6 +18,6 @@ class Fetch extends Module  {
     mem.io.PC := PC
     io.Instr := mem.io.Instr;
 
-    io.PcCounter := PC + 4.U;
-    PC := Mux( io.BrEn, io.BranchAddr, io.PcCounter )
+    io.NextPC := PC + 1.U;
+    PC := Mux( io.BrEn, io.BranchAddr, io.NextPC )
 }
