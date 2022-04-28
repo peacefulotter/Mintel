@@ -16,18 +16,18 @@ class Datapath extends Module {
         val instr     = Output(UInt(32.W))
 
         // Input 1
-        val disp0     = Output(UInt(6.W))
-        val disp1     = Output(UInt(6.W))
+        val hex7     = Output(UInt(6.W))
+        val hex6     = Output(UInt(6.W))
 
         // Input 2
-        val disp2     = Output(UInt(6.W))
-        val disp3     = Output(UInt(6.W))
+        val hex5     = Output(UInt(6.W))
+        val hex4     = Output(UInt(6.W))
 
         // Output
-        val disp4     = Output(UInt(6.W))
-        val disp5     = Output(UInt(6.W))
-        val disp6     = Output(UInt(6.W))
-        val disp7     = Output(UInt(6.W))
+        val hex3     = Output(UInt(6.W))
+        val hex2     = Output(UInt(6.W))
+        val hex1     = Output(UInt(6.W))
+        val hex0     = Output(UInt(6.W))
     } )
 
     val input1 = io.switches1
@@ -92,33 +92,33 @@ class Datapath extends Module {
     writeback.wb_io.WriteRegAddrIn := RegNext(memory.mem_io.WriteRegAddrOut)
 
     /** 7-Seg Displays **/
-    val U_decoder7seg_0 = Module( new decoder7seg )
-    val U_decoder7seg_1 = Module( new decoder7seg )
-    val U_decoder7seg_2 = Module( new decoder7seg )
-    val U_decoder7seg_3 = Module( new decoder7seg )
-    val U_decoder7seg_4 = Module( new decoder7seg )
-    val U_decoder7seg_5 = Module( new decoder7seg )
-    val U_decoder7seg_6 = Module( new decoder7seg )
     val U_decoder7seg_7 = Module( new decoder7seg )
+    val U_decoder7seg_6 = Module( new decoder7seg )
+    val U_decoder7seg_5 = Module( new decoder7seg )
+    val U_decoder7seg_4 = Module( new decoder7seg )
+    val U_decoder7seg_3 = Module( new decoder7seg )
+    val U_decoder7seg_2 = Module( new decoder7seg )
+    val U_decoder7seg_1 = Module( new decoder7seg )
+    val U_decoder7seg_0 = Module( new decoder7seg )
 
-    U_decoder7seg_0.io.in := input1(3,0)
-    U_decoder7seg_1.io.in := input1(7,4)
-    U_decoder7seg_2.io.in := input2(3,0)
-    U_decoder7seg_3.io.in := input2(7,4)
+    U_decoder7seg_7.io.in := input1(3,0)
+    U_decoder7seg_6.io.in := input1(7,4)
+    U_decoder7seg_5.io.in := input2(3,0)
+    U_decoder7seg_4.io.in := input2(7,4)
 
-    U_decoder7seg_4.io.in := output(3,0)
-    U_decoder7seg_5.io.in := output(7,4)
-    U_decoder7seg_6.io.in := output(11,8)
-    U_decoder7seg_7.io.in := output(15,12)
+    U_decoder7seg_3.io.in := output(3,0)
+    U_decoder7seg_2.io.in := output(7,4)
+    U_decoder7seg_1.io.in := output(11,8)
+    U_decoder7seg_0.io.in := output(15,12)
 
-    io.disp0 := U_decoder7seg_0.io.out // Input1 -> Switches(3:0)
-    io.disp1 := U_decoder7seg_1.io.out // Input1 -> Switches(7:4)
-    io.disp2 := U_decoder7seg_2.io.out // Input1 -> Switches(3:0)
-    io.disp3 := U_decoder7seg_3.io.out // Input1 -> Switches(7:4)
-    io.disp4 := U_decoder7seg_4.io.out // Output -> Output(3:0)
-    io.disp5 := U_decoder7seg_5.io.out // Output -> Output(7:4)
-    io.disp6 := U_decoder7seg_6.io.out // Output -> Output(11:8)
-    io.disp7 := U_decoder7seg_7.io.out // Output -> Output(15:12)
+    io.hex7 := U_decoder7seg_7.io.out // Input1 -> Switches(3:0)
+    io.hex6 := U_decoder7seg_6.io.out // Input1 -> Switches(7:4)
+    io.hex5 := U_decoder7seg_5.io.out // Input1 -> Switches(3:0)
+    io.hex4 := U_decoder7seg_4.io.out // Input1 -> Switches(7:4)
+    io.hex3 := U_decoder7seg_3.io.out // Output -> Output(3:0)
+    io.hex2 := U_decoder7seg_2.io.out // Output -> Output(7:4)
+    io.hex1 := U_decoder7seg_1.io.out // Output -> Output(11:8)
+    io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
 }
 
 object Datapath extends App {
