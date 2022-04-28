@@ -20,7 +20,7 @@ class Mem extends Module {
         // From Execute
         val WriteData = Input(UInt(32.W))
         val AluBrEn = Input(Bool())
-        val WriteAddr = Input(UInt(32.W))
+        val AluResIn = Input(UInt(32.W))
         val BrAddrIn = Input(UInt(32.W))
         val WriteRegAddrIn = Input(UInt(32.W))
 
@@ -28,7 +28,7 @@ class Mem extends Module {
         val ReadData = Output(UInt(32.W))
         val WbTypeOut = Output(UInt(1.W))
         val WbEnOut = Output(UInt(1.W))
-        val AddrOut = Output(UInt(32.W))
+        val AluResOut = Output(UInt(32.W))
         // To WB -> Decode
         val WriteRegAddrOut = Output(UInt(32.W))
 
@@ -37,7 +37,7 @@ class Mem extends Module {
         val BrEnOut = Output(Bool())
     })
 
-    mem.io.addr := io.WriteAddr
+    mem.io.addr := io.AluResIn
     mem.io.readEn := io.ReadEn
     mem.io.writeEn := io.WriteEn
     mem.io.writeData := io.WriteData // we write the ALU result ???
@@ -47,7 +47,7 @@ class Mem extends Module {
 
     io.WbTypeOut := io.WbTypeIn
     io.WbEnOut := io.WbEnIn
-    io.AddrOut := io.WriteAddr
+    io.AluResOut := io.AluResIn
 
     io.BrEnOut := io.AluBrEn & io.CtrlBrEn
 

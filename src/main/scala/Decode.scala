@@ -31,8 +31,9 @@ class Decode extends Module  {
         // To WB going back to Decode
         val WbType = Output(UInt(1.W))
         val WbEn = Output(UInt(1.W))
-        val rd = Output(UInt(6.W))
+        val rs = Output(UInt(6.W))
         val rt = Output(UInt(6.W))
+        val rd = Output(UInt(6.W))
 
         val DataRead1 = Output(UInt(32.W))          // RS VALUE
         val DataRead2 = Output(UInt(32.W))          // RT VALUE
@@ -40,8 +41,9 @@ class Decode extends Module  {
 
     // CONTROL - which takes care of the actual instruction decoding
     control.io.instr := io.Instr;
-    io.rd := control.io.rd
+    io.rs := control.io.rs
     io.rt := control.io.rt
+    io.rd := control.io.rd
     io.Imm := control.io.imm;
     io.AluOp := control.io.AluOp;
     io.BrEn := control.io.BrEn

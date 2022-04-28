@@ -27,6 +27,15 @@ class Datapath extends Module {
     decode.io.WriteDataIn := writeback.io.WriteDataOut // no RegNext
 
     /** EXECUTE **/
+    execute.io.rs := RegNext(decode.io.AluOp)
+    execute.io.rt := RegNext(decode.io.rt)
+    execute.io.rd := RegNext(decode.io.rd)
+    execute.io.DataRead1 := RegNext(decode.io.DataRead1)
+    execute.io.DataRead2 := RegNext(decode.io.DataRead2)
+    execute.io.MemAddr := memory.io.WriteRegAddrOut // no RegNext
+    execute.io.MemVal := memory.io.AluResOut // no RegNext
+    execute.io.WbAddr := writeback.io.WriteRegAddrOut // no RegNext
+    execute.io.WbVal := writeback.io.WriteDataOut // no RegNext
     execute.io.AluOp := RegNext(decode.io.AluOp)
     execute.io.Imm := RegNext(decode.io.Imm)
     execute.io.ImmEn := RegNext(decode.io.ImmEn)
@@ -36,10 +45,6 @@ class Datapath extends Module {
     execute.io.WriteEnIn := RegNext(decode.io.WriteEnOut)
     execute.io.WbTypeIn := RegNext(decode.io.WbType)
     execute.io.WbEnIn := RegNext(decode.io.WbEn)
-    execute.io.rd := RegNext(decode.io.rd)
-    execute.io.rt := RegNext(decode.io.rt)
-    execute.io.DataRead1 := RegNext(decode.io.DataRead1)
-    execute.io.DataRead2 := RegNext(decode.io.DataRead2)
 
     /** MEMORY **/
     memory.io.WriteEn := RegNext(execute.io.WriteEnOut)
@@ -47,7 +52,7 @@ class Datapath extends Module {
     memory.io.WbTypeIn := RegNext(execute.io.WbTypeOut)
     memory.io.WbEnIn := RegNext(execute.io.WbEnOut)
     memory.io.WriteData := RegNext(execute.io.DataRead2Out)
-    memory.io.WriteAddr := RegNext(execute.io.AluRes)
+    memory.io.AluResIn := RegNext(execute.io.AluRes)
     memory.io.CtrlBrEn := RegNext(execute.io.BrEnOut)
     memory.io.AluBrEn := RegNext(execute.io.zero)
     memory.io.BrAddrIn := RegNext(execute.io.BranchAddrOut)
@@ -57,6 +62,6 @@ class Datapath extends Module {
     writeback.io.WbTypeIn := RegNext(memory.io.WbTypeOut)
     writeback.io.WbEnIn := RegNext(memory.io.WbEnOut)
     writeback.io.ReadData := RegNext(memory.io.ReadData)
-    writeback.io.AddrData := RegNext(memory.io.AddrOut)
+    writeback.io.AddrData := RegNext(memory.io.AluResOut)
     writeback.io.WriteRegAddrIn := RegNext(memory.io.WriteRegAddrOut)
 }

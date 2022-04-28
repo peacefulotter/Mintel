@@ -3,14 +3,14 @@ import chisel3._
 import chisel3.util._
 
 object ALU {
-    val add :: sub :: and :: or :: xor :: sll :: srl :: slt :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(16)
+    val add :: sub :: and :: or :: xor :: sll :: srl :: slt :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(13)
 }
 
 class ALU extends Module {
     val io = IO(new Bundle {
         val A = Input(UInt(32.W))
         val B = Input(UInt(32.W))
-        val alu_op = Input(UInt(5.W))
+        val AluOp = Input(UInt(5.W))
 
         val out = Output(UInt(32.W))
         val zero = Output(Bool())
@@ -19,7 +19,7 @@ class ALU extends Module {
     def shamt: UInt = io.B(4, 0).asUInt
 
     def zero: Bool = MuxLookup(
-        io.alu_op,
+        io.AluOp,
         false.B,
         Seq(
             ALU.lt ->   (io.A.asSInt < io.B.asSInt),
@@ -30,13 +30,16 @@ class ALU extends Module {
     )
 
     io.out := MuxLookup(
-        io.alu_op,
+        io.AluOp,
         zero.asUInt,
         Seq(
             add ->  (io.A + io.B),
             sub ->  (io.A - io.B),
-            srl ->  (io.A >> io.B),
-            sll ->  (io.A << io.B),
+            // TODO add sra
+            // TODO add mult
+            // TODO add ..
+            srl ->  (io.A >> shamt),
+            sll ->  (io.A << shamt),
             slt ->  (io.A.asSInt < io.B.asSInt),
             and ->  (io.A & io.B),
             or ->   (io.A | io.B),

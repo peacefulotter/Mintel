@@ -18,6 +18,16 @@ class DatapathTest extends AnyFlatSpec with ChiselScalatestTester {
             d.clock.step(1)
             println(d.io.instr.peek())
             d.clock.step(1)
+            println(d.io.instr.peek())
+            d.clock.step(1)
+            println(d.io.instr.peek())
+            d.clock.step(1)
+            println(d.io.instr.peek())
+            d.clock.step(1)
+            println(d.io.instr.peek())
+            d.clock.step(1)
+            println(d.io.instr.peek())
+            d.clock.step(1)
         }
     }
 }

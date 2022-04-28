@@ -14,9 +14,11 @@ class Fetch extends Module  {
         val Instr = Output(UInt(32.W))
     })
 
+    io.NextPC := PC + 1.U;
+    val newPC = Mux( io.BrEn, io.BranchAddr, io.NextPC )
+
     mem.io.PC := PC
     io.Instr := mem.io.Instr;
 
-    io.NextPC := PC + 1.U;
-    PC := Mux( io.BrEn, io.BranchAddr, io.NextPC )
+    PC := newPC
 }

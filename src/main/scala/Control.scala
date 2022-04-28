@@ -21,6 +21,7 @@ class Control extends Module  {
         val WbEn = Output(UInt(1.W))
     })
 
+
     val format = ListLookup(io.instr.asUInt, default, Instructions.map);
     io.rs      := io.instr.apply(25,  21)
     io.rt      := io.instr.apply(20, 16)

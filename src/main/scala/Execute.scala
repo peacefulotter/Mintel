@@ -1,6 +1,8 @@
 import chisel3._
 
 class Execute extends Module {
+
+    val forward = Module( new Forwarding )
     val alu = Module( new ALU )
 
     val io = IO(new Bundle {
@@ -9,10 +11,19 @@ class Execute extends Module {
 
         // From Decode
         val Imm = Input(UInt(32.W))
+        val rs = Input(UInt(32.W))
         val rt = Input(UInt(32.W))
         val rd = Input(UInt(32.W))
         val DataRead1 = Input(UInt(32.W))
         val DataRead2 = Input(UInt(32.W))
+
+        // From MEM
+        val MemAddr = Input(UInt(32.W))
+        val MemVal = Input(UInt(32.W))
+
+        // From WB
+        val WbAddr = Input(UInt(32.W))
+        val WbVal = Input(UInt(32.W))
 
         // From Control
         val AluOp = Input(UInt(4.W))
@@ -42,20 +53,34 @@ class Execute extends Module {
         val WriteRegAddr = Output(UInt(32.W))
     })
 
-    alu.io.A := io.DataRead1;
-    alu.io.B := Mux(io.ImmEn, io.Imm, io.DataRead2);
-    alu.io.alu_op := io.AluOp
+    // Forwarding Unit
+    forward.io.rs := io.rs
+    forward.io.rt := io.rt
+    forward.io.AIn := io.DataRead1
+    forward.io.BIn := io.DataRead2
+    forward.io.MemAddr := io.MemAddr
+    forward.io.MemVal := io.MemVal
+    forward.io.WbAddr := io.WbAddr
+    forward.io.WbVal := io.WbVal
+    val B: UInt = forward.io.BOut
+
+    // ALU
+    alu.io.A := forward.io.AOut;
+    alu.io.B := Mux(io.ImmEn, io.Imm, B)
+    alu.io.AluOp := io.AluOp
     io.AluRes := alu.io.out
     io.zero := alu.io.zero
 
-    io.BranchAddrOut := io.NextPC // + (io.Imm << 2) ONLY NEEDED IF PC + 4
-    io.DataRead2Out := io.DataRead2;
+    // Control Out := In
+    io.BranchAddrOut := io.Imm // io.NextPC // + (io.Imm << 2) ONLY NEEDED IF PC + 4
+    io.DataRead2Out := io.DataRead2
     io.WriteEnOut := io.WriteEnIn
     io.ReadEnOut := io.ReadEnIn
     io.BrEnOut := io.BrEnIn
     io.WbTypeOut := io.WbTypeIn
     io.WbEnOut := io.WbEnIn
 
-    io.WriteAddrOut := io.DataRead2;
+    // For MEM
+    io.WriteAddrOut := B
     io.WriteRegAddr := Mux( io.ImmEn, io.rt, io.rd )
 }
