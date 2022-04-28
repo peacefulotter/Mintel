@@ -6,11 +6,8 @@ class DatapathTest extends AnyFlatSpec with ChiselScalatestTester {
         test(new Datapath).withAnnotations(Seq(WriteVcdAnnotation)) { d =>
 
             for (i <- 0 until 10) {
-                println(i)
-                println(d.io.instr.peek())
-                println(d.io.WriteData.peek())
-                println(d.io.ReadData.peek())
-                d.clock.step(1)
+                println(i, d.io.instr.peek().litValue)
+                d.clock.step()
             }
 
         }

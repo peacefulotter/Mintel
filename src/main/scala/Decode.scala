@@ -45,7 +45,6 @@ class Decode extends Module  {
     dec_io.rs := control.io.rs
     dec_io.rt := control.io.rt
     dec_io.rd := control.io.rd
-    dec_io.Imm := control.io.imm;
     dec_io.AluOp := control.io.AluOp;
     dec_io.BrEn := control.io.BrEn
     dec_io.ReadEn := control.io.LoadEn
@@ -66,7 +65,7 @@ class Decode extends Module  {
 
     dec_io.NextPCOut := dec_io.NextPCIn
 
-    signExtend.io.in := dec_io.Instr(15, 0)
+    signExtend.io.in := control.io.imm
     signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic
     dec_io.Imm := signExtend.io.out
 }

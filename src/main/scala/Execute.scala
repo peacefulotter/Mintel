@@ -85,15 +85,11 @@ class Execute extends Module {
     val Attr2Val: UInt = exec_io.DataRead2
 
     val A: UInt = forward(Attr1Addr, Attr1Val)
-    val B: UInt = Mux(
-        exec_io.ImmEn,
-        exec_io.Imm,
-        forward(Attr2Addr, Attr2Val)
-    )
+    val B: UInt = forward(Attr2Addr, Attr2Val)
 
     // ALU
     alu.io.A := A
-    alu.io.B := B
+    alu.io.B := Mux(exec_io.ImmEn, exec_io.Imm, B)
     alu.io.AluOp := exec_io.AluOp
     exec_io.AluRes := alu.io.out
     exec_io.zero := alu.io.zero
@@ -107,7 +103,7 @@ class Execute extends Module {
     exec_io.WriteEnOut := exec_io.WriteEnIn
 
     // To Mem
-    exec_io.WriteData := B
+    exec_io.WriteData := B // using path forwarding
 
     // To MEM -> Decode
     exec_io.WriteRegAddr := Mux(isImmediate, exec_io.rt, exec_io.rd)

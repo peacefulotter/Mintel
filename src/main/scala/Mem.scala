@@ -42,7 +42,7 @@ class Mem extends Module {
     mem.io.Addr := mem_io.AddrIn
     mem.io.ReadEn := mem_io.ReadEn
     mem.io.WriteEn := mem_io.WriteEn
-    mem.io.WriteData := mem_io.WriteData // we write the ALU result ???
+    mem.io.WriteData := mem_io.WriteData
     mem_io.ReadData := mem.io.ReadData
 
     mem_io.BrAddrOut := mem_io.BrAddrIn
