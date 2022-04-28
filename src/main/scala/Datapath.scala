@@ -13,11 +13,12 @@ class Datapath extends Module {
         val instr = Output(UInt(32.W))
     } )
 
+    io.instr := fetch.io.Instr;
+
     /** FETCH **/
+    fetch.io.Stall := decode.io.BrEn // stall for 2 CC if branching occurs (1 + reg update)
     fetch.io.BrEn := memory.io.BrEnOut
     fetch.io.BranchAddr := memory.io.BrAddrOut
-
-    io.instr := fetch.io.Instr;
 
     /** DECODE **/
     decode.io.Instr := RegNext( fetch.io.Instr )

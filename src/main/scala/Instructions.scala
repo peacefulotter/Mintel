@@ -4,7 +4,7 @@ import chisel3.util.BitPat
 
 object Instructions {
 
-    val default = (0 until 7).map( _ => 0.U ).toList
+    val nop = (0 until 7).map( _ => 0.U ).toList
 
     // IMM SEL
     val IMM_N = 0.U(1.W)
@@ -61,7 +61,7 @@ object Instructions {
     )
 
     // TODO: add unsigned arithmetic ?
-    def NOP   = BitPat("b000000?0000000000000000000000000")
+    def NOP   = BitPat("b00000000000000000000000000000000")
     // Arithmetic
     def ADDI  = BitPat("b001000??????????????????????????")
     def ADD   = BitPat("b000000???????????????00000100000")

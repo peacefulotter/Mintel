@@ -1,4 +1,3 @@
-import Instructions.default
 import chisel3._
 import chisel3.util.ListLookup
 
@@ -21,14 +20,14 @@ class Control extends Module  {
         val WbEn = Output(UInt(1.W))
     })
 
-
-    val format = ListLookup(io.instr.asUInt, default, Instructions.map);
     io.rs      := io.instr.apply(25,  21)
     io.rt      := io.instr.apply(20, 16)
     io.rd      := io.instr.apply(15, 11)
     io.imm     := io.instr.apply(15, 0)
     io.addr    := io.instr.apply(25,  0)
     // io.shamt   := 0.U; // io.instr(21, 26)
+
+    val format = ListLookup(io.instr.asUInt, Instructions.nop, Instructions.map);
     io.AluOp   := format(0)
     io.ImmEn   := format(1)
     io.BrEn    := format(2)
