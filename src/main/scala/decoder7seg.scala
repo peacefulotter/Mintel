@@ -9,7 +9,7 @@ class decoder7seg extends Module {
     })
 
     val sel = io.in
-    val result = WireDefault(0.U)
+    val result = WireDefault(0.U(7.W))
 
     switch(sel) {
         is (0.U) { result   := "b0000001".U}
