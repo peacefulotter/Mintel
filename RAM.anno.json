@@ -9,9 +9,9 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~RAM|RAM>io_readData",
+    "sink":"~RAM|RAM>io_ReadData",
     "sources":[
-      "~RAM|RAM>io_readEn"
+      "~RAM|RAM>io_ReadEn"
     ]
   }
 ]

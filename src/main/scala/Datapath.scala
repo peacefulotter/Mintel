@@ -120,3 +120,7 @@ class Datapath extends Module {
     io.disp6 := U_decoder7seg_6.io.out // Output -> Output(11:8)
     io.disp7 := U_decoder7seg_7.io.out // Output -> Output(15:12)
 }
+
+object Datapath extends App {
+    (new chisel3.stage.ChiselStage).emitVerilog(new Datapath, Array("--target-dir", "generated_verilog"))
+}
