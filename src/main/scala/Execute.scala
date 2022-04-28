@@ -2,10 +2,10 @@ import chisel3._
 
 class Execute extends Module {
 
-    val forward = Module( new Forwarding )
+    // val forward = Module( new Forwarding )
     val alu = Module( new ALU )
 
-    val io = IO(new Bundle {
+    val exec_io = IO(new Bundle {
         // From Fetch -> Decode
         val NextPC = Input(UInt(32.W)) // used for branch addr
 
@@ -18,10 +18,12 @@ class Execute extends Module {
         val DataRead2 = Input(UInt(32.W))
 
         // From MEM
+        val MemWbEn = Input(UInt(1.W))
         val MemAddr = Input(UInt(32.W))
         val MemVal = Input(UInt(32.W))
 
         // From WB
+        val WbWbEn = Input(UInt(1.W))
         val WbAddr = Input(UInt(32.W))
         val WbVal = Input(UInt(32.W))
 
@@ -37,12 +39,11 @@ class Execute extends Module {
         // From ALU to MEM
         val AluRes = Output(UInt(32.W))
         val zero = Output(Bool())
-        val WriteAddrOut = Output(UInt(32.W))
 
         val BranchAddrOut = Output(UInt(32.W))
 
         // To MEM
-        val DataRead2Out = Output(UInt(32.W))
+        val WriteData = Output(UInt(32.W))
         val ReadEnOut = Output(UInt(1.W))
         val WriteEnOut = Output(UInt(1.W))
         val BrEnOut = Output(UInt(1.W))
@@ -54,33 +55,60 @@ class Execute extends Module {
     })
 
     // Forwarding Unit
-    forward.io.rs := io.rs
-    forward.io.rt := io.rt
-    forward.io.AIn := io.DataRead1
-    forward.io.BIn := io.DataRead2
-    forward.io.MemAddr := io.MemAddr
-    forward.io.MemVal := io.MemVal
-    forward.io.WbAddr := io.WbAddr
-    forward.io.WbVal := io.WbVal
-    val B: UInt = forward.io.BOut
+    /*forward.io.Attr1Addr := Attr1Addr
+    forward.io.Attr2Addr := Attr2Addr
+    forward.io.Attr1ValIn := Attr1Val
+    forward.io.Attr2ValIn := Attr2Val
+    forward.io.MemWbEn := exec_io.MemWbEn;
+    forward.io.MemAddr := exec_io.MemAddr
+    forward.io.MemVal := exec_io.MemVal
+    forward.io.WbWbEn := exec_io.WbWbEn;
+    forward.io.WbAddr := exec_io.WbAddr
+    forward.io.WbVal := exec_io.WbVal
+    val A: UInt = forward.io.Attr1ValOut
+    val B: UInt = forward.io.Attr2ValOut*/
+
+    def forward(addr: UInt, defVal: UInt): UInt = Mux(
+        addr === exec_io.MemAddr & exec_io.MemWbEn === 1.U,
+        exec_io.MemVal,
+        Mux( addr === exec_io.WbAddr & exec_io.WbWbEn === 1.U,
+            exec_io.WbVal,
+            defVal
+        )
+    )
+
+    val isImmediate: Bool = exec_io.ImmEn === 1.U
+
+    val Attr1Addr: UInt = exec_io.rs
+    val Attr1Val: UInt = exec_io.DataRead1
+    val Attr2Addr: UInt = exec_io.rt
+    val Attr2Val: UInt = exec_io.DataRead2
+
+    val A: UInt = forward(Attr1Addr, Attr1Val)
+    val B: UInt = Mux(
+        exec_io.ImmEn,
+        exec_io.Imm,
+        forward(Attr2Addr, Attr2Val)
+    )
 
     // ALU
-    alu.io.A := forward.io.AOut;
-    alu.io.B := Mux(io.ImmEn, io.Imm, B)
-    alu.io.AluOp := io.AluOp
-    io.AluRes := alu.io.out
-    io.zero := alu.io.zero
+    alu.io.A := A
+    alu.io.B := B
+    alu.io.AluOp := exec_io.AluOp
+    exec_io.AluRes := alu.io.out
+    exec_io.zero := alu.io.zero
 
     // Control Out := In
-    io.BranchAddrOut := io.Imm // io.NextPC // + (io.Imm << 2) ONLY NEEDED IF PC + 4
-    io.DataRead2Out := io.DataRead2
-    io.WriteEnOut := io.WriteEnIn
-    io.ReadEnOut := io.ReadEnIn
-    io.BrEnOut := io.BrEnIn
-    io.WbTypeOut := io.WbTypeIn
-    io.WbEnOut := io.WbEnIn
+    exec_io.BranchAddrOut := exec_io.Imm // io.NextPC // + (io.Imm << 2) ONLY NEEDED IF PC + 4
+    exec_io.BrEnOut := exec_io.BrEnIn
+    exec_io.WbTypeOut := exec_io.WbTypeIn
+    exec_io.WbEnOut := exec_io.WbEnIn
+    exec_io.ReadEnOut := exec_io.ReadEnIn
+    exec_io.WriteEnOut := exec_io.WriteEnIn
 
-    // For MEM
-    io.WriteAddrOut := B
-    io.WriteRegAddr := Mux( io.ImmEn, io.rt, io.rd )
+    // To Mem
+    exec_io.WriteData := B
+
+    // To MEM -> Decode
+    exec_io.WriteRegAddr := Mux(isImmediate, exec_io.rt, exec_io.rd)
 }

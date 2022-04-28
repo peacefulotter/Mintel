@@ -7,7 +7,7 @@ class Decode extends Module  {
     val control = Module( new Control )
     val signExtend = Module( new SignExtend )
 
-    val io = IO(new Bundle {
+    val dec_io = IO(new Bundle {
         // From Fetch
         val Instr = Input(UInt(32.W))
         val NextPCIn = Input(UInt(32.W))
@@ -40,32 +40,33 @@ class Decode extends Module  {
     })
 
     // CONTROL - which takes care of the actual instruction decoding
-    control.io.instr := io.Instr;
-    io.rs := control.io.rs
-    io.rt := control.io.rt
-    io.rd := control.io.rd
-    io.Imm := control.io.imm;
-    io.AluOp := control.io.AluOp;
-    io.BrEn := control.io.BrEn
-    io.ReadEn := control.io.LoadEn
-    io.ImmEn := control.io.ImmEn;
-    io.WriteEnOut := control.io.StoreEn;
-    io.WbType := control.io.WbType;
-    io.WbEn := control.io.WbEn;
+    control.io.instr := dec_io.Instr;
+
+    dec_io.rs := control.io.rs
+    dec_io.rt := control.io.rt
+    dec_io.rd := control.io.rd
+    dec_io.Imm := control.io.imm;
+    dec_io.AluOp := control.io.AluOp;
+    dec_io.BrEn := control.io.BrEn
+    dec_io.ReadEn := control.io.LoadEn
+    dec_io.ImmEn := control.io.ImmEn;
+    dec_io.WriteEnOut := control.io.StoreEn;
+    dec_io.WbType := control.io.WbType;
+    dec_io.WbEn := control.io.WbEn;
 
     // REGISTER FILE
     regFile.io.ReadAddr1 := control.io.rs;
     regFile.io.ReadAddr2 := control.io.rt;
-    regFile.io.WriteEnable := io.WriteEnIn === WB_MEM;
-    regFile.io.WriteAddr := io.WriteAddrIn;
-    regFile.io.WriteData := io.WriteDataIn;
+    regFile.io.WriteEnable := dec_io.WriteEnIn === WB_MEM;
+    regFile.io.WriteAddr := dec_io.WriteAddrIn;
+    regFile.io.WriteData := dec_io.WriteDataIn;
 
-    io.DataRead1 := regFile.io.ReadData1;
-    io.DataRead2 := regFile.io.ReadData2;
+    dec_io.DataRead1 := regFile.io.ReadData1;
+    dec_io.DataRead2 := regFile.io.ReadData2;
 
-    io.NextPCOut := io.NextPCIn
+    dec_io.NextPCOut := dec_io.NextPCIn
 
-    signExtend.io.in := io.Instr(15, 0)
+    signExtend.io.in := dec_io.Instr(15, 0)
     signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic
-    io.Imm := signExtend.io.out
+    dec_io.Imm := signExtend.io.out
 }

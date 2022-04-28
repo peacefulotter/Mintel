@@ -43,9 +43,9 @@ object Instructions {
         XOR ->   List(ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         XORI ->  List(ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Shifts
-        SLLV ->  List(ALU.sll, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLLV ->  List(ALU.sll, IMM_N,   BR_N,     LD_N,    ST_N,   WB_ALU,   WB_Y),
         SLLI ->  List(ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SRLV ->  List(ALU.srl, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SRLV ->  List(ALU.srl, IMM_N,   BR_N,     LD_N,    ST_N,   WB_ALU,   WB_Y),
         // Compare
         SLT ->   List(ALU.lt,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
         SLTI ->  List(ALU.lt,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
@@ -55,9 +55,9 @@ object Instructions {
         BLT ->   List(ALU.lt,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
         BGE ->   List(ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
         // Load
-        LW ->    List(ALU.add,  IMM_N,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
+        LW ->    List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
         // Store
-        SW ->    List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_Y,   WB_ALU,   WB_N),
+        SW ->    List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_Y,   WB_MEM,   WB_N),
     )
 
     // TODO: add unsigned arithmetic ?

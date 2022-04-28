@@ -11,58 +11,64 @@ class Datapath extends Module {
 
     val io = IO( new Bundle {
         val instr = Output(UInt(32.W))
+        val WriteData = Output(UInt(32.W))
+        val ReadData = Output(UInt(32.W))
     } )
 
     io.instr := fetch.io.Instr;
+    io.WriteData := RegNext(execute.exec_io.WriteData)
+    io.ReadData := RegNext(memory.mem_io.ReadData)
 
     /** FETCH **/
-    fetch.io.Stall := decode.io.BrEn // stall for 2 CC if branching occurs (1 + reg update)
-    fetch.io.BrEn := memory.io.BrEnOut
-    fetch.io.BranchAddr := memory.io.BrAddrOut
+    fetch.io.Stall := decode.dec_io.BrEn // stall for 2 CC if branching occurs (1 + reg update)
+    fetch.io.BrEn := memory.mem_io.BrEnOut
+    fetch.io.BranchAddr := memory.mem_io.BrAddrOut
 
     /** DECODE **/
-    decode.io.Instr := RegNext( fetch.io.Instr )
-    decode.io.NextPCIn := RegNext( fetch.io.NextPC )
-    decode.io.WriteEnIn := writeback.io.WbEnOut // no RegNext
-    decode.io.WriteAddrIn := writeback.io.WriteRegAddrOut // no RegNext
-    decode.io.WriteDataIn := writeback.io.WriteDataOut // no RegNext
+    decode.dec_io.Instr := RegNext( fetch.io.Instr )
+    decode.dec_io.NextPCIn := RegNext( fetch.io.NextPC )
+    decode.dec_io.WriteEnIn := writeback.wb_io.WbEnOut // no RegNext
+    decode.dec_io.WriteAddrIn := writeback.wb_io.WriteRegAddrOut // no RegNext
+    decode.dec_io.WriteDataIn := writeback.wb_io.WriteDataOut // no RegNext
 
     /** EXECUTE **/
-    execute.io.rs := RegNext(decode.io.AluOp)
-    execute.io.rt := RegNext(decode.io.rt)
-    execute.io.rd := RegNext(decode.io.rd)
-    execute.io.DataRead1 := RegNext(decode.io.DataRead1)
-    execute.io.DataRead2 := RegNext(decode.io.DataRead2)
-    execute.io.MemAddr := memory.io.WriteRegAddrOut // no RegNext
-    execute.io.MemVal := memory.io.AluResOut // no RegNext
-    execute.io.WbAddr := writeback.io.WriteRegAddrOut // no RegNext
-    execute.io.WbVal := writeback.io.WriteDataOut // no RegNext
-    execute.io.AluOp := RegNext(decode.io.AluOp)
-    execute.io.Imm := RegNext(decode.io.Imm)
-    execute.io.ImmEn := RegNext(decode.io.ImmEn)
-    execute.io.BrEnIn := RegNext(decode.io.BrEn)
-    execute.io.NextPC := RegNext(decode.io.NextPCOut)
-    execute.io.ReadEnIn := RegNext(decode.io.ReadEn)
-    execute.io.WriteEnIn := RegNext(decode.io.WriteEnOut)
-    execute.io.WbTypeIn := RegNext(decode.io.WbType)
-    execute.io.WbEnIn := RegNext(decode.io.WbEn)
+    execute.exec_io.rs := RegNext(decode.dec_io.rs)
+    execute.exec_io.rt := RegNext(decode.dec_io.rt)
+    execute.exec_io.rd := RegNext(decode.dec_io.rd)
+    execute.exec_io.DataRead1 := RegNext(decode.dec_io.DataRead1)
+    execute.exec_io.DataRead2 := RegNext(decode.dec_io.DataRead2)
+    execute.exec_io.MemWbEn := memory.mem_io.WbEnOut // no RegNext
+    execute.exec_io.MemAddr := memory.mem_io.WriteRegAddrOut // no RegNext
+    execute.exec_io.MemVal := Mux(memory.mem_io.WbEnOut === 1.U, memory.mem_io.ReadData, memory.mem_io.AddrIn) // no RegNext - addr mem is alu_res
+    execute.exec_io.WbWbEn := writeback.wb_io.WbEnOut // no RegNext
+    execute.exec_io.WbAddr := writeback.wb_io.WriteRegAddrOut // no RegNext
+    execute.exec_io.WbVal := writeback.wb_io.WriteDataOut // no RegNext
+    execute.exec_io.AluOp := RegNext(decode.dec_io.AluOp)
+    execute.exec_io.Imm := RegNext(decode.dec_io.Imm)
+    execute.exec_io.ImmEn := RegNext(decode.dec_io.ImmEn)
+    execute.exec_io.BrEnIn := RegNext(decode.dec_io.BrEn)
+    execute.exec_io.NextPC := RegNext(decode.dec_io.NextPCOut)
+    execute.exec_io.ReadEnIn := RegNext(decode.dec_io.ReadEn)
+    execute.exec_io.WriteEnIn := RegNext(decode.dec_io.WriteEnOut)
+    execute.exec_io.WbTypeIn := RegNext(decode.dec_io.WbType)
+    execute.exec_io.WbEnIn := RegNext(decode.dec_io.WbEn)
 
     /** MEMORY **/
-    memory.io.WriteEn := RegNext(execute.io.WriteEnOut)
-    memory.io.ReadEn := RegNext(execute.io.ReadEnOut)
-    memory.io.WbTypeIn := RegNext(execute.io.WbTypeOut)
-    memory.io.WbEnIn := RegNext(execute.io.WbEnOut)
-    memory.io.WriteData := RegNext(execute.io.DataRead2Out)
-    memory.io.AluResIn := RegNext(execute.io.AluRes)
-    memory.io.CtrlBrEn := RegNext(execute.io.BrEnOut)
-    memory.io.AluBrEn := RegNext(execute.io.zero)
-    memory.io.BrAddrIn := RegNext(execute.io.BranchAddrOut)
-    memory.io.WriteRegAddrIn := RegNext(execute.io.WriteRegAddr)
+    memory.mem_io.WriteEn := RegNext(execute.exec_io.WriteEnOut)
+    memory.mem_io.ReadEn := RegNext(execute.exec_io.ReadEnOut)
+    memory.mem_io.WbTypeIn := RegNext(execute.exec_io.WbTypeOut)
+    memory.mem_io.WbEnIn := RegNext(execute.exec_io.WbEnOut)
+    memory.mem_io.WriteData := RegNext(execute.exec_io.WriteData)
+    memory.mem_io.AddrIn := RegNext(execute.exec_io.AluRes)
+    memory.mem_io.CtrlBrEn := RegNext(execute.exec_io.BrEnOut)
+    memory.mem_io.AluBrEn := RegNext(execute.exec_io.zero)
+    memory.mem_io.BrAddrIn := RegNext(execute.exec_io.BranchAddrOut)
+    memory.mem_io.WriteRegAddrIn := RegNext(execute.exec_io.WriteRegAddr)
 
     /** WRITEBACK **/
-    writeback.io.WbTypeIn := RegNext(memory.io.WbTypeOut)
-    writeback.io.WbEnIn := RegNext(memory.io.WbEnOut)
-    writeback.io.ReadData := RegNext(memory.io.ReadData)
-    writeback.io.AddrData := RegNext(memory.io.AluResOut)
-    writeback.io.WriteRegAddrIn := RegNext(memory.io.WriteRegAddrOut)
+    writeback.wb_io.WbTypeIn := RegNext(memory.mem_io.WbTypeOut)
+    writeback.wb_io.WbEnIn := RegNext(memory.mem_io.WbEnOut)
+    writeback.wb_io.ReadData := memory.mem_io.ReadData // already one clock delay from the RAM
+    writeback.wb_io.AddrData := RegNext(memory.mem_io.AddrOut)
+    writeback.wb_io.WriteRegAddrIn := RegNext(memory.mem_io.WriteRegAddrOut)
 }

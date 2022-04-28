@@ -4,7 +4,7 @@ import chisel3._
 
 class Writeback extends Module {
 
-    val io = IO(new Bundle {
+    val wb_io = IO(new Bundle {
         val WbEnIn = Input(Bool())
         val WbTypeIn = Input(Bool())
         val WriteRegAddrIn = Input(UInt(32.W))
@@ -17,7 +17,7 @@ class Writeback extends Module {
         val WriteDataOut = Output(UInt(32.W))
     })
 
-    io.WbEnOut := io.WbEnIn;
-    io.WriteRegAddrOut := io.WriteRegAddrIn
-    io.WriteDataOut := Mux(io.WbTypeIn, io.ReadData, io.AddrData)
+    wb_io.WbEnOut := wb_io.WbEnIn;
+    wb_io.WriteRegAddrOut := wb_io.WriteRegAddrIn
+    wb_io.WriteDataOut := Mux(wb_io.WbTypeIn, wb_io.ReadData, wb_io.AddrData)
 }

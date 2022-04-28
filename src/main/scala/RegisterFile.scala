@@ -2,7 +2,7 @@ import chisel3._
 
 class RegisterFile extends Module {
 
-    val regs = RegInit(VecInit(Seq.fill(32)(0.U(32.W)).toList.zipWithIndex.map((t) => t._2.U(32.W))))
+    val regs = RegInit(VecInit(Seq.fill(32)(0.U(32.W)) /* .toList.zipWithIndex.map((t) => t._2.U(32.W) + 1.U) */ ))
 
     val io = IO(new Bundle {
         val ReadAddr1  = Input(UInt(5.W))

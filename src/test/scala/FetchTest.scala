@@ -9,10 +9,9 @@ class FetchTest extends AnyFlatSpec with ChiselScalatestTester {
             f.io.BranchAddr.poke(1.U)
             f.io.BrEn.poke(true.B)
             f.clock.setTimeout(0)
-            println("Start the blinking LED")
 
             f.clock.step(1)
-            val pc1 = f.io.PcCounter.peek().litValue
+            val pc1 = f.io.NextPC.peek().litValue
             val in1 = f.io.Instr.peek().litValue
             println(pc1)
             println(in1)
@@ -22,12 +21,10 @@ class FetchTest extends AnyFlatSpec with ChiselScalatestTester {
             f.io.BrEn.poke(false.B);
 
             f.clock.step(1);
-            val pc2 = f.io.PcCounter.peek().litValue;
+            val pc2 = f.io.NextPC.peek().litValue;
             val in2 = f.io.Instr.peek().litValue
             println(pc2)
             println(in2)
-
-            println("\nEnd the blinking LED")
         }
     }
 }
