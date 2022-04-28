@@ -16,18 +16,18 @@ class Datapath extends Module {
         val instr     = Output(UInt(32.W))
 
         // Input 1
-        val hex7     = Output(UInt(6.W))
-        val hex6     = Output(UInt(6.W))
+        val hex7     = Output(UInt(7.W))
+        val hex6     = Output(UInt(7.W))
 
         // Input 2
-        val hex5     = Output(UInt(6.W))
-        val hex4     = Output(UInt(6.W))
+        val hex5     = Output(UInt(7.W))
+        val hex4     = Output(UInt(7.W))
 
         // Output
-        val hex3     = Output(UInt(6.W))
-        val hex2     = Output(UInt(6.W))
-        val hex1     = Output(UInt(6.W))
-        val hex0     = Output(UInt(6.W))
+        val hex3     = Output(UInt(7.W))
+        val hex2     = Output(UInt(7.W))
+        val hex1     = Output(UInt(7.W))
+        val hex0     = Output(UInt(7.W))
     } )
 
     val input1 = io.switches1
