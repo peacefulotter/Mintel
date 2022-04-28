@@ -101,15 +101,15 @@ class Datapath extends Module {
     val U_decoder7seg_1 = Module( new decoder7seg )
     val U_decoder7seg_0 = Module( new decoder7seg )
 
-    U_decoder7seg_7.io.in := input1(3,0)
-    U_decoder7seg_6.io.in := input1(7,4)
-    U_decoder7seg_5.io.in := input2(3,0)
-    U_decoder7seg_4.io.in := input2(7,4)
+    U_decoder7seg_7.io.in := input1(7,4)
+    U_decoder7seg_6.io.in := input1(3,0)
+    U_decoder7seg_5.io.in := input2(7,4)
+    U_decoder7seg_4.io.in := input2(3,0)
 
-    U_decoder7seg_3.io.in := output(3,0)
-    U_decoder7seg_2.io.in := output(7,4)
-    U_decoder7seg_1.io.in := output(11,8)
-    U_decoder7seg_0.io.in := output(15,12)
+    U_decoder7seg_3.io.in := output(15,12)
+    U_decoder7seg_2.io.in := output(11,8)
+    U_decoder7seg_1.io.in := output(7,4)
+    U_decoder7seg_0.io.in := output(3,0)
 
     io.hex7 := U_decoder7seg_7.io.out // Input1 -> Switches(3:0)
     io.hex6 := U_decoder7seg_6.io.out // Input1 -> Switches(7:4)
