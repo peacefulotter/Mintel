@@ -1,4 +1,4 @@
-import Instructions.WB_MEM
+import Instructions.{SI_Y, WB_MEM}
 import chisel3._
 
 class Decode extends Module  {
@@ -19,10 +19,10 @@ class Decode extends Module  {
 
         // To Execute
         val AluOp = Output(UInt(32.W))
-        val Imm = Output(UInt(32.W))               // IMM VAL
-        val ImmEn = Output(UInt(1.W))              // IMM SEL
+        val Imm = Output(UInt(32.W))
+        val ImmEn = Output(UInt(1.W))
         val BrEn = Output(UInt(1.W))
-        val NextPCOut = Output(UInt(32.W))      // PC + 4
+        val NextPCOut = Output(UInt(32.W))         // PC + 4
 
         // To Mem
         val ReadEn = Output(Bool())
@@ -66,6 +66,6 @@ class Decode extends Module  {
     dec_io.NextPCOut := dec_io.NextPCIn
 
     signExtend.io.in := control.io.imm
-    signExtend.io.isSigned := true.B // FIXME: Unsigned arithmetic
+    signExtend.io.isSigned := control.io.IsSigned === SI_Y
     dec_io.Imm := signExtend.io.out
 }

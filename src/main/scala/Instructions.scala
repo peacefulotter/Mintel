@@ -4,8 +4,6 @@ import chisel3.util.BitPat
 
 object Instructions {
 
-    val nop = (0 until 7).map( _ => 0.U ).toList
-
     // IMM SEL
     val IMM_N = 0.U(1.W)
     val IMM_Y = 1.U(1.W)
@@ -24,51 +22,59 @@ object Instructions {
     // WR EN
     val WB_N = 0.U(1.W)
     val WB_Y = 1.U(1.W)
-    
-    // FIXME: LW - SW format and IMM_EN
-    // SIGNED / UNSGINED FIX
+    // SIGNED
+    val SI_N = 0.U(1.W)
+    val SI_Y = 1.U(1.W)
 
     val map = Array(
-        //            alu_op    imm_en   br_en    ld_en    st_en   wb_type   wb_en
-        NOP   -> List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        //            alu_op    imm_en   br_en    ld_en    st_en   wb_type   wb_en  signed
+        NOP   -> List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
         // Arithmetic
-        ADD   -> List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ADDI  -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SUB   -> List(ALU.sub,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        ADD   -> List(ALU.add,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_Y),
+        ADDI  -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_Y),
+        ADDU  -> List(ALU.addu, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        ADDIU -> List(ALU.addu, IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        SUB   -> List(ALU.sub,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_Y),
+        SUBU  -> List(ALU.subu, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Logical
-        AND   -> List(ALU.and,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ANDI  -> List(ALU.and,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        OR    -> List(ALU.or,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        ORI   -> List(ALU.or,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        XOR   -> List(ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        XORI  -> List(ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        AND   -> List(ALU.and,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        ANDI  -> List(ALU.and,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        OR    -> List(ALU.or,   IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        ORI   -> List(ALU.or,   IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        XOR   -> List(ALU.xor,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        XORI  -> List(ALU.xor,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Shifts
-        SLL   -> List(ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SRL   -> List(ALU.srl,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLLV  -> List(ALU.sllv, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SRLV  -> List(ALU.srlv, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLL   -> List(ALU.sll,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        SRL   -> List(ALU.srl,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        SLLV  -> List(ALU.sllv, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        SRLV  -> List(ALU.srlv, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Compare
-        SLT   -> List(ALU.slt,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTI  -> List(ALU.slt,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTU  -> List(ALU.sltu, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
-        SLTIU -> List(ALU.sltu, IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y),
+        SLT   -> List(ALU.slt,  IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_Y),
+        SLTI  -> List(ALU.slt,  IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_Y),
+        SLTU  -> List(ALU.sltu, IMM_N,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
+        SLTIU -> List(ALU.sltu, IMM_Y,   BR_N,    LD_N,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Branch
-        BNE   -> List(ALU.ne,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BEQ   -> List(ALU.eq,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BLT   -> List(ALU.lt,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
-        BGE   -> List(ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N),
+        BNE   -> List(ALU.ne,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
+        BEQ   -> List(ALU.eq,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
+        BLT   -> List(ALU.slt,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
+        BGE   -> List(ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
         // Load
-        LW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y),
+        LW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y,  SI_N),
         // Store
-        SW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_Y,   WB_MEM,   WB_N),
+        SW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_Y,   WB_MEM,   WB_N,  SI_N),
     )
 
-    // TODO: add unsigned arithmetic ?
+    val default: List[UInt] = map.apply(0)._2
+
     def NOP   = BitPat("b00000000000000000000000000000000")  // X
     // Arithmetic
-    def ADDI  = BitPat("b001000??????????????????????????")  // X
     def ADD   = BitPat("b000000???????????????00000100000")  // X
+    def ADDU  = BitPat("b000000???????????????00000100001")
+    def ADDI  = BitPat("b001000??????????????????????????")  // X
+    def ADDIU = BitPat("b001001??????????????????????????")
     def SUB   = BitPat("b000000???????????????00000100010")  // X
+    def SUBU  = BitPat("b000000???????????????00000100011")  // X
+    // def MULT  = BitPat("b000000??????????0000000000011000")
     // Logical
     def AND   = BitPat("b000000???????????????00000100100")  // X
     def ANDI  = BitPat("b001100??????????????????????????")  // X

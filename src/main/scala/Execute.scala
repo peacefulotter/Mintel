@@ -14,7 +14,6 @@ class Execute extends Module {
         val rs = Input(UInt(32.W))
         val rt = Input(UInt(32.W))
         val rd = Input(UInt(32.W))
-        val shamt = Input(UInt(5.W))
         val DataRead1 = Input(UInt(32.W))
         val DataRead2 = Input(UInt(32.W))
 
@@ -56,19 +55,6 @@ class Execute extends Module {
     })
 
     // Forwarding Unit
-    /*forward.io.Attr1Addr := Attr1Addr
-    forward.io.Attr2Addr := Attr2Addr
-    forward.io.Attr1ValIn := Attr1Val
-    forward.io.Attr2ValIn := Attr2Val
-    forward.io.MemWbEn := exec_io.MemWbEn;
-    forward.io.MemAddr := exec_io.MemAddr
-    forward.io.MemVal := exec_io.MemVal
-    forward.io.WbWbEn := exec_io.WbWbEn;
-    forward.io.WbAddr := exec_io.WbAddr
-    forward.io.WbVal := exec_io.WbVal
-    val A: UInt = forward.io.Attr1ValOut
-    val B: UInt = forward.io.Attr2ValOut*/
-
     def forward(addr: UInt, defVal: UInt): UInt = Mux(
         addr === exec_io.MemAddr & exec_io.MemWbEn === 1.U,
         exec_io.MemVal,

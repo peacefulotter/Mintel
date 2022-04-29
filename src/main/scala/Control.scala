@@ -1,5 +1,6 @@
 import chisel3._
 import chisel3.util.ListLookup
+import Instructions.{ default, map }
 
 class Control extends Module  {
     val io = IO(new Bundle {
@@ -18,6 +19,7 @@ class Control extends Module  {
         val StoreEn = Output(UInt(1.W))
         val WbType = Output(UInt(1.W))
         val WbEn = Output(UInt(1.W))
+        val IsSigned = Output(UInt(1.W))
     })
 
     io.rs      := io.instr.apply(25,  21)
@@ -26,12 +28,13 @@ class Control extends Module  {
     io.imm     := io.instr.apply(15, 0)
     io.addr    := io.instr.apply(25,  0)
 
-    val format = ListLookup(io.instr.asUInt, Instructions.nop, Instructions.map);
-    io.AluOp   := format(0)
-    io.ImmEn   := format(1)
-    io.BrEn    := format(2)
-    io.LoadEn  := format(3)
-    io.StoreEn := format(4)
-    io.WbType  := format(5)
-    io.WbEn    := format(6)
+    val format: List[UInt] = ListLookup(io.instr.asUInt, default, map);
+    io.AluOp    := format(0)
+    io.ImmEn    := format(1)
+    io.BrEn     := format(2)
+    io.LoadEn   := format(3)
+    io.StoreEn  := format(4)
+    io.WbType   := format(5)
+    io.WbEn     := format(6)
+    io.IsSigned := format(7)
 }

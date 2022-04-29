@@ -3,7 +3,7 @@ import chisel3._
 import chisel3.util._
 
 object ALU {
-    val add :: sub :: and :: or :: xor :: sll :: sllv :: srlv ::srl :: slt :: sltu :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(13)
+    val add :: addu :: sub :: subu :: mult :: and :: or :: xor :: sll :: sllv :: srl :: srlv :: slt :: sltu :: lte :: ge :: ne :: eq :: Nil = Enum(18)
 }
 
 class ALU extends Module {
@@ -22,10 +22,10 @@ class ALU extends Module {
         io.AluOp,
         false.B,
         Seq(
-            ALU.lt ->   (io.A.asSInt < io.B.asSInt),
-            ALU.ge ->   (io.A.asSInt >= io.B.asSInt),
-            ALU.ne ->   (io.A =/= io.B),
-            ALU.eq ->   (io.A === io.B)
+            ALU.slt ->  (io.A.asSInt < io.B.asSInt),
+            ALU.ge  ->  (io.A.asSInt >= io.B.asSInt),
+            ALU.ne  ->  (io.A =/= io.B),
+            ALU.eq  ->  (io.A === io.B)
         )
     )
 
@@ -33,21 +33,22 @@ class ALU extends Module {
         io.AluOp,
         zero.asUInt,
         Seq(
-            // TODO: add mult ?
-            add ->  (io.A + io.B),
-            sub ->  (io.A - io.B),
+            add  -> (io.A.asSInt + io.B.asSInt).asUInt,
+            addu -> (io.A + io.B),
+            sub  -> (io.A.asSInt - io.B.asSInt).asUInt,
+            subu -> (io.A - io.B),
+            mult -> (io.A.asSInt * io.B.asSInt).asUInt,
 
-            and ->  (io.A & io.B),
-            or ->   (io.A | io.B),
-            xor ->  (io.A ^ io.B),
+            and  -> (io.A & io.B),
+            or   -> (io.A | io.B),
+            xor  -> (io.A ^ io.B),
 
-            sll ->  (io.A << shamt),
-            srl ->  (io.A >> shamt),
-            sllv ->  (io.A << io.B.apply(4, 0)),
-            srlv ->  (io.A >> io.B.apply(4, 0)),
+            sll  -> (io.A << shamt),
+            srl  -> (io.A >> shamt),
+            sllv -> (io.A << io.B.apply(4, 0)),
+            srlv -> (io.A >> io.B.apply(4, 0)),
 
-            slt ->  (io.A.asSInt < io.B.asSInt).asUInt,
-            sltu ->  (io.A < io.B).asUInt,
+            sltu -> (io.A < io.B).asUInt,
         )
     )
 
