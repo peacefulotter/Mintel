@@ -3,7 +3,7 @@ import chisel3._
 class Mem extends Module {
 
     // val mem = Module( new MemoryModule )
-    val mem = Module( new RAM );
+    val ram = Module( new RAM );
 
     /**
      * TODO: REPLACE RAM WITH MEMORY_MODULE
@@ -39,11 +39,11 @@ class Mem extends Module {
         val BrEnOut = Output(Bool())
     })
 
-    mem.io.Addr := mem_io.AddrIn
-    mem.io.ReadEn := mem_io.ReadEn
-    mem.io.WriteEn := mem_io.WriteEn
-    mem.io.WriteData := mem_io.WriteData
-    mem_io.ReadData := mem.io.ReadData
+    ram.ram_io.Addr := mem_io.AddrIn
+    ram.ram_io.ReadEn := mem_io.ReadEn
+    ram.ram_io.WriteEn := mem_io.WriteEn
+    ram.ram_io.WriteData := mem_io.WriteData
+    mem_io.ReadData := ram.ram_io.ReadData
 
     mem_io.BrAddrOut := mem_io.BrAddrIn
 

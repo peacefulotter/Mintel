@@ -58,7 +58,6 @@ class Datapath extends Module {
     execute.exec_io.MemWbEn := memory.mem_io.WbEnOut // no RegNext
     execute.exec_io.MemAddr := memory.mem_io.WriteRegAddrOut // no RegNext
     execute.exec_io.MemVal := RegNext(execute.exec_io.AluRes)
-    // Mux(memory.mem_io.WbEnOut === 1.U, memory.mem_io.ReadData, memory.mem_io.AddrIn) // no RegNext - addr mem is alu_res
     execute.exec_io.WbWbEn := writeback.wb_io.WbEnOut // no RegNext
     execute.exec_io.WbAddr := writeback.wb_io.WriteRegAddrOut // no RegNext
     execute.exec_io.WbVal := writeback.wb_io.WriteDataOut // no RegNext
@@ -73,12 +72,12 @@ class Datapath extends Module {
     execute.exec_io.WbEnIn := RegNext(decode.dec_io.WbEn)
 
     /** MEMORY **/
+    memory.mem_io.ReadEn := (execute.exec_io.ReadEnOut)
+    memory.mem_io.AddrIn := (execute.exec_io.AluRes)
     memory.mem_io.WriteEn := RegNext(execute.exec_io.WriteEnOut)
-    memory.mem_io.ReadEn := RegNext(execute.exec_io.ReadEnOut)
     memory.mem_io.WbEnIn := RegNext(execute.exec_io.WbEnOut)
     memory.mem_io.WbTypeIn := RegNext(execute.exec_io.WbTypeOut)
     memory.mem_io.WriteData := RegNext(execute.exec_io.WriteData)
-    memory.mem_io.AddrIn := RegNext(execute.exec_io.AluRes)
     memory.mem_io.CtrlBrEn := RegNext(execute.exec_io.BrEnOut)
     memory.mem_io.AluBrEn := RegNext(execute.exec_io.zero)
     memory.mem_io.BrAddrIn := RegNext(execute.exec_io.BranchAddrOut)

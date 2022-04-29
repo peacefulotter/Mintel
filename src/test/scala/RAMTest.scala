@@ -8,25 +8,25 @@ class RAMTest extends AnyFlatSpec with ChiselScalatestTester {
         test(new RAM).withAnnotations(Seq(WriteVcdAnnotation)) { c =>
             c.clock.setTimeout(0)
 
-            c.io.Addr.poke(0.U);
-            c.io.ReadEn.poke(true.B)
+            c.ram_io.Addr.poke(0.U);
+            c.ram_io.ReadEn.poke(true.B)
 
             // Read at 0x0
             c.clock.step(1)
-            val r2 = c.io.ReadData.peek().litValue
+            val r2 = c.ram_io.ReadData.peek().litValue
             println(r2)
 
             // Write 4 at 0x0
             c.clock.step(1)
-            c.io.ReadEn.poke(true.B);
-            c.io.WriteEn.poke(true.B);
-            c.io.WriteData.poke(4.U);
-            println(c.io.ReadData.peek().litValue);
+            c.ram_io.ReadEn.poke(true.B);
+            c.ram_io.WriteEn.poke(true.B);
+            c.ram_io.WriteData.poke(4.U);
+            println(c.ram_io.ReadData.peek().litValue);
 
             // Read at 0x0
             c.clock.step(1);
-            c.io.ReadEn.poke(true.B);
-            val r3 = c.io.ReadData.peek().litValue;
+            c.ram_io.ReadEn.poke(true.B);
+            val r3 = c.ram_io.ReadData.peek().litValue;
             println(r3)
         }
     }
