@@ -10,7 +10,7 @@ class Control extends Module  {
         val rd = Output(UInt(5.W))
         val imm = Output(UInt(16.W))
         val addr = Output(UInt(26.W))
-        // val shamt = Output(UInt(5.W))
+
         val ImmEn = Output(UInt(1.W))
         val AluOp = Output(UInt(6.W))
         val BrEn = Output(UInt(1.W))
@@ -25,7 +25,6 @@ class Control extends Module  {
     io.rd      := io.instr.apply(15, 11)
     io.imm     := io.instr.apply(15, 0)
     io.addr    := io.instr.apply(25,  0)
-    // io.shamt   := 0.U; // io.instr(21, 26)
 
     val format = ListLookup(io.instr.asUInt, Instructions.nop, Instructions.map);
     io.AluOp   := format(0)

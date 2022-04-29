@@ -3,7 +3,7 @@ import chisel3._
 import chisel3.util._
 
 object ALU {
-    val add :: sub :: and :: or :: xor :: sll :: srl :: slt :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(13)
+    val add :: sub :: and :: or :: xor :: sll :: sllv :: srlv ::srl :: slt :: sltu :: lt :: lte :: ge :: ne :: eq :: Nil = Enum(13)
 }
 
 class ALU extends Module {
@@ -16,7 +16,7 @@ class ALU extends Module {
         val zero = Output(Bool())
     })
 
-    def shamt: UInt = io.B(4, 0).asUInt
+    val shamt: UInt = io.B.apply(10,  6)
 
     def zero: Bool = MuxLookup(
         io.AluOp,
@@ -33,20 +33,23 @@ class ALU extends Module {
         io.AluOp,
         zero.asUInt,
         Seq(
+            // TODO: add mult ?
             add ->  (io.A + io.B),
             sub ->  (io.A - io.B),
-            // TODO add sra
-            // TODO add mult
-            // TODO add ..
-            srl ->  (io.A >> shamt),
-            sll ->  (io.A << shamt),
-            slt ->  (io.A.asSInt < io.B.asSInt),
+
             and ->  (io.A & io.B),
             or ->   (io.A | io.B),
-            xor ->  (io.A ^ io.B)
+            xor ->  (io.A ^ io.B),
+
+            sll ->  (io.A << shamt),
+            srl ->  (io.A >> shamt),
+            sllv ->  (io.A << io.B.apply(4, 0)),
+            srlv ->  (io.A >> io.B.apply(4, 0)),
+
+            slt ->  (io.A.asSInt < io.B.asSInt).asUInt,
+            sltu ->  (io.A < io.B).asUInt,
         )
     )
 
     io.zero := zero
-    // io.sum := io.A + Mux(io.alu_op(0), -io.B, io.B)
 }

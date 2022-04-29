@@ -14,6 +14,7 @@ class Execute extends Module {
         val rs = Input(UInt(32.W))
         val rt = Input(UInt(32.W))
         val rd = Input(UInt(32.W))
+        val shamt = Input(UInt(5.W))
         val DataRead1 = Input(UInt(32.W))
         val DataRead2 = Input(UInt(32.W))
 
