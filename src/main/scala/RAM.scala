@@ -48,6 +48,6 @@ class RAM(val size: Int = 1024) extends Module {
     ram_io.ReadData := Mux( doForwardWr, PrevWrData, ReadData )
 }
 
-object RAM extends App {
-    (new chisel3.stage.ChiselStage).emitVerilog(new RAM())
-}
+//object RAM extends App {
+//    (new chisel3.stage.ChiselStage).emitVerilog(new RAM())
+//}

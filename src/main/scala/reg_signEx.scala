@@ -1,9 +1,9 @@
 
 import chisel3._
 
-class Switch extends Module {
+class reg_signEx(width: Int) extends Module {
 
-    val nbSwitches = 8;
+    val nbSwitches = width;
     val reg = RegInit(0.U)
 
     val signExtend = Module( new SignExtend(nbSwitches) )
