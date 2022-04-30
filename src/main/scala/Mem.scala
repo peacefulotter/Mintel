@@ -7,15 +7,11 @@ class Mem extends Module {
 
     val Switches1 = Module( new Switch ) // 1021
     val Switches2 = Module( new Switch ) // 1022
-    val Outport = Module( new Switch ) // 1023
+    val Outport   = Module( new Switch ) // 1023
 
     val Switch1Addr = 1021.U
     val Switch2Addr = 1022.U
     val OutportAddr = 1023.U
-
-    /**
-     * TODO: REPLACE RAM WITH MEMORY_MODULE
-     */
 
     val mem_io = IO(new Bundle {
         // Switches
