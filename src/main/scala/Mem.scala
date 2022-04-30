@@ -1,15 +1,26 @@
 import chisel3._
+import chisel3.util.MuxCase
 
 class Mem extends Module {
 
-    val mem = Module( new MemoryModule )
-    // val ram = Module( new RAM );
+    val ram = Module( new RAM );
+
+    val Switches1 = Module( new Switch ) // 1021
+    val Switches2 = Module( new Switch ) // 1022
+    val Outport = Module( new Switch ) // 1023
+
+    val Switch1Addr = 1021.U
+    val Switch2Addr = 1022.U
 
     /**
      * TODO: REPLACE RAM WITH MEMORY_MODULE
      */
 
     val mem_io = IO(new Bundle {
+        // Switches
+        val Switches1 = Input(UInt(8.W))
+        val Switches2 = Input(UInt(8.W))
+
         // From Control
         val WriteEn = Input(UInt(1.W))
         val ReadEn = Input(UInt(1.W))
@@ -39,11 +50,27 @@ class Mem extends Module {
         val BrEnOut = Output(Bool())
     })
 
+    val AddrSel = MuxCase( 0.U, Array(
+        (mem_io.AddrIn === Switch1Addr) -> 1.U, // Switches1
+        (mem_io.AddrIn === Switch2Addr) -> 2.U, // Switches2
+        //(mem_io.AddrIn === 1023.U) -> 3.U, // Outport
+    ))
+
+    Switches1.io.DataIn := mem_io.Switches1
+    Switches1.io.WrEn := mem_io.WriteEn & AddrSel === 1.U
+    Switches2.io.DataIn := mem_io.Switches2
+    Switches2.io.WrEn := mem_io.WriteEn & AddrSel === 2.U
+    /*Outport.io.DataIn := ???
+    Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U*/
+
     ram.ram_io.Addr := mem_io.AddrIn
-    ram.ram_io.ReadEn := mem_io.ReadEn
-    ram.ram_io.WriteEn := mem_io.WriteEn
+    ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
+    ram.ram_io.WriteEn := (mem_io.WriteEn & AddrSel === 0.U)
     ram.ram_io.WriteData := mem_io.WriteData
-    mem_io.ReadData := ram.ram_io.ReadData
+    mem_io.ReadData := MuxCase( ram.ram_io.ReadData, Array(
+        (mem_io.AddrIn === Switch1Addr) -> Switches1.io.DataOut, // Switches1
+        (mem_io.AddrIn === Switch2Addr) -> Switches2.io.DataOut, // Switches2
+    ) )
 
     mem_io.BrAddrOut := mem_io.BrAddrIn
 

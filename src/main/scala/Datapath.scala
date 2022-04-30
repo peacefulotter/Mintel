@@ -11,9 +11,9 @@ class Datapath extends Module {
 
     val io = IO( new Bundle {
         // Input 1
-        val switches1 = Input(UInt(8.W)) // 7:AB26, 6:AD26, 5:AC26, 4:AB27, 3:AD27, 2:AC27, 1:AC28, 0:AB28
+        val Switches1 = Input(UInt(8.W)) // 7:AB26, 6:AD26, 5:AC26, 4:AB27, 3:AD27, 2:AC27, 1:AC28, 0:AB28
         // Input 2
-        val switches2 = Input(UInt(8.W))  // 7:AA22, 6:AA23, 5:AA24, 4:AB23, 3:AB24, 2:AC24, 1:AB25, 0:AC25
+        val Switches2 = Input(UInt(8.W))  // 7:AA22, 6:AA23, 5:AA24, 4:AB23, 3:AB24, 2:AC24, 1:AB25, 0:AC25
 
         val instr     = Output(UInt(32.W))
         val txd_instr = Output(UInt(1.W)) // G9
@@ -40,10 +40,7 @@ class Datapath extends Module {
         // 6:H22, 5:J22, 4:L25, 3:L26, 2:E17, 1:F22, 0:G18
     } )
 
-    val input1 = io.switches1
-    val input2 = io.switches2
-    val output = WireDefault(0.U(32.W))
-    output := execute.exec_io.AluRes
+
 
     io.instr := fetch.io.Instr;
 
@@ -92,6 +89,10 @@ class Datapath extends Module {
     memory.mem_io.AluBrEn := RegNext(execute.exec_io.zero)
     memory.mem_io.BrAddrIn := RegNext(execute.exec_io.BranchAddrOut)
     memory.mem_io.WriteRegAddrIn := RegNext(execute.exec_io.WriteRegAddr)
+    // Switches
+        memory.mem_io.Switches1 := io.Switches1
+    memory.mem_io.Switches2 := io.Switches2
+
 
     /** WRITEBACK **/
     writeback.wb_io.WbEnIn := RegNext(memory.mem_io.WbEnOut)
@@ -110,11 +111,12 @@ class Datapath extends Module {
     val U_decoder7seg_1 = Module( new decoder7seg )
     val U_decoder7seg_0 = Module( new decoder7seg )
 
-    U_decoder7seg_7.io.in := input1(7,4)
-    U_decoder7seg_6.io.in := input1(3,0)
-    U_decoder7seg_5.io.in := input2(7,4)
-    U_decoder7seg_4.io.in := input2(3,0)
+    U_decoder7seg_7.io.in := io.Switches1(7,4)
+    U_decoder7seg_6.io.in := io.Switches1(3,0)
+    U_decoder7seg_5.io.in := io.Switches2(7,4)
+    U_decoder7seg_4.io.in := io.Switches2(3,0)
 
+    val output = fetch.io.Instr;
     U_decoder7seg_3.io.in := output(15,12)
     U_decoder7seg_2.io.in := output(11,8)
     U_decoder7seg_1.io.in := output(7,4)

@@ -4,36 +4,21 @@ import chisel3.util.MuxCase
 
 class MemoryModule extends Module {
 
-    val width = 32;
-    val switches = 8;
-
-    // TODO: have the IO ports in separate component
-
-    /****
-     *
-     *  REFACTOR MEMORY MODULE - STORE THE PORTS INTO A SEPARATE COMPONENT
-     *
-     */
-
-    val InPort0 = RegInit(UInt(32.W))
-    val InPort1 = RegInit(UInt(32.W))
-    val OutPort = RegInit(UInt(32.W))
     val ram = Module( new RAM );
 
-    val maxAddr: UInt = 1024.U
-    val InPort0Addr: UInt = 65524.U; // FFF4 = 65524 -> Inport0
-    val InPort1Addr: UInt = 65528.U; // FFF8 = 65528 -> Inport1
-    val OutPortAddr: UInt = 65532.U; // FFFC = 65532 -> Outport
+    val Switches1 = Module( new Switch ) // 1021
+    val Switches2 = Module( new Switch ) // 1022
+    val Switches3 = Module( new Switch ) // 1023
 
     val io = IO(new Bundle {
-        val SwitchData: Vec[UInt] = Input(Vec(switches, UInt(width.W)))
+        val Switches1 = Input(UInt(8.W))
+        val Switches2 = Input(UInt(8.W))
 
         val readEn: Bool = Input(Bool())
         val writeEn: Bool = Input(Bool())
-        val writeData: UInt = Input(UInt(width.W))
-        val addr: UInt = Input(UInt(width.W)); // Could be read or write
-
-        val readData: UInt = Output(UInt(width.W))
+        val writeData: UInt = Input(UInt(32.W))
+        val addr: UInt = Input(UInt(32.W)); // Could be read or write
+        val readData: UInt = Output(UInt(32.W))
     })
 
     val OutportWrEn: Bool = io.writeEn & (io.addr === OutPortAddr);
@@ -42,17 +27,6 @@ class MemoryModule extends Module {
         (!io.writeEn && (io.addr === InPort0Addr)) -> 2.U,
         (!io.writeEn && (io.addr === InPort1Addr)) -> 1.U
     ));
-    // val delay_en = false.B;
-
-    InPort0 := io.SwitchData(0)
-
-    InPort1 := io.SwitchData(1)
-
-    OutPort := io.writeData;
-
-    ram.io.writeEn := io.writeEn
-    ram.io.addr := io.addr;
-    ram.io.writeData := io.writeData;
 
     io.readData := MuxCase(0.U, Array(
         (mux_sel == 1.U).B -> InPort1,
