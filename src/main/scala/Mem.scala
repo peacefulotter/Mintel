@@ -11,6 +11,7 @@ class Mem extends Module {
 
     val Switch1Addr = 1021.U
     val Switch2Addr = 1022.U
+    val OutportAddr = 1023.U
 
     /**
      * TODO: REPLACE RAM WITH MEMORY_MODULE
@@ -53,15 +54,15 @@ class Mem extends Module {
     val AddrSel = MuxCase( 0.U, Array(
         (mem_io.AddrIn === Switch1Addr) -> 1.U, // Switches1
         (mem_io.AddrIn === Switch2Addr) -> 2.U, // Switches2
-        //(mem_io.AddrIn === 1023.U) -> 3.U, // Outport
-    ))
+        (mem_io.AddrIn === OutportAddr) -> 3.U, // Outport
+    ) )
 
     Switches1.io.DataIn := mem_io.Switches1
     Switches1.io.WrEn := mem_io.WriteEn & AddrSel === 1.U
     Switches2.io.DataIn := mem_io.Switches2
     Switches2.io.WrEn := mem_io.WriteEn & AddrSel === 2.U
-    /*Outport.io.DataIn := ???
-    Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U*/
+    Outport.io.DataIn := mem_io.WriteData
+    Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U
 
     ram.ram_io.Addr := mem_io.AddrIn
     ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
@@ -70,6 +71,7 @@ class Mem extends Module {
     mem_io.ReadData := MuxCase( ram.ram_io.ReadData, Array(
         (mem_io.AddrIn === Switch1Addr) -> Switches1.io.DataOut, // Switches1
         (mem_io.AddrIn === Switch2Addr) -> Switches2.io.DataOut, // Switches2
+        (mem_io.AddrIn === OutportAddr) -> Outport.io.DataOut,   // Outport
     ) )
 
     mem_io.BrAddrOut := mem_io.BrAddrIn

@@ -83,7 +83,7 @@ class Datapath extends Module {
     // Switches
     memory.mem_io.Switches1 := io.Switches1
     memory.mem_io.Switches2 := io.Switches2
-    
+
     /** WRITEBACK **/
     writeback.wb_io.WbEnIn          := RegNext(memory.mem_io.WbEnOut)
     writeback.wb_io.WbTypeIn        := RegNext(memory.mem_io.WbTypeOut)
@@ -122,8 +122,6 @@ class Datapath extends Module {
     io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
 
     /** UART to transmit instructions **/
-
-
 }
 
 object Datapath extends App {
