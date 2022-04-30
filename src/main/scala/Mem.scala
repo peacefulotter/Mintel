@@ -2,8 +2,8 @@ import chisel3._
 
 class Mem extends Module {
 
-    // val mem = Module( new MemoryModule )
-    val ram = Module( new RAM );
+    val mem = Module( new MemoryModule )
+    // val ram = Module( new RAM );
 
     /**
      * TODO: REPLACE RAM WITH MEMORY_MODULE

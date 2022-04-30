@@ -10,24 +10,34 @@ class Datapath extends Module {
     val writeback = Module( new Writeback )
 
     val io = IO( new Bundle {
-        val switches1 = Input(UInt(8.W)) // Input 1
-        val switches2 = Input(UInt(8.W)) // Input 2
+        // Input 1
+        val switches1 = Input(UInt(8.W)) // 7:AB26, 6:AD26, 5:AC26, 4:AB27, 3:AD27, 2:AC27, 1:AC28, 0:AB28
+        // Input 2
+        val switches2 = Input(UInt(8.W))  // 7:AA22, 6:AA23, 5:AA24, 4:AB23, 3:AB24, 2:AC24, 1:AB25, 0:AC25
 
         val instr     = Output(UInt(32.W))
+        val txd_instr = Output(UInt(1.W)) // G9
 
         // Input 1
-        val hex7     = Output(UInt(7.W))
-        val hex6     = Output(UInt(7.W))
+        val hex7     = Output(UInt(7.W)) // 6:AA14, 5:AG18, 4:AF17, 3:AH17, 2:AG17, 1:AE17, 0:AD17
+        val hex6     = Output(UInt(7.W))  // 6:AC17, 5:AA15, 4:AB15, 3:AB17, 2:AA16, 1:AB16, 0:AA17
 
         // Input 2
         val hex5     = Output(UInt(7.W))
+        // 6:AH18, 5:AF18, 4:AG19, 3:AH19, 2:AB18, 1:AC18, 0:AD18
         val hex4     = Output(UInt(7.W))
+        // 6:AE18, 5:AF19, 4:AE19, 3:AH21, 2:AG21, 1:AA19, 0:AB19
 
         // Output
         val hex3     = Output(UInt(7.W))
+        // 6:Y19, 5:AF23, 4:AD24, 3:AA21, 2:AB20, 1:U21, 0:V21
+
         val hex2     = Output(UInt(7.W))
+        // 6:, 5:, 4:, 3:, 2:, 1:, 0:
         val hex1     = Output(UInt(7.W))
+        // 6:, 5:, 4:, 3:, 2:, 1:, 0:
         val hex0     = Output(UInt(7.W))
+        // 6:H22, 5:J22, 4:L25, 3:L26, 2:E17, 1:F22, 0:G18
     } )
 
     val input1 = io.switches1
@@ -118,6 +128,10 @@ class Datapath extends Module {
     io.hex2 := U_decoder7seg_2.io.out // Output -> Output(7:4)
     io.hex1 := U_decoder7seg_1.io.out // Output -> Output(11:8)
     io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
+
+    /** UART to transmit instructions **/
+
+
 }
 
 object Datapath extends App {

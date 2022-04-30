@@ -5,7 +5,7 @@ class Decode extends Module  {
 
     val regFile = Module( new RegisterFile )
     val control = Module( new Control )
-    val signExtend = Module( new SignExtend )
+    val signExtend = Module( new SignExtend(16) )
 
     val dec_io = IO(new Bundle {
         // From Fetch

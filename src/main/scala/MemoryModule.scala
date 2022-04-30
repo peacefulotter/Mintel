@@ -1,4 +1,4 @@
-/*
+
 import chisel3._
 import chisel3.util.MuxCase
 
@@ -15,9 +15,9 @@ class MemoryModule extends Module {
      *
      */
 
-    val InPort0 = Module(new FakeRegister)
-    val InPort1 = Module(new FakeRegister)
-    val OutPort = Module(new FakeRegister)
+    val InPort0 = RegInit(UInt(32.W))
+    val InPort1 = RegInit(UInt(32.W))
+    val OutPort = RegInit(UInt(32.W))
     val ram = Module( new RAM );
 
     val maxAddr: UInt = 1024.U
@@ -26,8 +26,6 @@ class MemoryModule extends Module {
     val OutPortAddr: UInt = 65532.U; // FFFC = 65532 -> Outport
 
     val io = IO(new Bundle {
-        val Inport0En: Bool = Input(Bool())
-        val Inport1En: Bool = Input(Bool())
         val SwitchData: Vec[UInt] = Input(Vec(switches, UInt(width.W)))
 
         val readEn: Bool = Input(Bool())
@@ -46,22 +44,19 @@ class MemoryModule extends Module {
     ));
     // val delay_en = false.B;
 
-    InPort0.io.en := io.Inport0En
-    InPort0.reg := io.SwitchData(0)
+    InPort0 := io.SwitchData(0)
 
-    InPort1.io.en := io.Inport1En
-    InPort1.reg := io.SwitchData(1)
+    InPort1 := io.SwitchData(1)
 
-    OutPort.reg := io.writeData;
-    OutPort.io.en := OutportWrEn;
+    OutPort := io.writeData;
 
     ram.io.writeEn := io.writeEn
     ram.io.addr := io.addr;
     ram.io.writeData := io.writeData;
 
     io.readData := MuxCase(0.U, Array(
-        (mux_sel == 1.U).B -> InPort1.reg,
-        (mux_sel == 2.U).B -> InPort0.reg,
+        (mux_sel == 1.U).B -> InPort1,
+        (mux_sel == 2.U).B -> InPort0,
         (mux_sel == 3.U).B -> ram.io.readData
     ))
 }
@@ -70,4 +65,4 @@ object MemoryModule extends App {
     (new chisel3.stage.ChiselStage).emitVerilog(new MemoryModule())
 }
 
-*/
+
