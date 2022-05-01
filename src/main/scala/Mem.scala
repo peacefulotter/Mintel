@@ -5,18 +5,21 @@ class Mem extends Module {
 
     val ram = Module( new RAM );
 
-    val Switches1 = Module( new Switch ) // 1021
-    val Switches2 = Module( new Switch ) // 1022
-    val Outport   = Module( new Switch ) // 1023
 
-    val Switch1Addr = 1021.U
-    val Switch2Addr = 1022.U
+    val Inport1 = Module( new EnRegister(8) ) // 1021
+    val Inport2 = Module( new EnRegister(8) ) // 1022
+    val Outport = Module( new EnRegister(16) ) // 1023
+
+    val Inport1Addr = 1021.U
+    val Inport2Addr = 1022.U
     val OutportAddr = 1023.U
 
     val mem_io = IO(new Bundle {
         // Switches
-        val Switches1 = Input(UInt(8.W))
-        val Switches2 = Input(UInt(8.W))
+        val Inport1 = Input(UInt(8.W))
+        val Inport2 = Input(UInt(8.W))
+
+        val Outport = Output(UInt(16.W))
 
         // From Control
         val WriteEn = Input(UInt(1.W))
@@ -48,26 +51,28 @@ class Mem extends Module {
     })
 
     val AddrSel = MuxCase( 0.U, Array(
-        (mem_io.AddrIn === Switch1Addr) -> 1.U, // Switches1
-        (mem_io.AddrIn === Switch2Addr) -> 2.U, // Switches2
+        (mem_io.AddrIn === Inport1Addr) -> 1.U, // Switches1
+        (mem_io.AddrIn === Inport2Addr) -> 2.U, // Switches2
         (mem_io.AddrIn === OutportAddr) -> 3.U, // Outport
     ) )
 
-    Switches1.io.DataIn := mem_io.Switches1
-    Switches1.io.WrEn := mem_io.WriteEn & AddrSel === 1.U
-    Switches2.io.DataIn := mem_io.Switches2
-    Switches2.io.WrEn := mem_io.WriteEn & AddrSel === 2.U
+    Inport1.io.DataIn := mem_io.Inport1
+    Inport1.io.WrEn := mem_io.WriteEn & AddrSel === 1.U
+    Inport2.io.DataIn := mem_io.Inport2
+    Inport2.io.WrEn := mem_io.WriteEn & AddrSel === 2.U
     Outport.io.DataIn := mem_io.WriteData
     Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U
+
+    mem_io.Outport := Outport.io.DataOut
 
     ram.ram_io.Addr := mem_io.AddrIn
     ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
     ram.ram_io.WriteEn := (mem_io.WriteEn & AddrSel === 0.U)
     ram.ram_io.WriteData := mem_io.WriteData
     mem_io.ReadData := MuxCase( ram.ram_io.ReadData, Array(
-        (mem_io.AddrIn === Switch1Addr) -> Switches1.io.DataOut, // Switches1
-        (mem_io.AddrIn === Switch2Addr) -> Switches2.io.DataOut, // Switches2
-        (mem_io.AddrIn === OutportAddr) -> Outport.io.DataOut,   // Outport
+        (mem_io.AddrIn === Inport1Addr) -> Inport1.io.DataOut, // Switches1
+        (mem_io.AddrIn === Inport2Addr) -> Inport2.io.DataOut, // Switches2
+        (mem_io.AddrIn === OutportAddr) -> Outport.io.DataOut, // Outport
     ) )
 
     mem_io.BrAddrOut := mem_io.BrAddrIn

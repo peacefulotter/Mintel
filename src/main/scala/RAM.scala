@@ -38,16 +38,15 @@ class RAM(val size: Int = 1024) extends Module {
         mem.write(CurAddr, ram_io.WriteData)
     }
 
-    val reg_raddr = Reg(UInt())
-    when ( CurReadEn & isValid ) { reg_raddr := CurAddr }
-    val ReadData = mem.read(reg_raddr)
-    // val ReadData = RegNext( Mux(CurReadEn, mem.read(CurAddr), 0.U) )
+    val RegAddr = Reg(UInt())
+    val ReadAllowed = CurReadEn & isValid
+    when ( ReadAllowed ) { RegAddr := CurAddr }
+    val ReadData = Mux( ReadAllowed, mem.read(RegAddr), 0.U)
 
-    val doForwardWr = RegNext( CurAddr === PrevAddr & PrevWrEn & CurReadEn )
-
+    val doForwardWr = CurAddr === PrevAddr & PrevWrEn & CurReadEn
     ram_io.ReadData := Mux( doForwardWr, PrevWrData, ReadData )
 }
 
-object RAM extends App {
-    (new chisel3.stage.ChiselStage).emitVerilog(new RAM())
-}
+//object RAM extends App {
+//    (new chisel3.stage.ChiselStage).emitVerilog(new RAM())
+//}

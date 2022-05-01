@@ -1,15 +1,14 @@
 
 import chisel3._
 
-class Switch extends Module {
+class EnRegister(width: Int) extends Module {
 
-    val nbSwitches = 8;
     val reg = RegInit(0.U)
 
-    val signExtend = Module( new SignExtend(nbSwitches) )
+    val signExtend = Module( new SignExtend(width) )
 
     val io = IO(new Bundle {
-        val DataIn = Input(UInt(nbSwitches.W))
+        val DataIn = Input(UInt(width.W))
         val WrEn = Input(Bool())
 
         val DataOut = Output(UInt(32.W))
