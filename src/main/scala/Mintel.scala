@@ -10,6 +10,8 @@ class Mintel extends Module {
         // Input 2
         // 7:AA22, 6:AA23, 5:AA24, 4:AB23, 3:AB24, 2:AC24, 1:AB25, 0:AC25
 
+        val instr = Output(UInt(32.W))
+
         val txd_instr = Output(UInt(1.W)) // G9
 
         // Input 1 Display
@@ -38,7 +40,7 @@ class Mintel extends Module {
 
     val datapath = Module( new Datapath )
 
-    val instr     = datapath.io.instr
+    io.instr     := datapath.io.instr
 
     val Inport1  = io.SW(7,0)
     val Inport2  = io.SW(15,0)
@@ -82,7 +84,7 @@ class Mintel extends Module {
     val tx = Module(new BufferedTx(50000000, 115200))
     io.txd_instr := tx.io.txd
 
-    val string = instr.toString()
+    val string = io.instr.toString()
     val text = VecInit(string.map(_.U))
 
     val len = string.length.U
