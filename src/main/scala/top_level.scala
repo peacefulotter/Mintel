@@ -28,9 +28,9 @@ class top_level extends Module {
 
     // Just there in case we decide to use them
     val LEDR  = Output(UInt(17.W))
-    // 17:, 16:, 15:, 14:, 13:, 12:, 11:, 10:, 9:, 8:, 8:, 7:, 6:, 5:, 4:, 3:, 2:, 1:, 0:
-    val LEDG  = Output(UInt(8.W))
-    // 7:, 6:, 5:, 4:, 3:, 2:, 1:, 0:
+    // 17:H15, 16:G16, 15:G15, 14:F15, 13:H17, 12:J16, 11:H16, 10:J15, 9:G17, 8:J17, 8:H19, 7:H19, 6:J19, 5:E18, 4:F18, 3:F21, 2:E19, 1:F19, 0:G19
+    val LEDG  = Output(UInt(9.W))
+    // 8:F17 7:G21, 6:G22, 5:G20, 4:H21, 3:E24, 2:E25, 1:E22, 0:E21
     val KEY   = Input(UInt(4.W))
     // 3:R24, 2:N21, 1:M21, 0:M23
   }
@@ -100,7 +100,7 @@ class top_level extends Module {
   // not use for anything
   val LEDG      = WireDefault(0.U(8.W))
   io.LEDR       := ~io.SW
-  LEDG          := Cat(~io.KEY,~io.KEY)
+  LEDG          := Cat(1.U, ~io.KEY, ~io.KEY)
   io.LEDG       := LEDG
 }
 

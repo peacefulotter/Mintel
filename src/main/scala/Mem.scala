@@ -62,6 +62,8 @@ class Mem extends Module {
     Outport.io.DataIn := mem_io.WriteData
     Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U
 
+    mem_io.Outport := 0.U
+
     ram.ram_io.Addr := mem_io.AddrIn
     ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
     ram.ram_io.WriteEn := (mem_io.WriteEn & AddrSel === 0.U)
@@ -69,7 +71,7 @@ class Mem extends Module {
     mem_io.ReadData := MuxCase( ram.ram_io.ReadData, Array(
         (mem_io.AddrIn === Inport1Addr) -> Inport1.io.DataOut, // Switches1
         (mem_io.AddrIn === Inport2Addr) -> Inport2.io.DataOut, // Switches2
-        (mem_io.AddrIn === OutportAddr) -> Outport.io.DataOut,   // Outport
+        (mem_io.AddrIn === OutportAddr) -> Outport.io.DataOut, // Outport
     ) )
 
     mem_io.BrAddrOut := mem_io.BrAddrIn
