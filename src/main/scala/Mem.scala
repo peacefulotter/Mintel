@@ -62,7 +62,7 @@ class Mem extends Module {
     Outport.io.DataIn := mem_io.WriteData
     Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U
 
-    mem_io.Outport := 0.U
+    mem_io.Outport := Outport.io.DataOut
 
     ram.ram_io.Addr := mem_io.AddrIn
     ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
