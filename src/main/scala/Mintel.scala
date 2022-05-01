@@ -43,7 +43,7 @@ class Mintel extends Module {
     io.instr     := datapath.io.instr
 
     val Inport1  = io.SW(7,0)
-    val Inport2  = io.SW(15,0)
+    val Inport2  = io.SW(15,8)
     val Outport  = WireDefault(0.U(16.W))
 
     datapath.io.Inport1 := Inport1
