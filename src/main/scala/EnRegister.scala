@@ -1,7 +1,7 @@
 
 import chisel3._
 
-class reg_signEx(width: Int) extends Module {
+class EnRegister(width: Int) extends Module {
 
     val reg = RegInit(0.U)
 

@@ -6,9 +6,10 @@ class Mem extends Module {
 
     val ram = Module( new RAM );
 
-    val Inport1 = Module( new reg_signEx(8) ) // 1021
-    val Inport2 = Module( new reg_signEx(8) ) // 1022
-    val Outport = Module( new reg_signEx(16) ) // 1023
+
+    val Inport1 = Module( new EnRegister(8) ) // 1021
+    val Inport2 = Module( new EnRegister(8) ) // 1022
+    val Outport = Module( new EnRegister(16) ) // 1023
 
     val Inport1Addr = 1021.U
     val Inport2Addr = 1022.U
