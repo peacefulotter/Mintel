@@ -29,9 +29,9 @@ class Mintel extends Module {
         val hex0     = Output(UInt(7.W)) // 6:H22, 5:J22, 4:L25, 3:L26, 2:E17, 1:F22, 0:G18
 
         // Just there in case we decide to use them
-        val LEDR  = Output(UInt(17.W))
+        val LEDR  = Output(UInt(18.W))
         // 17:H15, 16:G16, 15:G15, 14:F15, 13:H17, 12:J16, 11:H16, 10:J15, 9:G17, 8:J17, 8:H19, 7:H19, 6:J19, 5:E18, 4:F18, 3:F21, 2:E19, 1:F19, 0:G19
-        val LEDG  = Output(UInt(9.W))
+        val LEDG  = Output(UInt(8.W))
         // 8:F17 7:G21, 6:G22, 5:G20, 4:H21, 3:E24, 2:E25, 1:E22, 0:E21
         val KEY   = Input(UInt(4.W))
         // 3:R24, 2:N21, 1:M21, 0:M23
@@ -84,8 +84,8 @@ class Mintel extends Module {
     val tx = Module(new BufferedTx(50000000, 115200))
     io.txd_instr := tx.io.txd
 
-    val string = io.instr.toString()
-    val text = VecInit(string.map(_.U))
+    val string = io.instr.asBools
+    val text = VecInit(string.map(_.asUInt))
 
     val len = string.length.U
     val cntReg2 = RegInit(0.U(8.W))
@@ -101,8 +101,8 @@ class Mintel extends Module {
 
     // not use for anything
     val LEDG      = WireDefault(0.U(8.W))
-    io.LEDR       := ~io.SW
-    LEDG          := Cat(1.U, ~io.KEY, ~io.KEY)
+    io.LEDR       := io.SW
+    LEDG          := Cat(~io.KEY, ~io.KEY)
     io.LEDG       := LEDG
 }
 

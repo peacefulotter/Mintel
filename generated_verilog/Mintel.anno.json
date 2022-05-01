@@ -8,31 +8,31 @@
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_1",
-    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:reg_signEx/signExtend:SignExtend_1",
+    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:EnRegister/signExtend:SignExtend_1",
     "index":0.3103448275862069
   },
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~Mintel|reg_signEx",
-    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:reg_signEx",
+    "original":"~Mintel|EnRegister",
+    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:EnRegister",
     "index":0.3448275862068966
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_2",
-    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:reg_signEx/signExtend:SignExtend_1",
+    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:EnRegister/signExtend:SignExtend_1",
     "index":0.3793103448275862
   },
   {
     "class":"firrtl.transforms.DedupedResult",
-    "original":"~Mintel|reg_signEx_1",
-    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:reg_signEx",
+    "original":"~Mintel|EnRegister_1",
+    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:EnRegister",
     "index":0.41379310344827586
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_3",
-    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Outport:reg_signEx_2/signExtend:SignExtend",
+    "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Outport:EnRegister_2/signExtend:SignExtend",
     "index":0.4482758620689655
   },
   {
