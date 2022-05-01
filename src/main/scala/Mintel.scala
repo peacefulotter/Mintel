@@ -2,8 +2,10 @@ import chisel3._
 import chisel3.util.Cat
 import uart._
 
-class top_level extends Module {
+class Mintel extends Module {
   val io = IO( new Bundle {
+    val instr = Output(UInt(32.W))
+
     val SW = Input(UInt(18.W))
     // Input 1
     // 7:AB26, 6:AD26, 5:AC26, 4:AB27, 3:AD27, 2:AC27, 1:AC28, 0:AB28
@@ -27,9 +29,9 @@ class top_level extends Module {
     val hex0     = Output(UInt(7.W)) // 6:H22, 5:J22, 4:L25, 3:L26, 2:E17, 1:F22, 0:G18
 
     // Just there in case we decide to use them
-    val LEDR  = Output(UInt(17.W))
+    val LEDR  = Output(UInt(18.W))
     // 17:H15, 16:G16, 15:G15, 14:F15, 13:H17, 12:J16, 11:H16, 10:J15, 9:G17, 8:J17, 8:H19, 7:H19, 6:J19, 5:E18, 4:F18, 3:F21, 2:E19, 1:F19, 0:G19
-    val LEDG  = Output(UInt(9.W))
+    val LEDG  = Output(UInt(8.W))
     // 8:F17 7:G21, 6:G22, 5:G20, 4:H21, 3:E24, 2:E25, 1:E22, 0:E21
     val KEY   = Input(UInt(4.W))
     // 3:R24, 2:N21, 1:M21, 0:M23
@@ -38,10 +40,10 @@ class top_level extends Module {
 
   val datapath = Module( new Datapath )
 
-  val instr     = datapath.io.instr
+  io.instr     := datapath.io.instr
 
   val Inport1  = io.SW(7,0)
-  val Inport2  = io.SW(15,0)
+  val Inport2  = io.SW(15,8)
   val Outport  = WireDefault(0.U(16.W))
 
   datapath.io.Inport1 := Inport1
@@ -82,10 +84,11 @@ class top_level extends Module {
   val tx = Module(new BufferedTx(50000000, 115200))
   io.txd_instr := tx.io.txd
 
-  val string = instr.toString()
-  val text = VecInit(string.map(_.U))
+//  val string = instr.toString()
+  val string = io.instr.asBools
+  val text = VecInit(string.map(_.asUInt))
 
-  val len = string.length.U
+  val len = 32.U
   val cntReg2 = RegInit(0.U(8.W))
 
   tx.io.channel.bits := text(cntReg2)
@@ -99,11 +102,11 @@ class top_level extends Module {
 
   // not use for anything
   val LEDG      = WireDefault(0.U(8.W))
-  io.LEDR       := ~io.SW
-  LEDG          := Cat(1.U, ~io.KEY, ~io.KEY)
+  io.LEDR       := io.SW
+  LEDG          := Cat(~io.KEY, ~io.KEY)
   io.LEDG       := LEDG
 }
 
-object top_level extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new top_level, Array("--target-dir", "generated_verilog"))
+object Mintel extends App {
+  (new chisel3.stage.ChiselStage).emitVerilog(new Mintel, Array("--target-dir", "generated_verilog"))
 }

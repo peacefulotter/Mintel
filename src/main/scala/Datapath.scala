@@ -54,8 +54,8 @@ class Datapath extends Module {
     execute.exec_io.WbEnIn      := RegNext(decode.dec_io.WbEn)
 
     /** MEMORY **/
-    memory.mem_io.ReadEn            := (execute.exec_io.ReadEnOut)
-    memory.mem_io.AddrIn            := (execute.exec_io.AluRes)
+    memory.mem_io.ReadEn            := RegNext(execute.exec_io.ReadEnOut)
+    memory.mem_io.AddrIn            := RegNext(execute.exec_io.AluRes)
     memory.mem_io.WriteEn           := RegNext(execute.exec_io.WriteEnOut)
     memory.mem_io.WbEnIn            := RegNext(execute.exec_io.WbEnOut)
     memory.mem_io.WbTypeIn          := RegNext(execute.exec_io.WbTypeOut)
@@ -70,12 +70,11 @@ class Datapath extends Module {
     io.Outport            := memory.mem_io.Outport
     
     /** WRITEBACK **/
-    writeback.wb_io.WbEnIn          := RegNext(memory.mem_io.WbEnOut)
-    writeback.wb_io.WbTypeIn        := RegNext(memory.mem_io.WbTypeOut)
-    writeback.wb_io.ReadData        := memory.mem_io.ReadData // already one clock delay from the RAM
-    writeback.wb_io.AddrData        := RegNext(memory.mem_io.AddrOut)
-    writeback.wb_io.WriteRegAddrIn  := RegNext(memory.mem_io.WriteRegAddrOut)
-
+    writeback.wb_io.WbEnIn          := RegNext( memory.mem_io.WbEnOut )
+    writeback.wb_io.WbTypeIn        := RegNext( memory.mem_io.WbTypeOut )
+    writeback.wb_io.ReadData        := RegNext( memory.mem_io.ReadData ) // already one clock delay from the RAM
+    writeback.wb_io.AddrData        := RegNext( memory.mem_io.AddrOut )
+    writeback.wb_io.WriteRegAddrIn  := RegNext( memory.mem_io.WriteRegAddrOut )
 }
 
 //object Datapath extends App {

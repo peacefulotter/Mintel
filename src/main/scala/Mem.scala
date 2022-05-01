@@ -1,4 +1,5 @@
 import chisel3._
+import chisel3.util.Cat
 import chisel3.util.MuxCase
 
 class Mem extends Module {
@@ -56,11 +57,11 @@ class Mem extends Module {
     ) )
 
     Inport1.io.DataIn := mem_io.Inport1
-    Inport1.io.WrEn := mem_io.WriteEn & AddrSel === 1.U
+    Inport1.io.WrEn := true.B // := mem_io.WriteEn & AddrSel === 1.U
     Inport2.io.DataIn := mem_io.Inport2
-    Inport2.io.WrEn := mem_io.WriteEn & AddrSel === 2.U
+    Inport2.io.WrEn := true.B // := mem_io.WriteEn & AddrSel === 2.U
     Outport.io.DataIn := mem_io.WriteData
-    Outport.io.WrEn := mem_io.WriteEn & AddrSel === 3.U
+    Outport.io.WrEn := true.B // := mem_io.WriteEn & AddrSel === 3.U
 
     mem_io.Outport := Outport.io.DataOut
 
