@@ -1,3 +1,4 @@
+import Instructions.WB_ALU
 import chisel3._
 
 class Execute extends Module {
@@ -28,7 +29,7 @@ class Execute extends Module {
         val WbVal = Input(UInt(32.W))
 
         // From Control
-        val AluOp = Input(UInt(4.W))
+        val AluOp = Input(UInt(8.W))
         val ImmEn = Input(Bool()) // 0 = dataRead2, 1 = Imm
         val WriteEnIn = Input(UInt(1.W))
         val ReadEnIn = Input(UInt(1.W))
@@ -56,9 +57,9 @@ class Execute extends Module {
 
     // Forwarding Unit
     def forward(addr: UInt, defVal: UInt): UInt = Mux(
-        addr === exec_io.MemAddr & exec_io.MemWbEn === 1.U,
+        addr === exec_io.MemAddr & exec_io.MemWbEn === WB_ALU,
         exec_io.MemVal,
-        Mux( addr === exec_io.WbAddr & exec_io.WbWbEn === 1.U,
+        Mux( addr === exec_io.WbAddr & exec_io.WbWbEn === WB_ALU,
             exec_io.WbVal,
             defVal
         )
