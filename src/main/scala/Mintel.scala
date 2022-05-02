@@ -12,7 +12,7 @@ class Mintel extends Module {
 
         val instr = Output(UInt(32.W))
 
-        val txd_instr = Output(UInt(1.W)) // G9
+        // val txd_instr = Output(UInt(1.W)) // G9
 
         // Input 1 Display
         val hex7     = Output(UInt(7.W)) // 6:AA14, 5:AG18, 4:AF17, 3:AH17, 2:AG17, 1:AE17, 0:AD17
@@ -35,6 +35,8 @@ class Mintel extends Module {
         // 8:F17 7:G21, 6:G22, 5:G20, 4:H21, 3:E24, 2:E25, 1:E22, 0:E21
         val KEY   = Input(UInt(4.W))
         // 3:R24, 2:N21, 1:M21, 0:M23
+
+        // val string = Output(UInt(32.W))
     }
     )
 
@@ -80,24 +82,50 @@ class Mintel extends Module {
     io.hex1 := U_decoder7seg_1.io.out // Output -> Output(11:8)
     io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
 
-    /** UART to transmit instructions **/
-    val tx = Module(new BufferedTx(50000000, 115200))
-    io.txd_instr := tx.io.txd
-
-    val string = io.instr.asBools
-    val text = VecInit(string.map(_.asUInt))
-
-    val len = string.length.U
-    val cntReg2 = RegInit(0.U(8.W))
-
-    tx.io.channel.bits := text(cntReg2)
-    tx.io.channel.valid := cntReg2 =/= len
-
-    when(tx.io.channel.ready && cntReg2 =/= len) {
-        cntReg2 := cntReg2 + 1.U
-    } .elsewhen(cntReg2 === len){
-        cntReg2 := 0.U
-    }
+//    /** UART to transmit instructions **/
+//    val tx = Module(new BufferedTx(50000000, 115200))
+//    io.txd_instr := tx.io.txd
+//
+//
+//    val instructions = io.instr
+//    for (i <- 0 to 7) {
+//        val nibble = instructions(4*i+3,4*i) & 0xf.U
+//        var h = '0'.U(8.W) + nibble
+//
+//        when (nibble > 9.U) {
+//            if ( nibble === 10.U )
+//                h = 'A'.U - 10.U + nibble
+//            else if (nibble === 11.U)
+//                h = 'B'.U - 11.U + nibble
+//            else if (nibble === 12.U)
+//                h = 'C'.U - 12.U + nibble
+//            else if (nibble === 13.U)
+//                h = 'D'.U - 13.U + nibble
+//            else if (nibble === 14.U)
+//                h = 'E'.U - 14.U + nibble
+//            else if (nibble === 15.U)
+//                h = 'F'.U - 15.U + nibble
+//        }
+//        println(h)
+//        io.string := h
+//        val string = 1.U
+//
+//
+//        val text = VecInit(string)
+//
+//        val len = 8.U
+//        val cntReg2 = RegInit(0.U(8.W))
+//
+//        tx.io.channel.bits := text(cntReg2)
+//        tx.io.channel.valid := cntReg2 =/= len
+//
+//        when(tx.io.channel.ready && cntReg2 =/= len) {
+//            cntReg2 := cntReg2 + 1.U
+//        } .elsewhen(cntReg2 === len){
+//            cntReg2 := 0.U
+//        }
+//
+//    }
 
     // not use for anything
     val LEDG      = WireDefault(0.U(8.W))
