@@ -789,26 +789,6 @@ module Control(
   wire  _format_T_181 = _format_T_7 ? 1'h0 : _format_T_180; // @[Lookup.scala 34:39]
   wire  _format_T_182 = _format_T_5 ? 1'h0 : _format_T_181; // @[Lookup.scala 34:39]
   wire  _format_T_183 = _format_T_3 ? 1'h0 : _format_T_182; // @[Lookup.scala 34:39]
-  wire  _format_T_190 = _format_T_41 ? 1'h0 : _format_T_85; // @[Lookup.scala 34:39]
-  wire  _format_T_191 = _format_T_39 ? 1'h0 : _format_T_190; // @[Lookup.scala 34:39]
-  wire  _format_T_192 = _format_T_37 ? 1'h0 : _format_T_191; // @[Lookup.scala 34:39]
-  wire  _format_T_193 = _format_T_35 ? 1'h0 : _format_T_192; // @[Lookup.scala 34:39]
-  wire  _format_T_194 = _format_T_33 ? 1'h0 : _format_T_193; // @[Lookup.scala 34:39]
-  wire  _format_T_195 = _format_T_31 ? 1'h0 : _format_T_194; // @[Lookup.scala 34:39]
-  wire  _format_T_196 = _format_T_29 ? 1'h0 : _format_T_195; // @[Lookup.scala 34:39]
-  wire  _format_T_197 = _format_T_27 ? 1'h0 : _format_T_196; // @[Lookup.scala 34:39]
-  wire  _format_T_198 = _format_T_25 ? 1'h0 : _format_T_197; // @[Lookup.scala 34:39]
-  wire  _format_T_199 = _format_T_23 ? 1'h0 : _format_T_198; // @[Lookup.scala 34:39]
-  wire  _format_T_200 = _format_T_21 ? 1'h0 : _format_T_199; // @[Lookup.scala 34:39]
-  wire  _format_T_201 = _format_T_19 ? 1'h0 : _format_T_200; // @[Lookup.scala 34:39]
-  wire  _format_T_202 = _format_T_17 ? 1'h0 : _format_T_201; // @[Lookup.scala 34:39]
-  wire  _format_T_203 = _format_T_15 ? 1'h0 : _format_T_202; // @[Lookup.scala 34:39]
-  wire  _format_T_204 = _format_T_13 ? 1'h0 : _format_T_203; // @[Lookup.scala 34:39]
-  wire  _format_T_205 = _format_T_11 ? 1'h0 : _format_T_204; // @[Lookup.scala 34:39]
-  wire  _format_T_206 = _format_T_9 ? 1'h0 : _format_T_205; // @[Lookup.scala 34:39]
-  wire  _format_T_207 = _format_T_7 ? 1'h0 : _format_T_206; // @[Lookup.scala 34:39]
-  wire  _format_T_208 = _format_T_5 ? 1'h0 : _format_T_207; // @[Lookup.scala 34:39]
-  wire  _format_T_209 = _format_T_3 ? 1'h0 : _format_T_208; // @[Lookup.scala 34:39]
   wire  _format_T_246 = _format_T_33 ? 1'h0 : _format_T_35 | _format_T_37; // @[Lookup.scala 34:39]
   wire  _format_T_247 = _format_T_31 ? 1'h0 : _format_T_246; // @[Lookup.scala 34:39]
   wire  _format_T_248 = _format_T_29 ? 1'h0 : _format_T_247; // @[Lookup.scala 34:39]
@@ -831,7 +811,7 @@ module Control(
   assign io_BrEn = _format_T_1 ? 1'h0 : _format_T_131; // @[Lookup.scala 34:39]
   assign io_LoadEn = _format_T_1 ? 1'h0 : _format_T_157; // @[Lookup.scala 34:39]
   assign io_StoreEn = _format_T_1 ? 1'h0 : _format_T_183; // @[Lookup.scala 34:39]
-  assign io_WbType = _format_T_1 ? 1'h0 : _format_T_209; // @[Lookup.scala 34:39]
+  assign io_WbType = _format_T_1 ? 1'h0 : _format_T_183; // @[Lookup.scala 34:39]
   assign io_WbEn = _format_T_1 ? 1'h0 : _format_T_3 | (_format_T_5 | (_format_T_7 | (_format_T_9 | (_format_T_11 | (
     _format_T_13 | (_format_T_15 | (_format_T_17 | (_format_T_19 | (_format_T_21 | (_format_T_23 | (_format_T_25 | (
     _format_T_27 | (_format_T_29 | (_format_T_31 | (_format_T_33 | (_format_T_35 | (_format_T_37 | (_format_T_39 | (
@@ -854,7 +834,7 @@ module Decode(
   input  [31:0] dec_io_WriteAddrIn,
   input         dec_io_WriteEnIn,
   input  [31:0] dec_io_WriteDataIn,
-  output [31:0] dec_io_AluOp,
+  output [7:0]  dec_io_AluOp,
   output [31:0] dec_io_Imm,
   output        dec_io_ImmEn,
   output        dec_io_BrEn,
@@ -924,7 +904,7 @@ module Decode(
     .io_isSigned(signExtend_io_isSigned),
     .io_out(signExtend_io_out)
   );
-  assign dec_io_AluOp = {{26'd0}, control_io_AluOp}; // @[Decode.scala 48:18]
+  assign dec_io_AluOp = {{2'd0}, control_io_AluOp}; // @[Decode.scala 48:18]
   assign dec_io_Imm = signExtend_io_out; // @[Decode.scala 70:16]
   assign dec_io_ImmEn = control_io_ImmEn; // @[Decode.scala 51:18]
   assign dec_io_BrEn = control_io_BrEn; // @[Decode.scala 49:17]
@@ -951,7 +931,7 @@ endmodule
 module ALU(
   input  [31:0] io_A,
   input  [31:0] io_B,
-  input  [4:0]  io_AluOp,
+  input  [7:0]  io_AluOp,
   output [31:0] io_out,
   output        io_zero
 );
@@ -960,9 +940,9 @@ module ALU(
   wire  _io_out_T_5 = $signed(io_A) >= $signed(io_B); // @[ALU.scala 26:38]
   wire  _io_out_T_6 = io_A != io_B; // @[ALU.scala 27:31]
   wire  _io_out_T_7 = io_A == io_B; // @[ALU.scala 28:31]
-  wire  _io_out_T_11 = 5'hf == io_AluOp ? _io_out_T_5 : 5'hc == io_AluOp & _io_out_T_2; // @[Mux.scala 81:58]
-  wire  _io_out_T_13 = 5'h10 == io_AluOp ? _io_out_T_6 : _io_out_T_11; // @[Mux.scala 81:58]
-  wire  _io_out_T_15 = 5'h11 == io_AluOp ? _io_out_T_7 : _io_out_T_13; // @[Mux.scala 81:58]
+  wire  _io_out_T_11 = 8'hf == io_AluOp ? _io_out_T_5 : 8'hc == io_AluOp & _io_out_T_2; // @[Mux.scala 81:58]
+  wire  _io_out_T_13 = 8'h10 == io_AluOp ? _io_out_T_6 : _io_out_T_11; // @[Mux.scala 81:58]
+  wire  _io_out_T_15 = 8'h11 == io_AluOp ? _io_out_T_7 : _io_out_T_13; // @[Mux.scala 81:58]
   wire [31:0] _io_out_T_21 = $signed(io_A) + $signed(io_B); // @[ALU.scala 36:49]
   wire [31:0] _io_out_T_23 = io_A + io_B; // @[ALU.scala 37:27]
   wire [31:0] _io_out_T_29 = $signed(io_A) - $signed(io_B); // @[ALU.scala 38:49]
@@ -978,21 +958,21 @@ module ALU(
   wire [62:0] _io_out_T_42 = _GEN_1 << io_B[4:0]; // @[ALU.scala 48:27]
   wire [31:0] _io_out_T_44 = io_A >> io_B[4:0]; // @[ALU.scala 49:27]
   wire  _io_out_T_45 = io_A < io_B; // @[ALU.scala 51:27]
-  wire [31:0] _io_out_T_47 = 5'h0 == io_AluOp ? _io_out_T_21 : {{31'd0}, _io_out_T_15}; // @[Mux.scala 81:58]
-  wire [31:0] _io_out_T_49 = 5'h1 == io_AluOp ? _io_out_T_23 : _io_out_T_47; // @[Mux.scala 81:58]
-  wire [31:0] _io_out_T_51 = 5'h2 == io_AluOp ? _io_out_T_29 : _io_out_T_49; // @[Mux.scala 81:58]
-  wire [31:0] _io_out_T_53 = 5'h3 == io_AluOp ? _io_out_T_31 : _io_out_T_51; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_55 = 5'h4 == io_AluOp ? _io_out_T_35 : {{32'd0}, _io_out_T_53}; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_57 = 5'h5 == io_AluOp ? {{32'd0}, _io_out_T_36} : _io_out_T_55; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_59 = 5'h6 == io_AluOp ? {{32'd0}, _io_out_T_37} : _io_out_T_57; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_61 = 5'h7 == io_AluOp ? {{32'd0}, _io_out_T_38} : _io_out_T_59; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_63 = 5'h8 == io_AluOp ? {{1'd0}, _io_out_T_39} : _io_out_T_61; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_65 = 5'ha == io_AluOp ? {{32'd0}, _io_out_T_40} : _io_out_T_63; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_67 = 5'h9 == io_AluOp ? {{1'd0}, _io_out_T_42} : _io_out_T_65; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_69 = 5'hb == io_AluOp ? {{32'd0}, _io_out_T_44} : _io_out_T_67; // @[Mux.scala 81:58]
-  wire [63:0] _io_out_T_71 = 5'hd == io_AluOp ? {{63'd0}, _io_out_T_45} : _io_out_T_69; // @[Mux.scala 81:58]
+  wire [31:0] _io_out_T_47 = 8'h0 == io_AluOp ? _io_out_T_21 : {{31'd0}, _io_out_T_15}; // @[Mux.scala 81:58]
+  wire [31:0] _io_out_T_49 = 8'h1 == io_AluOp ? _io_out_T_23 : _io_out_T_47; // @[Mux.scala 81:58]
+  wire [31:0] _io_out_T_51 = 8'h2 == io_AluOp ? _io_out_T_29 : _io_out_T_49; // @[Mux.scala 81:58]
+  wire [31:0] _io_out_T_53 = 8'h3 == io_AluOp ? _io_out_T_31 : _io_out_T_51; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_55 = 8'h4 == io_AluOp ? _io_out_T_35 : {{32'd0}, _io_out_T_53}; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_57 = 8'h5 == io_AluOp ? {{32'd0}, _io_out_T_36} : _io_out_T_55; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_59 = 8'h6 == io_AluOp ? {{32'd0}, _io_out_T_37} : _io_out_T_57; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_61 = 8'h7 == io_AluOp ? {{32'd0}, _io_out_T_38} : _io_out_T_59; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_63 = 8'h8 == io_AluOp ? {{1'd0}, _io_out_T_39} : _io_out_T_61; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_65 = 8'ha == io_AluOp ? {{32'd0}, _io_out_T_40} : _io_out_T_63; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_67 = 8'h9 == io_AluOp ? {{1'd0}, _io_out_T_42} : _io_out_T_65; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_69 = 8'hb == io_AluOp ? {{32'd0}, _io_out_T_44} : _io_out_T_67; // @[Mux.scala 81:58]
+  wire [63:0] _io_out_T_71 = 8'hd == io_AluOp ? {{63'd0}, _io_out_T_45} : _io_out_T_69; // @[Mux.scala 81:58]
   assign io_out = _io_out_T_71[31:0]; // @[ALU.scala 32:12]
-  assign io_zero = 5'h11 == io_AluOp ? _io_out_T_7 : _io_out_T_13; // @[Mux.scala 81:58]
+  assign io_zero = 8'h11 == io_AluOp ? _io_out_T_7 : _io_out_T_13; // @[Mux.scala 81:58]
 endmodule
 module Execute(
   input  [31:0] exec_io_Imm,
@@ -1007,7 +987,7 @@ module Execute(
   input         exec_io_WbWbEn,
   input  [31:0] exec_io_WbAddr,
   input  [31:0] exec_io_WbVal,
-  input  [3:0]  exec_io_AluOp,
+  input  [7:0]  exec_io_AluOp,
   input         exec_io_ImmEn,
   input         exec_io_WriteEnIn,
   input         exec_io_ReadEnIn,
@@ -1025,36 +1005,36 @@ module Execute(
   output        exec_io_WbEnOut,
   output [31:0] exec_io_WriteRegAddr
 );
-  wire [31:0] alu_io_A; // @[Execute.scala 6:21]
-  wire [31:0] alu_io_B; // @[Execute.scala 6:21]
-  wire [4:0] alu_io_AluOp; // @[Execute.scala 6:21]
-  wire [31:0] alu_io_out; // @[Execute.scala 6:21]
-  wire  alu_io_zero; // @[Execute.scala 6:21]
-  wire  _A_T_2 = exec_io_rs == exec_io_MemAddr & exec_io_MemWbEn; // @[Execute.scala 59:34]
-  wire [31:0] _A_T_6 = exec_io_rs == exec_io_WbAddr & exec_io_WbWbEn ? exec_io_WbVal : exec_io_DataRead1; // @[Execute.scala 61:12]
-  wire  _B_T_2 = exec_io_rt == exec_io_MemAddr & exec_io_MemWbEn; // @[Execute.scala 59:34]
-  wire [31:0] _B_T_6 = exec_io_rt == exec_io_WbAddr & exec_io_WbWbEn ? exec_io_WbVal : exec_io_DataRead2; // @[Execute.scala 61:12]
-  wire [31:0] B = _B_T_2 ? exec_io_MemVal : _B_T_6; // @[Execute.scala 58:54]
-  ALU alu ( // @[Execute.scala 6:21]
+  wire [31:0] alu_io_A; // @[Execute.scala 7:21]
+  wire [31:0] alu_io_B; // @[Execute.scala 7:21]
+  wire [7:0] alu_io_AluOp; // @[Execute.scala 7:21]
+  wire [31:0] alu_io_out; // @[Execute.scala 7:21]
+  wire  alu_io_zero; // @[Execute.scala 7:21]
+  wire  _A_T_2 = exec_io_rs == exec_io_MemAddr & ~exec_io_MemWbEn; // @[Execute.scala 60:34]
+  wire [31:0] _A_T_6 = exec_io_rs == exec_io_WbAddr & ~exec_io_WbWbEn ? exec_io_WbVal : exec_io_DataRead1; // @[Execute.scala 62:12]
+  wire  _B_T_2 = exec_io_rt == exec_io_MemAddr & ~exec_io_MemWbEn; // @[Execute.scala 60:34]
+  wire [31:0] _B_T_6 = exec_io_rt == exec_io_WbAddr & ~exec_io_WbWbEn ? exec_io_WbVal : exec_io_DataRead2; // @[Execute.scala 62:12]
+  wire [31:0] B = _B_T_2 ? exec_io_MemVal : _B_T_6; // @[Execute.scala 59:54]
+  ALU alu ( // @[Execute.scala 7:21]
     .io_A(alu_io_A),
     .io_B(alu_io_B),
     .io_AluOp(alu_io_AluOp),
     .io_out(alu_io_out),
     .io_zero(alu_io_zero)
   );
-  assign exec_io_AluRes = alu_io_out; // @[Execute.scala 81:20]
-  assign exec_io_zero = alu_io_zero; // @[Execute.scala 82:18]
-  assign exec_io_BranchAddrOut = exec_io_Imm; // @[Execute.scala 85:27]
-  assign exec_io_WriteData = _B_T_2 ? exec_io_MemVal : _B_T_6; // @[Execute.scala 58:54]
-  assign exec_io_ReadEnOut = exec_io_ReadEnIn; // @[Execute.scala 89:23]
-  assign exec_io_WriteEnOut = exec_io_WriteEnIn; // @[Execute.scala 90:24]
-  assign exec_io_BrEnOut = exec_io_BrEnIn; // @[Execute.scala 86:21]
-  assign exec_io_WbTypeOut = exec_io_WbTypeIn; // @[Execute.scala 87:23]
-  assign exec_io_WbEnOut = exec_io_WbEnIn; // @[Execute.scala 88:21]
-  assign exec_io_WriteRegAddr = exec_io_ImmEn ? exec_io_rt : exec_io_rd; // @[Execute.scala 96:32]
-  assign alu_io_A = _A_T_2 ? exec_io_MemVal : _A_T_6; // @[Execute.scala 58:54]
-  assign alu_io_B = exec_io_ImmEn ? exec_io_Imm : B; // @[Execute.scala 79:20]
-  assign alu_io_AluOp = {{1'd0}, exec_io_AluOp}; // @[Execute.scala 80:18]
+  assign exec_io_AluRes = alu_io_out; // @[Execute.scala 82:20]
+  assign exec_io_zero = alu_io_zero; // @[Execute.scala 83:18]
+  assign exec_io_BranchAddrOut = exec_io_Imm; // @[Execute.scala 86:27]
+  assign exec_io_WriteData = _B_T_2 ? exec_io_MemVal : _B_T_6; // @[Execute.scala 59:54]
+  assign exec_io_ReadEnOut = exec_io_ReadEnIn; // @[Execute.scala 90:23]
+  assign exec_io_WriteEnOut = exec_io_WriteEnIn; // @[Execute.scala 91:24]
+  assign exec_io_BrEnOut = exec_io_BrEnIn; // @[Execute.scala 87:21]
+  assign exec_io_WbTypeOut = exec_io_WbTypeIn; // @[Execute.scala 88:23]
+  assign exec_io_WbEnOut = exec_io_WbEnIn; // @[Execute.scala 89:21]
+  assign exec_io_WriteRegAddr = exec_io_ImmEn ? exec_io_rt : exec_io_rd; // @[Execute.scala 97:32]
+  assign alu_io_A = _A_T_2 ? exec_io_MemVal : _A_T_6; // @[Execute.scala 59:54]
+  assign alu_io_B = exec_io_ImmEn ? exec_io_Imm : B; // @[Execute.scala 80:20]
+  assign alu_io_AluOp = exec_io_AluOp; // @[Execute.scala 81:18]
 endmodule
 module RAM(
   input         clock,
@@ -1494,7 +1474,7 @@ module Datapath(
   wire [31:0] decode_dec_io_WriteAddrIn; // @[Datapath.scala 7:24]
   wire  decode_dec_io_WriteEnIn; // @[Datapath.scala 7:24]
   wire [31:0] decode_dec_io_WriteDataIn; // @[Datapath.scala 7:24]
-  wire [31:0] decode_dec_io_AluOp; // @[Datapath.scala 7:24]
+  wire [7:0] decode_dec_io_AluOp; // @[Datapath.scala 7:24]
   wire [31:0] decode_dec_io_Imm; // @[Datapath.scala 7:24]
   wire  decode_dec_io_ImmEn; // @[Datapath.scala 7:24]
   wire  decode_dec_io_BrEn; // @[Datapath.scala 7:24]
@@ -1519,7 +1499,7 @@ module Datapath(
   wire  execute_exec_io_WbWbEn; // @[Datapath.scala 8:25]
   wire [31:0] execute_exec_io_WbAddr; // @[Datapath.scala 8:25]
   wire [31:0] execute_exec_io_WbVal; // @[Datapath.scala 8:25]
-  wire [3:0] execute_exec_io_AluOp; // @[Datapath.scala 8:25]
+  wire [7:0] execute_exec_io_AluOp; // @[Datapath.scala 8:25]
   wire  execute_exec_io_ImmEn; // @[Datapath.scala 8:25]
   wire  execute_exec_io_WriteEnIn; // @[Datapath.scala 8:25]
   wire  execute_exec_io_ReadEnIn; // @[Datapath.scala 8:25]
@@ -1573,7 +1553,7 @@ module Datapath(
   reg [31:0] execute_exec_io_DataRead1_REG; // @[Datapath.scala 38:43]
   reg [31:0] execute_exec_io_DataRead2_REG; // @[Datapath.scala 39:43]
   reg [31:0] execute_exec_io_MemVal_REG; // @[Datapath.scala 42:43]
-  reg [31:0] execute_exec_io_AluOp_REG; // @[Datapath.scala 46:43]
+  reg [7:0] execute_exec_io_AluOp_REG; // @[Datapath.scala 46:43]
   reg [31:0] execute_exec_io_Imm_REG; // @[Datapath.scala 47:43]
   reg  execute_exec_io_ImmEn_REG; // @[Datapath.scala 48:43]
   reg  execute_exec_io_BrEnIn_REG; // @[Datapath.scala 49:43]
@@ -1716,7 +1696,7 @@ module Datapath(
   assign execute_exec_io_WbWbEn = writeback_wb_io_WbEnOut; // @[Datapath.scala 43:33]
   assign execute_exec_io_WbAddr = writeback_wb_io_WriteRegAddrOut; // @[Datapath.scala 44:33]
   assign execute_exec_io_WbVal = writeback_wb_io_WriteDataOut; // @[Datapath.scala 45:33]
-  assign execute_exec_io_AluOp = execute_exec_io_AluOp_REG[3:0]; // @[Datapath.scala 46:33]
+  assign execute_exec_io_AluOp = execute_exec_io_AluOp_REG; // @[Datapath.scala 46:33]
   assign execute_exec_io_ImmEn = execute_exec_io_ImmEn_REG; // @[Datapath.scala 48:33]
   assign execute_exec_io_WriteEnIn = execute_exec_io_WriteEnIn_REG; // @[Datapath.scala 52:33]
   assign execute_exec_io_ReadEnIn = execute_exec_io_ReadEnIn_REG; // @[Datapath.scala 51:33]
@@ -1825,7 +1805,7 @@ initial begin
   _RAND_6 = {1{`RANDOM}};
   execute_exec_io_MemVal_REG = _RAND_6[31:0];
   _RAND_7 = {1{`RANDOM}};
-  execute_exec_io_AluOp_REG = _RAND_7[31:0];
+  execute_exec_io_AluOp_REG = _RAND_7[7:0];
   _RAND_8 = {1{`RANDOM}};
   execute_exec_io_Imm_REG = _RAND_8[31:0];
   _RAND_9 = {1{`RANDOM}};
@@ -1899,6 +1879,246 @@ module decoder7seg(
   wire [6:0] _GEN_14 = 4'h1 == io_in ? 7'h79 : _GEN_13; // @[decoder7seg.scala 14:17 16:29]
   assign io_out = 4'h0 == io_in ? 7'h40 : _GEN_14; // @[decoder7seg.scala 14:17 15:29]
 endmodule
+module Tx(
+  input        clock,
+  input        reset,
+  output       io_txd,
+  output       io_channel_ready,
+  input        io_channel_valid,
+  input  [7:0] io_channel_bits
+);
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+  reg [31:0] _RAND_1;
+  reg [31:0] _RAND_2;
+`endif // RANDOMIZE_REG_INIT
+  reg [10:0] shiftReg; // @[Uart.scala 29:25]
+  reg [19:0] cntReg; // @[Uart.scala 30:23]
+  reg [3:0] bitsReg; // @[Uart.scala 31:24]
+  wire  _io_channel_ready_T = cntReg == 20'h0; // @[Uart.scala 33:31]
+  wire [9:0] shift = shiftReg[10:1]; // @[Uart.scala 40:28]
+  wire [10:0] _shiftReg_T_1 = {1'h1,shift}; // @[Cat.scala 31:58]
+  wire [3:0] _bitsReg_T_1 = bitsReg - 4'h1; // @[Uart.scala 42:26]
+  wire [10:0] _shiftReg_T_3 = {2'h3,io_channel_bits,1'h0}; // @[Cat.scala 31:58]
+  wire [19:0] _cntReg_T_1 = cntReg - 20'h1; // @[Uart.scala 53:22]
+  assign io_txd = shiftReg[0]; // @[Uart.scala 34:21]
+  assign io_channel_ready = cntReg == 20'h0 & bitsReg == 4'h0; // @[Uart.scala 33:40]
+  always @(posedge clock) begin
+    if (reset) begin // @[Uart.scala 29:25]
+      shiftReg <= 11'h7ff; // @[Uart.scala 29:25]
+    end else if (_io_channel_ready_T) begin // @[Uart.scala 36:24]
+      if (bitsReg != 4'h0) begin // @[Uart.scala 39:27]
+        shiftReg <= _shiftReg_T_1; // @[Uart.scala 41:16]
+      end else if (io_channel_valid) begin // @[Uart.scala 44:30]
+        shiftReg <= _shiftReg_T_3; // @[Uart.scala 45:18]
+      end else begin
+        shiftReg <= 11'h7ff; // @[Uart.scala 48:18]
+      end
+    end
+    if (reset) begin // @[Uart.scala 30:23]
+      cntReg <= 20'h0; // @[Uart.scala 30:23]
+    end else if (_io_channel_ready_T) begin // @[Uart.scala 36:24]
+      cntReg <= 20'h1b1; // @[Uart.scala 38:12]
+    end else begin
+      cntReg <= _cntReg_T_1; // @[Uart.scala 53:12]
+    end
+    if (reset) begin // @[Uart.scala 31:24]
+      bitsReg <= 4'h0; // @[Uart.scala 31:24]
+    end else if (_io_channel_ready_T) begin // @[Uart.scala 36:24]
+      if (bitsReg != 4'h0) begin // @[Uart.scala 39:27]
+        bitsReg <= _bitsReg_T_1; // @[Uart.scala 42:15]
+      end else if (io_channel_valid) begin // @[Uart.scala 44:30]
+        bitsReg <= 4'hb; // @[Uart.scala 46:17]
+      end
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  shiftReg = _RAND_0[10:0];
+  _RAND_1 = {1{`RANDOM}};
+  cntReg = _RAND_1[19:0];
+  _RAND_2 = {1{`RANDOM}};
+  bitsReg = _RAND_2[3:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
+endmodule
+module Buffer(
+  input        clock,
+  input        reset,
+  output       io_in_ready,
+  input        io_in_valid,
+  input  [7:0] io_in_bits,
+  input        io_out_ready,
+  output       io_out_valid,
+  output [7:0] io_out_bits
+);
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+  reg [31:0] _RAND_1;
+`endif // RANDOMIZE_REG_INIT
+  reg  stateReg; // @[Uart.scala 115:25]
+  reg [7:0] dataReg; // @[Uart.scala 116:24]
+  wire  _io_in_ready_T = ~stateReg; // @[Uart.scala 118:27]
+  wire  _GEN_1 = io_in_valid | stateReg; // @[Uart.scala 122:23 124:16 115:25]
+  assign io_in_ready = ~stateReg; // @[Uart.scala 118:27]
+  assign io_out_valid = stateReg; // @[Uart.scala 119:28]
+  assign io_out_bits = dataReg; // @[Uart.scala 131:15]
+  always @(posedge clock) begin
+    if (reset) begin // @[Uart.scala 115:25]
+      stateReg <= 1'h0; // @[Uart.scala 115:25]
+    end else if (_io_in_ready_T) begin // @[Uart.scala 121:28]
+      stateReg <= _GEN_1;
+    end else if (io_out_ready) begin // @[Uart.scala 127:24]
+      stateReg <= 1'h0; // @[Uart.scala 128:16]
+    end
+    if (reset) begin // @[Uart.scala 116:24]
+      dataReg <= 8'h0; // @[Uart.scala 116:24]
+    end else if (_io_in_ready_T) begin // @[Uart.scala 121:28]
+      if (io_in_valid) begin // @[Uart.scala 122:23]
+        dataReg <= io_in_bits; // @[Uart.scala 123:15]
+      end
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  stateReg = _RAND_0[0:0];
+  _RAND_1 = {1{`RANDOM}};
+  dataReg = _RAND_1[7:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
+endmodule
+module BufferedTx(
+  input        clock,
+  input        reset,
+  output       io_txd,
+  output       io_channel_ready,
+  input        io_channel_valid,
+  input  [7:0] io_channel_bits
+);
+  wire  tx_clock; // @[Uart.scala 142:18]
+  wire  tx_reset; // @[Uart.scala 142:18]
+  wire  tx_io_txd; // @[Uart.scala 142:18]
+  wire  tx_io_channel_ready; // @[Uart.scala 142:18]
+  wire  tx_io_channel_valid; // @[Uart.scala 142:18]
+  wire [7:0] tx_io_channel_bits; // @[Uart.scala 142:18]
+  wire  buf__clock; // @[Uart.scala 143:19]
+  wire  buf__reset; // @[Uart.scala 143:19]
+  wire  buf__io_in_ready; // @[Uart.scala 143:19]
+  wire  buf__io_in_valid; // @[Uart.scala 143:19]
+  wire [7:0] buf__io_in_bits; // @[Uart.scala 143:19]
+  wire  buf__io_out_ready; // @[Uart.scala 143:19]
+  wire  buf__io_out_valid; // @[Uart.scala 143:19]
+  wire [7:0] buf__io_out_bits; // @[Uart.scala 143:19]
+  Tx tx ( // @[Uart.scala 142:18]
+    .clock(tx_clock),
+    .reset(tx_reset),
+    .io_txd(tx_io_txd),
+    .io_channel_ready(tx_io_channel_ready),
+    .io_channel_valid(tx_io_channel_valid),
+    .io_channel_bits(tx_io_channel_bits)
+  );
+  Buffer buf_ ( // @[Uart.scala 143:19]
+    .clock(buf__clock),
+    .reset(buf__reset),
+    .io_in_ready(buf__io_in_ready),
+    .io_in_valid(buf__io_in_valid),
+    .io_in_bits(buf__io_in_bits),
+    .io_out_ready(buf__io_out_ready),
+    .io_out_valid(buf__io_out_valid),
+    .io_out_bits(buf__io_out_bits)
+  );
+  assign io_txd = tx_io_txd; // @[Uart.scala 147:10]
+  assign io_channel_ready = buf__io_in_ready; // @[Uart.scala 145:13]
+  assign tx_clock = clock;
+  assign tx_reset = reset;
+  assign tx_io_channel_valid = buf__io_out_valid; // @[Uart.scala 146:17]
+  assign tx_io_channel_bits = buf__io_out_bits; // @[Uart.scala 146:17]
+  assign buf__clock = clock;
+  assign buf__reset = reset;
+  assign buf__io_in_valid = io_channel_valid; // @[Uart.scala 145:13]
+  assign buf__io_in_bits = io_channel_bits; // @[Uart.scala 145:13]
+  assign buf__io_out_ready = tx_io_channel_ready; // @[Uart.scala 146:17]
+endmodule
 module Mintel(
   input         clock,
   input         reset,
@@ -1918,33 +2138,83 @@ module Mintel(
   input  [3:0]  io_KEY,
   output [7:0]  io_string
 );
-  wire  datapath_clock; // @[Mintel.scala 43:26]
-  wire  datapath_reset; // @[Mintel.scala 43:26]
-  wire [7:0] datapath_io_Inport1; // @[Mintel.scala 43:26]
-  wire [7:0] datapath_io_Inport2; // @[Mintel.scala 43:26]
-  wire [31:0] datapath_io_instr; // @[Mintel.scala 43:26]
-  wire [15:0] datapath_io_Outport; // @[Mintel.scala 43:26]
-  wire [3:0] U_decoder7seg_7_io_in; // @[Mintel.scala 57:33]
-  wire [6:0] U_decoder7seg_7_io_out; // @[Mintel.scala 57:33]
-  wire [3:0] U_decoder7seg_6_io_in; // @[Mintel.scala 58:33]
-  wire [6:0] U_decoder7seg_6_io_out; // @[Mintel.scala 58:33]
-  wire [3:0] U_decoder7seg_5_io_in; // @[Mintel.scala 59:33]
-  wire [6:0] U_decoder7seg_5_io_out; // @[Mintel.scala 59:33]
-  wire [3:0] U_decoder7seg_4_io_in; // @[Mintel.scala 60:33]
-  wire [6:0] U_decoder7seg_4_io_out; // @[Mintel.scala 60:33]
-  wire [3:0] U_decoder7seg_3_io_in; // @[Mintel.scala 61:33]
-  wire [6:0] U_decoder7seg_3_io_out; // @[Mintel.scala 61:33]
-  wire [3:0] U_decoder7seg_2_io_in; // @[Mintel.scala 62:33]
-  wire [6:0] U_decoder7seg_2_io_out; // @[Mintel.scala 62:33]
-  wire [3:0] U_decoder7seg_1_io_in; // @[Mintel.scala 63:33]
-  wire [6:0] U_decoder7seg_1_io_out; // @[Mintel.scala 63:33]
-  wire [3:0] U_decoder7seg_0_io_in; // @[Mintel.scala 64:33]
-  wire [6:0] U_decoder7seg_0_io_out; // @[Mintel.scala 64:33]
-  wire [7:0] Inport1 = io_SW[7:0]; // @[Mintel.scala 47:25]
-  wire [7:0] Inport2 = io_SW[15:8]; // @[Mintel.scala 48:25]
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+  reg [31:0] _RAND_1;
+`endif // RANDOMIZE_REG_INIT
+  wire  datapath_clock; // @[Mintel.scala 44:26]
+  wire  datapath_reset; // @[Mintel.scala 44:26]
+  wire [7:0] datapath_io_Inport1; // @[Mintel.scala 44:26]
+  wire [7:0] datapath_io_Inport2; // @[Mintel.scala 44:26]
+  wire [31:0] datapath_io_instr; // @[Mintel.scala 44:26]
+  wire [15:0] datapath_io_Outport; // @[Mintel.scala 44:26]
+  wire [3:0] U_decoder7seg_7_io_in; // @[Mintel.scala 58:33]
+  wire [6:0] U_decoder7seg_7_io_out; // @[Mintel.scala 58:33]
+  wire [3:0] U_decoder7seg_6_io_in; // @[Mintel.scala 59:33]
+  wire [6:0] U_decoder7seg_6_io_out; // @[Mintel.scala 59:33]
+  wire [3:0] U_decoder7seg_5_io_in; // @[Mintel.scala 60:33]
+  wire [6:0] U_decoder7seg_5_io_out; // @[Mintel.scala 60:33]
+  wire [3:0] U_decoder7seg_4_io_in; // @[Mintel.scala 61:33]
+  wire [6:0] U_decoder7seg_4_io_out; // @[Mintel.scala 61:33]
+  wire [3:0] U_decoder7seg_3_io_in; // @[Mintel.scala 62:33]
+  wire [6:0] U_decoder7seg_3_io_out; // @[Mintel.scala 62:33]
+  wire [3:0] U_decoder7seg_2_io_in; // @[Mintel.scala 63:33]
+  wire [6:0] U_decoder7seg_2_io_out; // @[Mintel.scala 63:33]
+  wire [3:0] U_decoder7seg_1_io_in; // @[Mintel.scala 64:33]
+  wire [6:0] U_decoder7seg_1_io_out; // @[Mintel.scala 64:33]
+  wire [3:0] U_decoder7seg_0_io_in; // @[Mintel.scala 65:33]
+  wire [6:0] U_decoder7seg_0_io_out; // @[Mintel.scala 65:33]
+  wire  tx_clock; // @[Mintel.scala 87:20]
+  wire  tx_reset; // @[Mintel.scala 87:20]
+  wire  tx_io_txd; // @[Mintel.scala 87:20]
+  wire  tx_io_channel_ready; // @[Mintel.scala 87:20]
+  wire  tx_io_channel_valid; // @[Mintel.scala 87:20]
+  wire [7:0] tx_io_channel_bits; // @[Mintel.scala 87:20]
+  wire [7:0] Inport1 = io_SW[7:0]; // @[Mintel.scala 48:25]
+  wire [7:0] Inport2 = io_SW[15:8]; // @[Mintel.scala 49:25]
   wire [15:0] Outport = datapath_io_Outport;
-  wire [3:0] _LEDG_T = ~io_KEY; // @[Mintel.scala 139:26]
-  Datapath datapath ( // @[Mintel.scala 43:26]
+  reg [7:0] cntReg2; // @[Mintel.scala 90:26]
+  reg [7:0] h; // @[Mintel.scala 91:20]
+  wire [6:0] _h_T_1 = 7'h41 - 7'ha; // @[Mintel.scala 100:28]
+  wire [6:0] _h_T_5 = 7'h42 - 7'hb; // @[Mintel.scala 103:28]
+  wire [6:0] _h_T_9 = 7'h43 - 7'hc; // @[Mintel.scala 106:28]
+  wire [6:0] _h_T_13 = 7'h44 - 7'hd; // @[Mintel.scala 109:28]
+  wire [6:0] _h_T_17 = 7'h45 - 7'he; // @[Mintel.scala 112:28]
+  wire [6:0] _h_T_21 = 7'h46 - 7'hf; // @[Mintel.scala 115:28]
+  wire  _tx_io_channel_valid_T = cntReg2 != 8'h4; // @[Mintel.scala 135:40]
+  wire [7:0] _cntReg2_T_1 = cntReg2 + 8'h1; // @[Mintel.scala 139:32]
+  wire [7:0] _GEN_7 = cntReg2 == 8'h4 ? 8'h0 : cntReg2; // @[Mintel.scala 140:37 141:21 90:26]
+  wire [7:0] _GEN_8 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_7; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_16 = cntReg2 == 8'h4 ? 8'h0 : _GEN_8; // @[Mintel.scala 140:37 141:21]
+  wire [7:0] _GEN_17 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_16; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_25 = cntReg2 == 8'h4 ? 8'h0 : _GEN_17; // @[Mintel.scala 140:37 141:21]
+  wire [7:0] _GEN_26 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_25; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_34 = cntReg2 == 8'h4 ? 8'h0 : _GEN_26; // @[Mintel.scala 140:37 141:21]
+  wire [7:0] _GEN_35 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_34; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_43 = cntReg2 == 8'h4 ? 8'h0 : _GEN_35; // @[Mintel.scala 140:37 141:21]
+  wire [7:0] _GEN_44 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_43; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_52 = cntReg2 == 8'h4 ? 8'h0 : _GEN_44; // @[Mintel.scala 140:37 141:21]
+  wire [7:0] _GEN_53 = tx_io_channel_ready & _tx_io_channel_valid_T ? _cntReg2_T_1 : _GEN_52; // @[Mintel.scala 137:54 139:21]
+  wire [7:0] _GEN_61 = cntReg2 == 8'h4 ? 8'h0 : _GEN_53; // @[Mintel.scala 140:37 141:21]
+  wire [3:0] nibble_7 = io_instr[31:28]; // @[Mintel.scala 95:30]
+  wire [6:0] _GEN_121 = {{3'd0}, nibble_7}; // @[Mintel.scala 100:35]
+  wire [6:0] _h_T_185 = _h_T_1 + _GEN_121; // @[Mintel.scala 100:35]
+  wire [6:0] _h_T_189 = _h_T_5 + _GEN_121; // @[Mintel.scala 103:35]
+  wire [6:0] _h_T_193 = _h_T_9 + _GEN_121; // @[Mintel.scala 106:35]
+  wire [6:0] _h_T_197 = _h_T_13 + _GEN_121; // @[Mintel.scala 109:35]
+  wire [6:0] _h_T_201 = _h_T_17 + _GEN_121; // @[Mintel.scala 112:35]
+  wire [6:0] _h_T_205 = _h_T_21 + _GEN_121; // @[Mintel.scala 115:35]
+  wire [6:0] _GEN_63 = nibble_7 == 4'hf ? _h_T_205 : 7'h57; // @[Mintel.scala 114:43 115:19 118:19]
+  wire [6:0] _GEN_64 = nibble_7 == 4'he ? _h_T_201 : _GEN_63; // @[Mintel.scala 111:43 112:19]
+  wire [6:0] _GEN_65 = nibble_7 == 4'hd ? _h_T_197 : _GEN_64; // @[Mintel.scala 108:43 109:19]
+  wire [6:0] _GEN_66 = nibble_7 == 4'hc ? _h_T_193 : _GEN_65; // @[Mintel.scala 105:43 106:19]
+  wire [6:0] _GEN_67 = nibble_7 == 4'hb ? _h_T_189 : _GEN_66; // @[Mintel.scala 102:43 103:19]
+  wire [6:0] _GEN_68 = nibble_7 == 4'ha ? _h_T_185 : _GEN_67; // @[Mintel.scala 100:19 99:36]
+  wire [5:0] _GEN_127 = {{2'd0}, nibble_7}; // @[Mintel.scala 122:24]
+  wire [5:0] _h_T_207 = 6'h30 + _GEN_127; // @[Mintel.scala 122:24]
+  wire [6:0] _GEN_69 = nibble_7 > 4'h9 ? _GEN_68 : {{1'd0}, _h_T_207}; // @[Mintel.scala 122:15 98:29]
+  wire [3:0] _LEDG_T = ~io_KEY; // @[Mintel.scala 148:26]
+  Datapath datapath ( // @[Mintel.scala 44:26]
     .clock(datapath_clock),
     .reset(datapath_reset),
     .io_Inport1(datapath_io_Inport1),
@@ -1952,61 +2222,138 @@ module Mintel(
     .io_instr(datapath_io_instr),
     .io_Outport(datapath_io_Outport)
   );
-  decoder7seg U_decoder7seg_7 ( // @[Mintel.scala 57:33]
+  decoder7seg U_decoder7seg_7 ( // @[Mintel.scala 58:33]
     .io_in(U_decoder7seg_7_io_in),
     .io_out(U_decoder7seg_7_io_out)
   );
-  decoder7seg U_decoder7seg_6 ( // @[Mintel.scala 58:33]
+  decoder7seg U_decoder7seg_6 ( // @[Mintel.scala 59:33]
     .io_in(U_decoder7seg_6_io_in),
     .io_out(U_decoder7seg_6_io_out)
   );
-  decoder7seg U_decoder7seg_5 ( // @[Mintel.scala 59:33]
+  decoder7seg U_decoder7seg_5 ( // @[Mintel.scala 60:33]
     .io_in(U_decoder7seg_5_io_in),
     .io_out(U_decoder7seg_5_io_out)
   );
-  decoder7seg U_decoder7seg_4 ( // @[Mintel.scala 60:33]
+  decoder7seg U_decoder7seg_4 ( // @[Mintel.scala 61:33]
     .io_in(U_decoder7seg_4_io_in),
     .io_out(U_decoder7seg_4_io_out)
   );
-  decoder7seg U_decoder7seg_3 ( // @[Mintel.scala 61:33]
+  decoder7seg U_decoder7seg_3 ( // @[Mintel.scala 62:33]
     .io_in(U_decoder7seg_3_io_in),
     .io_out(U_decoder7seg_3_io_out)
   );
-  decoder7seg U_decoder7seg_2 ( // @[Mintel.scala 62:33]
+  decoder7seg U_decoder7seg_2 ( // @[Mintel.scala 63:33]
     .io_in(U_decoder7seg_2_io_in),
     .io_out(U_decoder7seg_2_io_out)
   );
-  decoder7seg U_decoder7seg_1 ( // @[Mintel.scala 63:33]
+  decoder7seg U_decoder7seg_1 ( // @[Mintel.scala 64:33]
     .io_in(U_decoder7seg_1_io_in),
     .io_out(U_decoder7seg_1_io_out)
   );
-  decoder7seg U_decoder7seg_0 ( // @[Mintel.scala 64:33]
+  decoder7seg U_decoder7seg_0 ( // @[Mintel.scala 65:33]
     .io_in(U_decoder7seg_0_io_in),
     .io_out(U_decoder7seg_0_io_out)
   );
-  assign io_instr = datapath_io_instr; // @[Mintel.scala 45:18]
-  assign io_txd_instr = 1'h1; // @[Mintel.scala 88:18]
-  assign io_hex7 = U_decoder7seg_7_io_out; // @[Mintel.scala 76:13]
-  assign io_hex6 = U_decoder7seg_6_io_out; // @[Mintel.scala 77:13]
-  assign io_hex5 = U_decoder7seg_5_io_out; // @[Mintel.scala 78:13]
-  assign io_hex4 = U_decoder7seg_4_io_out; // @[Mintel.scala 79:13]
-  assign io_hex3 = U_decoder7seg_3_io_out; // @[Mintel.scala 80:13]
-  assign io_hex2 = U_decoder7seg_2_io_out; // @[Mintel.scala 81:13]
-  assign io_hex1 = U_decoder7seg_1_io_out; // @[Mintel.scala 82:13]
-  assign io_hex0 = U_decoder7seg_0_io_out; // @[Mintel.scala 83:13]
-  assign io_LEDR = io_SW; // @[Mintel.scala 138:19]
+  BufferedTx tx ( // @[Mintel.scala 87:20]
+    .clock(tx_clock),
+    .reset(tx_reset),
+    .io_txd(tx_io_txd),
+    .io_channel_ready(tx_io_channel_ready),
+    .io_channel_valid(tx_io_channel_valid),
+    .io_channel_bits(tx_io_channel_bits)
+  );
+  assign io_instr = datapath_io_instr; // @[Mintel.scala 46:18]
+  assign io_txd_instr = tx_io_txd; // @[Mintel.scala 96:22]
+  assign io_hex7 = U_decoder7seg_7_io_out; // @[Mintel.scala 77:13]
+  assign io_hex6 = U_decoder7seg_6_io_out; // @[Mintel.scala 78:13]
+  assign io_hex5 = U_decoder7seg_5_io_out; // @[Mintel.scala 79:13]
+  assign io_hex4 = U_decoder7seg_4_io_out; // @[Mintel.scala 80:13]
+  assign io_hex3 = U_decoder7seg_3_io_out; // @[Mintel.scala 81:13]
+  assign io_hex2 = U_decoder7seg_2_io_out; // @[Mintel.scala 82:13]
+  assign io_hex1 = U_decoder7seg_1_io_out; // @[Mintel.scala 83:13]
+  assign io_hex0 = U_decoder7seg_0_io_out; // @[Mintel.scala 84:13]
+  assign io_LEDR = io_SW; // @[Mintel.scala 147:19]
   assign io_LEDG = {_LEDG_T,_LEDG_T}; // @[Cat.scala 31:58]
-  assign io_string = 8'h1; // @[Mintel.scala 103:19]
+  assign io_string = {{4'd0}, nibble_7}; // @[Mintel.scala 126:19]
   assign datapath_clock = clock;
   assign datapath_reset = reset;
-  assign datapath_io_Inport1 = io_SW[7:0]; // @[Mintel.scala 47:25]
-  assign datapath_io_Inport2 = io_SW[15:8]; // @[Mintel.scala 48:25]
-  assign U_decoder7seg_7_io_in = Inport1[7:4]; // @[Mintel.scala 66:37]
-  assign U_decoder7seg_6_io_in = Inport1[3:0]; // @[Mintel.scala 67:37]
-  assign U_decoder7seg_5_io_in = Inport2[7:4]; // @[Mintel.scala 68:37]
-  assign U_decoder7seg_4_io_in = Inport2[3:0]; // @[Mintel.scala 69:37]
-  assign U_decoder7seg_3_io_in = Outport[15:12]; // @[Mintel.scala 71:37]
-  assign U_decoder7seg_2_io_in = Outport[11:8]; // @[Mintel.scala 72:37]
-  assign U_decoder7seg_1_io_in = Outport[7:4]; // @[Mintel.scala 73:37]
-  assign U_decoder7seg_0_io_in = Outport[3:0]; // @[Mintel.scala 74:37]
+  assign datapath_io_Inport1 = io_SW[7:0]; // @[Mintel.scala 48:25]
+  assign datapath_io_Inport2 = io_SW[15:8]; // @[Mintel.scala 49:25]
+  assign U_decoder7seg_7_io_in = Inport1[7:4]; // @[Mintel.scala 67:37]
+  assign U_decoder7seg_6_io_in = Inport1[3:0]; // @[Mintel.scala 68:37]
+  assign U_decoder7seg_5_io_in = Inport2[7:4]; // @[Mintel.scala 69:37]
+  assign U_decoder7seg_4_io_in = Inport2[3:0]; // @[Mintel.scala 70:37]
+  assign U_decoder7seg_3_io_in = Outport[15:12]; // @[Mintel.scala 72:37]
+  assign U_decoder7seg_2_io_in = Outport[11:8]; // @[Mintel.scala 73:37]
+  assign U_decoder7seg_1_io_in = Outport[7:4]; // @[Mintel.scala 74:37]
+  assign U_decoder7seg_0_io_in = Outport[3:0]; // @[Mintel.scala 75:37]
+  assign tx_clock = clock;
+  assign tx_reset = reset;
+  assign tx_io_channel_valid = cntReg2 != 8'h4; // @[Mintel.scala 135:40]
+  assign tx_io_channel_bits = h; // @[Mintel.scala 129:{27,27}]
+  always @(posedge clock) begin
+    if (reset) begin // @[Mintel.scala 90:26]
+      cntReg2 <= 8'h0; // @[Mintel.scala 90:26]
+    end else if (tx_io_channel_ready & _tx_io_channel_valid_T) begin // @[Mintel.scala 137:54]
+      cntReg2 <= _cntReg2_T_1; // @[Mintel.scala 139:21]
+    end else if (cntReg2 == 8'h4) begin // @[Mintel.scala 140:37]
+      cntReg2 <= 8'h0; // @[Mintel.scala 141:21]
+    end else if (tx_io_channel_ready & _tx_io_channel_valid_T) begin // @[Mintel.scala 137:54]
+      cntReg2 <= _cntReg2_T_1; // @[Mintel.scala 139:21]
+    end else begin
+      cntReg2 <= _GEN_61;
+    end
+    if (reset) begin // @[Mintel.scala 91:20]
+      h <= 8'h30; // @[Mintel.scala 91:20]
+    end else begin
+      h <= {{1'd0}, _GEN_69};
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  cntReg2 = _RAND_0[7:0];
+  _RAND_1 = {1{`RANDOM}};
+  h = _RAND_1[7:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
 endmodule

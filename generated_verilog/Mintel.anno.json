@@ -3,85 +3,85 @@
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/decode:Decode/signExtend:SignExtend",
-    "index":0.15384615384615385
+    "index":0.13793103448275862
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_1",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:EnRegister/signExtend:SignExtend_1",
-    "index":0.34615384615384615
+    "index":0.3103448275862069
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|EnRegister",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport1:EnRegister",
-    "index":0.38461538461538464
+    "index":0.3448275862068966
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_2",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:EnRegister/signExtend:SignExtend_1",
-    "index":0.4230769230769231
+    "index":0.3793103448275862
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|EnRegister_1",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Inport2:EnRegister",
-    "index":0.46153846153846156
+    "index":0.41379310344827586
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|SignExtend_3",
     "duplicate":"~Mintel|Mintel/datapath:Datapath/memory:Mem/Outport:EnRegister_2/signExtend:SignExtend",
-    "index":0.5
+    "index":0.4482758620689655
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_7:decoder7seg",
-    "index":0.6923076923076923
+    "index":0.6206896551724138
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_1",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_6:decoder7seg",
-    "index":0.7307692307692307
+    "index":0.6551724137931034
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_2",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_5:decoder7seg",
-    "index":0.7692307692307693
+    "index":0.6896551724137931
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_3",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_4:decoder7seg",
-    "index":0.8076923076923077
+    "index":0.7241379310344828
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_4",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_3:decoder7seg",
-    "index":0.8461538461538461
+    "index":0.7586206896551724
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_5",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_2:decoder7seg",
-    "index":0.8846153846153846
+    "index":0.7931034482758621
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_6",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_1:decoder7seg",
-    "index":0.9230769230769231
+    "index":0.8275862068965517
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~Mintel|decoder7seg_7",
     "duplicate":"~Mintel|Mintel/U_decoder7seg_0:decoder7seg",
-    "index":0.9615384615384616
+    "index":0.8620689655172413
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -103,6 +103,13 @@
     "sink":"~Mintel|Mintel>io_hex7",
     "sources":[
       "~Mintel|Mintel>io_SW"
+    ]
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~Mintel|Mintel>io_string",
+    "sources":[
+      "~Mintel|Mintel>io_instr"
     ]
   },
   {
