@@ -114,6 +114,6 @@ class temp extends Module {
   io.LEDG       := LEDG
 }
 
-object temp extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new temp, Array("--target-dir", "generated_verilog"))
-}
+//object temp extends App {
+//  (new chisel3.stage.ChiselStage).emitVerilog(new temp, Array("--target-dir", "generated_verilog"))
+//}
