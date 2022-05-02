@@ -28,10 +28,11 @@ class Fetch extends Module  {
     val isStalling: Bool = io.Stall > 0.U | STALL > 0.U
 
     io.NextPC := PC + 1.U;
+
     val newPC: UInt = Mux(
         isStalling,
         PC,
-        Mux( io.BrEn, io.BranchAddr, io.NextPC )
+        Mux( io.BrEn, io.BranchAddr + 1.U, PC + 1.U )
     )
 
     mem.io.PC := Mux( io.BrEn, io.BranchAddr, PC )

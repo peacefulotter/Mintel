@@ -8,8 +8,9 @@ object Instructions {
     val IMM_N = 0.U(1.W)
     val IMM_Y = 1.U(1.W)
     // BR EN
-    val BR_N = 0.U(1.W)
-    val BR_Y = 1.U(1.W)
+    val BR_N = 0.U(2.W)
+    val BR_Y = 1.U(2.W)
+    val BR_J = 2.U(2.W)
     // LD EN
     val LD_N = 0.U(1.W)
     val LD_Y = 1.U(1.W)
@@ -62,6 +63,8 @@ object Instructions {
         LW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Store
         SW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_Y,   WB_MEM,   WB_N,  SI_N),
+        // Jumps
+        J     -> List(ALU.eq,   IMM_Y,   BR_J,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N)
     )
 
     val default: List[UInt] = map.apply(0)._2
@@ -100,10 +103,6 @@ object Instructions {
     // Mem
     def LW    = BitPat("b100011??????????????????????????")
     def SW    = BitPat("b101011??????????????????????????")
-
-    /*
-    // Jump & Link
-    def JAL  = BitPat("bX")
-    def JALR = BitPat("bX")
-    */
+    // Jump
+    def J     = BitPat("b000010??????????????????????????")
 }

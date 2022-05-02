@@ -1,4 +1,4 @@
-import Instructions.{SI_Y, WB_MEM}
+import Instructions.{SI_Y, WB_ALU, WB_Y}
 import chisel3._
 
 class Decode extends Module  {
@@ -15,18 +15,19 @@ class Decode extends Module  {
         // From WB
         val WriteAddrIn = Input(UInt(32.W))
         val WriteEnIn = Input(UInt(1.W))
+        val WriteTypeIn = Input(UInt(1.W))
         val WriteDataIn = Input(UInt(32.W))
 
         // To Execute
         val AluOp = Output(UInt(8.W))
         val Imm = Output(UInt(32.W))
         val ImmEn = Output(UInt(1.W))
-        val BrEn = Output(UInt(1.W))
+        val BrEn = Output(UInt(2.W))
         val NextPCOut = Output(UInt(32.W))         // PC + 4
 
         // To Mem
-        val ReadEn = Output(Bool())
-        val WriteEnOut = Output(Bool())
+        val ReadEn = Output(UInt(1.W))
+        val WriteEnOut = Output(UInt(1.W))
 
         // To WB going back to Decode
         val WbType = Output(UInt(1.W))
@@ -56,7 +57,7 @@ class Decode extends Module  {
     // REGISTER FILE
     regFile.io.ReadAddr1 := control.io.rs;
     regFile.io.ReadAddr2 := control.io.rt;
-    regFile.io.WriteEnable := dec_io.WriteEnIn === WB_MEM;
+    regFile.io.WriteEnable := dec_io.WriteEnIn === WB_Y & dec_io.WriteTypeIn === WB_ALU;
     regFile.io.WriteAddr := dec_io.WriteAddrIn;
     regFile.io.WriteData := dec_io.WriteDataIn;
 

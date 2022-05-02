@@ -32,7 +32,7 @@ class RAM(val size: Int = 1024) extends Module {
     val PrevWrEn = RegNext ( ram_io.WriteEn )
     val PrevWrData = RegNext( ram_io.WriteData )
 
-    val isValid: Bool = CurAddr >= 0.U & CurAddr < size.asUInt
+    val isValid: Bool = CurAddr > 0.U & CurAddr < size.asUInt
 
     when ( ram_io.WriteEn & isValid ) {
         mem.write(CurAddr, ram_io.WriteData)
