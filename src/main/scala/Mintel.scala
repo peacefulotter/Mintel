@@ -46,12 +46,14 @@ class Mintel extends Module {
 
     val Inport1  = io.SW(7,0)
     val Inport2  = io.SW(15,8)
-    val Outport  = WireDefault(0.U(16.W))
+    val Outport  = RegInit(0.U(16.W))
 
     datapath.io.Inport1 := Inport1
     datapath.io.Inport2 := Inport2
 
-    Outport := datapath.io.Outport
+    when ( datapath.io.Outport =/= 0.U) {
+        Outport := datapath.io.Outport
+    }
 
     /** 7-Seg Displays **/
     val U_decoder7seg_7 = Module( new decoder7seg )
