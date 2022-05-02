@@ -59,7 +59,7 @@ object Instructions {
         BLT   -> List(ALU.slt,  IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
         BGE   -> List(ALU.ge,   IMM_N,   BR_Y,    LD_N,    ST_N,   WB_ALU,   WB_N,  SI_N),
         // Load
-        LW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_MEM,   WB_Y,  SI_N),
+        LW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_Y,    ST_N,   WB_ALU,   WB_Y,  SI_N),
         // Store
         SW    -> List(ALU.add,  IMM_Y,   BR_N,    LD_N,    ST_Y,   WB_MEM,   WB_N,  SI_N),
     )

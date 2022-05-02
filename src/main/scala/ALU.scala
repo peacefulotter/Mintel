@@ -10,7 +10,7 @@ class ALU extends Module {
     val io = IO(new Bundle {
         val A = Input(UInt(32.W))
         val B = Input(UInt(32.W))
-        val AluOp = Input(UInt(5.W))
+        val AluOp = Input(UInt(8.W))
 
         val out = Output(UInt(32.W))
         val zero = Output(Bool())

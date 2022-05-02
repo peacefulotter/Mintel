@@ -18,7 +18,7 @@ class Decode extends Module  {
         val WriteDataIn = Input(UInt(32.W))
 
         // To Execute
-        val AluOp = Output(UInt(32.W))
+        val AluOp = Output(UInt(8.W))
         val Imm = Output(UInt(32.W))
         val ImmEn = Output(UInt(1.W))
         val BrEn = Output(UInt(1.W))
