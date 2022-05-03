@@ -1,8 +1,7 @@
-import Chisel.{Lookup, MuxLookup}
+import Chisel.MuxLookup
 import chisel3._
 import chisel3.util.Cat
 import uart._
-import chisel3.util.ListLookup
 
 class Mintel extends Module {
     val io = IO( new Bundle {
@@ -48,7 +47,7 @@ class Mintel extends Module {
 
     val Inport1  = io.SW(7,0)
     val Inport2  = io.SW(15,8)
-    val Outport  = WireDefault(0.U(16.W))
+    val Outport  = WireDefault(0.U(32.W))
 
     datapath.io.Inport1 := Inport1
     datapath.io.Inport2 := Inport2

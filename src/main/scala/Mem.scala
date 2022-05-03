@@ -62,7 +62,7 @@ class Mem extends Module {
     Inport2.io.DataIn := mem_io.Inport2
     Inport2.io.WrEn := true.B // := mem_io.WriteEn & AddrSel === 2.U
     Outport.io.DataIn := mem_io.WriteData
-    Outport.io.WrEn := true.B // := mem_io.WriteEn & AddrSel === 3.U
+    Outport.io.WrEn := mem_io.StoreEn & AddrSel === 3.U
 
     mem_io.Outport := Outport.io.DataOut
 

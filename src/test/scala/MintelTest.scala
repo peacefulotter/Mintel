@@ -18,7 +18,7 @@ class MintelTest extends AnyFlatSpec with ChiselScalatestTester {
                 d.clock.step()
             }
             d.io.SW.poke(65313.U) // 1111 1111 (255) 0010 0001 (33) (OUT = 3)
-            for (i <- 0 until 100) {
+            for (i <- 0 until 180) {
                 println(i, d.io.instr.peek().litValue)
                 d.clock.step()
             }
