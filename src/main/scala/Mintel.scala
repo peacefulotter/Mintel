@@ -1,6 +1,8 @@
+import Chisel.{Lookup, MuxLookup}
 import chisel3._
 import chisel3.util.Cat
 import uart._
+import chisel3.util.ListLookup
 
 class Mintel extends Module {
     val io = IO( new Bundle {
@@ -12,7 +14,7 @@ class Mintel extends Module {
 
         val instr = Output(UInt(32.W))
 
-        // val txd_instr = Output(UInt(1.W)) // G9
+        val txd_instr = Output(UInt(1.W)) // G9
 
         // Input 1 Display
         val hex7     = Output(UInt(7.W)) // 6:AA14, 5:AG18, 4:AF17, 3:AH17, 2:AG17, 1:AE17, 0:AD17
@@ -36,7 +38,7 @@ class Mintel extends Module {
         val KEY   = Input(UInt(4.W))
         // 3:R24, 2:N21, 1:M21, 0:M23
 
-        // val string = Output(UInt(32.W))
+//        val string = Output(UInt(8.W))
     }
     )
 
@@ -46,7 +48,7 @@ class Mintel extends Module {
 
     val Inport1  = io.SW(7,0)
     val Inport2  = io.SW(15,8)
-    val Outport  = RegInit(0.U(16.W))
+    val Outport  = WireDefault(0.U(16.W))
 
     datapath.io.Inport1 := Inport1
     datapath.io.Inport2 := Inport2
@@ -84,56 +86,62 @@ class Mintel extends Module {
     io.hex1 := U_decoder7seg_1.io.out // Output -> Output(11:8)
     io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
 
-//    /** UART to transmit instructions **/
-//    val tx = Module(new BufferedTx(50000000, 115200))
-//    io.txd_instr := tx.io.txd
-//
-//
-//    val instructions = io.instr
-//    for (i <- 0 to 7) {
-//        val nibble = instructions(4*i+3,4*i) & 0xf.U
-//        var h = '0'.U(8.W) + nibble
-//
-//        when (nibble > 9.U) {
-//            if ( nibble === 10.U )
-//                h = 'A'.U - 10.U + nibble
-//            else if (nibble === 11.U)
-//                h = 'B'.U - 11.U + nibble
-//            else if (nibble === 12.U)
-//                h = 'C'.U - 12.U + nibble
-//            else if (nibble === 13.U)
-//                h = 'D'.U - 13.U + nibble
-//            else if (nibble === 14.U)
-//                h = 'E'.U - 14.U + nibble
-//            else if (nibble === 15.U)
-//                h = 'F'.U - 15.U + nibble
-//        }
-//        println(h)
-//        io.string := h
-//        val string = 1.U
-//
-//
-//        val text = VecInit(string)
-//
-//        val len = 8.U
-//        val cntReg2 = RegInit(0.U(8.W))
-//
-//        tx.io.channel.bits := text(cntReg2)
-//        tx.io.channel.valid := cntReg2 =/= len
-//
-//        when(tx.io.channel.ready && cntReg2 =/= len) {
-//            cntReg2 := cntReg2 + 1.U
-//        } .elsewhen(cntReg2 === len){
-//            cntReg2 := 0.U
-//        }
-//
-//    }
+    /** UART to transmit instructions **/
+    val tx = Module(new BufferedTx(50000000, 115200))
+    io.txd_instr := tx.io.txd
+
+    val cntReg2 = RegInit(0.U(8.W))
+
+    val instr_bit7 = tohex_inascii(io.instr.apply(31,28))
+    val instr_bit6 = tohex_inascii(io.instr.apply(27,24))
+    val instr_bit5 = tohex_inascii(io.instr.apply(23,20))
+    val instr_bit4 = tohex_inascii(io.instr.apply(19,16))
+    val instr_bit3 = tohex_inascii(io.instr.apply(15,12))
+    val instr_bit2 = tohex_inascii(io.instr.apply(11,8))
+    val instr_bit1 = tohex_inascii(io.instr.apply(7,4))
+    val instr_bit0 = tohex_inascii(io.instr.apply(3,0))
+
+    val string = Concat(instr_bit0, instr_bit1, instr_bit2, instr_bit3, instr_bit4, instr_bit5, instr_bit6, instr_bit7)
+
+    val text = VecInit(string)
+
+    val len = 64.U
+
+    tx.io.channel.bits := text(cntReg2)
+    tx.io.channel.valid := cntReg2 =/= len
+
+    when(tx.io.channel.ready && cntReg2 =/= len) {
+        println(cntReg2)
+        cntReg2 := cntReg2 + 1.U
+    } .elsewhen(cntReg2 === len){
+        cntReg2 := 0.U
+    }
+
 
     // not use for anything
     val LEDG      = WireDefault(0.U(8.W))
     io.LEDR       := io.SW
     LEDG          := Cat(~io.KEY, ~io.KEY)
     io.LEDG       := LEDG
+
+    def tohex_inascii(in: UInt): UInt   = {
+
+        val nibble = in & 0xf.U
+
+        val format: UInt = MuxLookup(nibble, '0'.U(8.W) + nibble, Seq(
+            10.U -> 'A'.U,
+            11.U -> 'B'.U,
+            12.U -> 'C'.U,
+            13.U -> 'D'.U,
+            14.U -> 'E'.U,
+            15.U -> 'F'.U
+        ))
+        format
+    }
+    def Concat(in0:UInt, in1:UInt, in2:UInt, in3:UInt, in4:UInt, in5:UInt, in6:UInt, in7:UInt): UInt ={
+        val temp0 = Cat(in7, Cat(in6, Cat(in5, Cat(in4, Cat(in3, Cat(in2, Cat(in1, in0)))))))
+        temp0
+    }
 }
 
 object Mintel extends App {

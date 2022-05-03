@@ -15,7 +15,7 @@ class Datapath extends Module {
         val Inport1   = Input(UInt(8.W))
         val Inport2   = Input(UInt(8.W))
         val instr     = Output(UInt(32.W))
-        val Outport  = Output(UInt(16.W))
+        val Outport  = Output(UInt(32.W))
     } )
 
     io.instr    := fetch.io.Instr
