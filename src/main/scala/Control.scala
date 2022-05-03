@@ -12,9 +12,9 @@ class Control extends Module  {
         val imm = Output(UInt(16.W))
         val addr = Output(UInt(26.W))
 
-        val ImmEn = Output(UInt(1.W))
         val AluOp = Output(UInt(6.W))
-        val BrEn = Output(UInt(1.W))
+        val ImmEn = Output(UInt(1.W))
+        val BrEn = Output(UInt(2.W))
         val LoadEn = Output(UInt(1.W))
         val StoreEn = Output(UInt(1.W))
         val WbType = Output(UInt(1.W))

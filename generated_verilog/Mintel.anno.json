@@ -107,13 +107,6 @@
   },
   {
     "class":"firrtl.transforms.CombinationalPath",
-    "sink":"~Mintel|Mintel>io_string",
-    "sources":[
-      "~Mintel|Mintel>io_instr"
-    ]
-  },
-  {
-    "class":"firrtl.transforms.CombinationalPath",
     "sink":"~Mintel|Mintel>io_hex4",
     "sources":[
       "~Mintel|Mintel>io_SW"

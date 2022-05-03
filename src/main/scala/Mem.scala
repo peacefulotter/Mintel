@@ -1,5 +1,5 @@
+import Instructions.{BR_J, BR_Y}
 import chisel3._
-import chisel3.util.Cat
 import chisel3.util.MuxCase
 
 class Mem extends Module {
@@ -20,18 +20,17 @@ class Mem extends Module {
         val Inport1 = Input(UInt(8.W))
         val Inport2 = Input(UInt(8.W))
 
-        val Outport = Output(UInt(16.W))
+        val Outport = Output(UInt(32.W))
 
         // From Control
-        val WriteEn = Input(UInt(1.W))
-        val ReadEn = Input(UInt(1.W))
-        val CtrlBrEn = Input(Bool())
-        val WbTypeIn = Input(UInt(1.W))
         val WbEnIn = Input(UInt(1.W))
+        val WbTypeIn = Input(UInt(1.W))
+        val LoadEnIn = Input(UInt(1.W))
+        val StoreEn = Input(UInt(1.W))
+        val CtrlBrEn = Input(UInt(2.W))
 
-        // From Control -> Execute
-        val AluBrEn = Input(Bool())
         val BrAddrIn = Input(UInt(32.W))
+        val AluBrEn = Input(Bool())
         val WriteRegAddrIn = Input(UInt(32.W))
 
         // From Execute
@@ -39,6 +38,7 @@ class Mem extends Module {
         val AddrIn = Input(UInt(32.W))
 
         // To WB
+        val LoadEnOut = Output(UInt(1.W))
         val ReadData = Output(UInt(32.W))
         val WbTypeOut = Output(UInt(1.W))
         val WbEnOut = Output(UInt(1.W))
@@ -48,7 +48,7 @@ class Mem extends Module {
 
         // Datapath -> To Fetch
         val BrAddrOut = Output(UInt(32.W))
-        val BrEnOut = Output(Bool())
+        val BrEnOut = Output(UInt(2.W))
     })
 
     val AddrSel = MuxCase( 0.U, Array(
@@ -67,8 +67,8 @@ class Mem extends Module {
     mem_io.Outport := Outport.io.DataOut
 
     ram.ram_io.Addr := mem_io.AddrIn
-    ram.ram_io.ReadEn := (mem_io.ReadEn & AddrSel === 0.U)
-    ram.ram_io.WriteEn := (mem_io.WriteEn & AddrSel === 0.U)
+    ram.ram_io.ReadEn := (mem_io.LoadEnIn & AddrSel === 0.U)
+    ram.ram_io.WriteEn := (mem_io.StoreEn & AddrSel === 0.U)
     ram.ram_io.WriteData := mem_io.WriteData
     mem_io.ReadData := MuxCase( ram.ram_io.ReadData, Array(
         (mem_io.AddrIn === Inport1Addr) -> Inport1.io.DataOut, // Switches1
@@ -78,11 +78,12 @@ class Mem extends Module {
 
     mem_io.BrAddrOut := mem_io.BrAddrIn
 
+    mem_io.LoadEnOut := mem_io.LoadEnIn
     mem_io.WbTypeOut := mem_io.WbTypeIn
     mem_io.WbEnOut := mem_io.WbEnIn
     mem_io.AddrOut := mem_io.AddrIn
 
-    mem_io.BrEnOut := mem_io.AluBrEn & mem_io.CtrlBrEn
+    mem_io.BrEnOut := (mem_io.CtrlBrEn === BR_J) | (mem_io.AluBrEn & (mem_io.CtrlBrEn === BR_Y))
 
     mem_io.WriteRegAddrOut := mem_io.WriteRegAddrIn
 }
