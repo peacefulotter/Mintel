@@ -20,7 +20,7 @@ class Mem extends Module {
         val Inport1 = Input(UInt(8.W))
         val Inport2 = Input(UInt(8.W))
 
-        val Outport = Output(UInt(16.W))
+        val Outport = Output(UInt(32.W))
 
         // From Control
         val WbEnIn = Input(UInt(1.W))
