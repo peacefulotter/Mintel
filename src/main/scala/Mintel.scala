@@ -85,6 +85,7 @@ class Mintel extends Module {
     io.hex1 := U_decoder7seg_1.io.out // Output -> Output(11:8)
     io.hex0 := U_decoder7seg_0.io.out // Output -> Output(15:12)
 
+
     /** UART to transmit instructions **/
     val tx = Module(new BufferedTx(50000000, 115200))
     io.txd_instr := tx.io.txd

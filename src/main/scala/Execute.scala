@@ -68,7 +68,7 @@ class Execute extends Module {
         )
     )
 
-    val isImmediate: Bool = exec_io.ImmEn === 1.U
+    val isImmediate: Bool = exec_io.ImmEn === IMM_Y
 
     val Attr1Addr: UInt = exec_io.rs
     val Attr1Val: UInt = exec_io.DataRead1
@@ -80,7 +80,7 @@ class Execute extends Module {
 
     // ALU
     alu.io.A := A
-    alu.io.B := Mux(exec_io.ImmEn === IMM_Y, exec_io.Imm, B)
+    alu.io.B := Mux(isImmediate, exec_io.Imm, B)
     alu.io.AluOp := exec_io.AluOp
     exec_io.AluRes := alu.io.out
     exec_io.zero := alu.io.zero
