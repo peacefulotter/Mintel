@@ -1,3 +1,1 @@
-# ChiselMIPS
-
-chisel sucks
+# Mintel
