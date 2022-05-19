@@ -6,6 +6,6 @@ Stages: Fetch, Decode, Execute, Memory, Writeback.
 
 ## Datapath
 
-![datapath img](./datapath.png)
+![datapath img](./datapath.jpg)
 
 - More on Chisel: https://www.chisel-lang.org/
