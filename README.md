@@ -10,6 +10,6 @@ Max clock frequency: 56MHz (did not focus on performance, but fixing bottlenecks
 
 ## Datapath
 
-![datapath img](./datapath.jpg)
+![datapath img](./showcase.png)
 
 - More on Chisel: https://www.chisel-lang.org/

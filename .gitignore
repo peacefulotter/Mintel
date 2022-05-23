@@ -5,3 +5,10 @@ test_run_dir/
 quartus/
 verilog/
 vivado/
+generated_verilog/
+project/
+*.v
+*.fir
+*.vhd
+*.vhd
+*.anno.json
